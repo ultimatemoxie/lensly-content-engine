@@ -13,17 +13,24 @@
     "publishedAt": "2026-07-22T13:00:00.000Z",
     "collectedAt": "2026-07-22T14:19:11.033Z",
     "evaluationStatus": "evaluated",
-    "score": 20,
-    "category": "",
-    "reason": "Lack of specific details",
+    "score": 55,
+    "category": "industry_trend",
+    "reason": "Lack of concrete information on OpenAI's AI infrastructure plans in Effingham County",
     "shouldPost": false,
     "verifiedFacts": [
-      "OpenAI announces Project Camellia",
-      "Effingham County, Georgia, is involved"
+      "OpenAI announces Project Camellia"
     ],
-    "postType": "industry_trend",
-    "confidence": 20,
-    "lastEvaluatedAt": "2026-07-22T16:28:35.408Z"
+    "postType": "industry_observation",
+    "confidence": 55,
+    "lastEvaluatedAt": "2026-07-22T18:04:23.702Z",
+    "providerAttempts": [
+      {
+        "provider": "groq",
+        "model": "llama-3.1-8b-instant",
+        "result": "success",
+        "httpStatus": 200
+      }
+    ]
   },
   {
     "id": "story-1784729951033-wurguhd",
@@ -39,17 +46,26 @@
     "publishedAt": "2026-07-22T05:30:00.000Z",
     "collectedAt": "2026-07-22T14:19:11.033Z",
     "evaluationStatus": "evaluated",
-    "score": 80,
-    "category": "tool_spotlight",
-    "reason": "OpenAI Presence is indeed an enterprise AI agent platform.",
-    "shouldPost": true,
+    "score": 43,
+    "category": "business_observation",
+    "reason": "The post provides a neutral business-oriented observation.",
+    "shouldPost": false,
     "verifiedFacts": [
-      "OpenAI Presence is an enterprise AI agent platform.",
-      "OpenAI Presence helps deploy trusted voice and chat agents."
+      "OpenAI Presence is a proven enterprise AI agent platform.",
+      "The platform helps organizations deploy trusted voice and chat agents for customer and internal workflows.",
+      "The platform was introduced in 2026."
     ],
-    "postType": "tool_spotlight",
-    "confidence": 75,
-    "lastEvaluatedAt": "2026-07-22T16:28:39.179Z"
+    "postType": "industry_observation",
+    "confidence": 43,
+    "lastEvaluatedAt": "2026-07-22T18:04:27.251Z",
+    "providerAttempts": [
+      {
+        "provider": "groq",
+        "model": "llama-3.1-8b-instant",
+        "result": "success",
+        "httpStatus": 200
+      }
+    ]
   },
   {
     "id": "story-1784729951033-a9wcpom",
@@ -65,16 +81,31 @@
     "publishedAt": "2026-07-21T17:00:00.000Z",
     "collectedAt": "2026-07-22T14:19:11.033Z",
     "evaluationStatus": "evaluated",
-    "score": 55,
-    "category": "business_observation",
-    "reason": "",
-    "shouldPost": false,
+    "score": 83,
+    "category": "model_update",
+    "reason": "Unsupported post type: model_update",
+    "shouldPost": true,
     "verifiedFacts": [
-      "OpenAI launches the ChatGPT for Small Businesses program"
+      {
+        "fact": "OpenAI launches a program for small businesses",
+        "source": "OpenAI Blog"
+      },
+      {
+        "fact": "Program aims to help entrepreneurs build AI skills, automate work, and grow with ChatGPT Work",
+        "source": "OpenAI Blog"
+      }
     ],
-    "postType": "industry_observation",
-    "confidence": 55,
-    "lastEvaluatedAt": "2026-07-22T16:28:42.978Z"
+    "postType": "model_update",
+    "confidence": 80,
+    "lastEvaluatedAt": "2026-07-22T18:04:30.865Z",
+    "providerAttempts": [
+      {
+        "provider": "groq",
+        "model": "llama-3.1-8b-instant",
+        "result": "success",
+        "httpStatus": 200
+      }
+    ]
   },
   {
     "id": "story-1784729951033-1wn9oe9",
@@ -90,18 +121,25 @@
     "publishedAt": "2026-07-21T07:00:00.000Z",
     "collectedAt": "2026-07-22T14:19:11.033Z",
     "evaluationStatus": "evaluated",
-    "score": 50,
-    "category": "industry_trend",
-    "reason": "general interest but lacks depth in details",
+    "score": 0,
+    "category": "breaking_ai_news",
+    "reason": "The source content is primarily promotional and lacks useful specifics.",
     "shouldPost": false,
     "verifiedFacts": [
-      "OpenAI and Hugging Face partner",
-      "security incident during AI model evaluation",
-      "published on July 21, 2026"
+      "AI model evaluation security incident",
+      "partnership between OpenAI and Hugging Face"
     ],
-    "postType": "industry_observation",
-    "confidence": 60,
-    "lastEvaluatedAt": "2026-07-22T16:28:46.786Z"
+    "postType": "breaking_news",
+    "confidence": 0,
+    "lastEvaluatedAt": "2026-07-22T18:04:34.379Z",
+    "providerAttempts": [
+      {
+        "provider": "groq",
+        "model": "llama-3.1-8b-instant",
+        "result": "success",
+        "httpStatus": 200
+      }
+    ]
   },
   {
     "id": "story-1784729951033-2qycpn3",
@@ -117,16 +155,25 @@
     "publishedAt": "2026-07-21T00:00:00.000Z",
     "collectedAt": "2026-07-22T14:19:11.033Z",
     "evaluationStatus": "evaluated",
-    "score": 25,
-    "category": "",
-    "reason": "The article has corporate language and lacks detail",
+    "score": 50,
+    "category": "business_observation",
+    "reason": "Insufficient context for a higher score",
     "shouldPost": false,
     "verifiedFacts": [
-      "David Vélez and Robin Vince join the boards of the OpenAI Foundation and OpenAI Group PBC"
+      "David Vélez and Robin Vince joined the boards of the OpenAI Foundation and OpenAI Group PBC",
+      "Their global leadership in finance, technology, and governance was mentioned"
     ],
-    "postType": "",
-    "confidence": 25,
-    "lastEvaluatedAt": "2026-07-22T16:28:50.654Z"
+    "postType": "industry_observation",
+    "confidence": 50,
+    "lastEvaluatedAt": "2026-07-22T18:04:37.926Z",
+    "providerAttempts": [
+      {
+        "provider": "groq",
+        "model": "llama-3.1-8b-instant",
+        "result": "success",
+        "httpStatus": 200
+      }
+    ]
   },
   {
     "id": "story-1784729951033-73a7e16",
@@ -141,23 +188,16 @@
     "articleUrl": "https://openai.com/index/safety-alignment-long-horizon-models",
     "publishedAt": "2026-07-20T10:00:00.000Z",
     "collectedAt": "2026-07-22T14:19:11.033Z",
-    "evaluationStatus": "evaluated",
-    "score": 45,
-    "category": "research_insight",
-    "reason": "",
-    "shouldPost": false,
-    "verifiedFacts": [],
-    "postType": "research_insight",
-    "confidence": 75,
-    "lastEvaluatedAt": "2026-07-22T17:09:40.911Z",
-    "providerAttempts": [
-      {
-        "provider": "groq",
-        "model": "llama-3.1-8b-instant",
-        "result": "success",
-        "httpStatus": 200
-      }
-    ]
+    "evaluationStatus": "pending",
+    "score": null,
+    "category": null,
+    "reason": null,
+    "shouldPost": null,
+    "verifiedFacts": null,
+    "postType": null,
+    "confidence": null,
+    "lastEvaluatedAt": null,
+    "providerAttempts": []
   },
   {
     "id": "story-1784729954713-ycuzirs",
@@ -172,27 +212,16 @@
     "articleUrl": "https://blog.google/products-and-platforms/platforms/android/galaxy-unpacked-switch-from-iphone-to-android/",
     "publishedAt": "2026-07-22T13:00:00.000Z",
     "collectedAt": "2026-07-22T14:19:14.713Z",
-    "evaluationStatus": "evaluated",
-    "score": 60,
-    "category": "industry_trend",
-    "reason": "",
-    "shouldPost": false,
-    "verifiedFacts": [
-      "Android 17",
-      "wireless data transfer from iPhone",
-      "Google AI Blog"
-    ],
-    "postType": "industry_observation",
-    "confidence": 50,
-    "lastEvaluatedAt": "2026-07-22T17:09:44.560Z",
-    "providerAttempts": [
-      {
-        "provider": "groq",
-        "model": "llama-3.1-8b-instant",
-        "result": "success",
-        "httpStatus": 200
-      }
-    ]
+    "evaluationStatus": "pending",
+    "score": null,
+    "category": null,
+    "reason": null,
+    "shouldPost": null,
+    "verifiedFacts": null,
+    "postType": null,
+    "confidence": null,
+    "lastEvaluatedAt": null,
+    "providerAttempts": []
   },
   {
     "id": "story-1784729954713-0xawfhh",
@@ -207,39 +236,16 @@
     "articleUrl": "https://blog.google/products-and-platforms/platforms/android/galaxy-unpacked-2026/",
     "publishedAt": "2026-07-22T13:00:00.000Z",
     "collectedAt": "2026-07-22T14:19:14.713Z",
-    "evaluationStatus": "evaluated",
-    "score": 25,
-    "category": "",
-    "reason": "",
-    "shouldPost": false,
-    "verifiedFacts": [
-      {
-        "fact": "The story was shared on Google AI Blog.",
-        "source": "The story itself",
-        "date": "2026-07-22"
-      },
-      {
-        "fact": "There were updates from Galaxy Unpacked 2026.",
-        "source": "The story itself",
-        "date": "2026-07-22"
-      },
-      {
-        "fact": "The updates were related to Samsung products.",
-        "source": "The story itself",
-        "date": "2026-07-22"
-      }
-    ],
-    "postType": "",
-    "confidence": 25,
-    "lastEvaluatedAt": "2026-07-22T17:09:48.355Z",
-    "providerAttempts": [
-      {
-        "provider": "groq",
-        "model": "llama-3.1-8b-instant",
-        "result": "success",
-        "httpStatus": 200
-      }
-    ]
+    "evaluationStatus": "pending",
+    "score": null,
+    "category": null,
+    "reason": null,
+    "shouldPost": null,
+    "verifiedFacts": null,
+    "postType": null,
+    "confidence": null,
+    "lastEvaluatedAt": null,
+    "providerAttempts": []
   },
   {
     "id": "story-1784729954713-twoiufr",
@@ -254,26 +260,16 @@
     "articleUrl": "https://blog.google/products-and-platforms/products/education/summer-productivity-tips-google-ai-tools/",
     "publishedAt": "2026-07-21T20:00:00.000Z",
     "collectedAt": "2026-07-22T14:19:14.713Z",
-    "evaluationStatus": "evaluated",
-    "score": 50,
-    "category": "research_insight",
-    "reason": "Title is informative but lacks a hook",
-    "shouldPost": false,
-    "verifiedFacts": [
-      "Published on 2026-07-21T20:00:00.000Z",
-      "Source: Google AI Blog"
-    ],
-    "postType": "research_insight",
-    "confidence": 40,
-    "lastEvaluatedAt": "2026-07-22T17:09:51.955Z",
-    "providerAttempts": [
-      {
-        "provider": "groq",
-        "model": "llama-3.1-8b-instant",
-        "result": "success",
-        "httpStatus": 200
-      }
-    ]
+    "evaluationStatus": "pending",
+    "score": null,
+    "category": null,
+    "reason": null,
+    "shouldPost": null,
+    "verifiedFacts": null,
+    "postType": null,
+    "confidence": null,
+    "lastEvaluatedAt": null,
+    "providerAttempts": []
   },
   {
     "id": "story-1784729954713-5bqy2sx",
@@ -288,30 +284,16 @@
     "articleUrl": "https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-3-6-flash-3-5-flash-lite-3-5-flash-cyber/",
     "publishedAt": "2026-07-21T15:00:00.000Z",
     "collectedAt": "2026-07-22T14:19:14.713Z",
-    "evaluationStatus": "evaluated",
-    "score": 80,
-    "category": "model_update",
-    "reason": "",
-    "shouldPost": true,
-    "verifiedFacts": [
-      {
-        "text": "Gemini 3.6 Flash, 3.5 Flash-Lite and 3.5 Flash Cyber are new Gemini models."
-      },
-      {
-        "text": "Models were introduced by Google AI Blog on 2026-07-21T15:00:00.000Z."
-      }
-    ],
-    "postType": "research_insight",
-    "confidence": 85,
-    "lastEvaluatedAt": "2026-07-22T17:09:55.519Z",
-    "providerAttempts": [
-      {
-        "provider": "groq",
-        "model": "llama-3.1-8b-instant",
-        "result": "success",
-        "httpStatus": 200
-      }
-    ]
+    "evaluationStatus": "pending",
+    "score": null,
+    "category": null,
+    "reason": null,
+    "shouldPost": null,
+    "verifiedFacts": null,
+    "postType": null,
+    "confidence": null,
+    "lastEvaluatedAt": null,
+    "providerAttempts": []
   },
   {
     "id": "story-1784729954713-yrogtjn",
@@ -327,14 +309,15 @@
     "publishedAt": "2026-07-21T14:00:00.000Z",
     "collectedAt": "2026-07-22T14:19:14.713Z",
     "evaluationStatus": "pending",
-    "score": 0,
-    "category": "",
-    "reason": "Max AI calls reached",
-    "shouldPost": false,
-    "verifiedFacts": [],
-    "postType": "",
-    "confidence": 0,
-    "lastEvaluatedAt": "2026-07-22T16:29:05.519Z"
+    "score": null,
+    "category": null,
+    "reason": null,
+    "shouldPost": null,
+    "verifiedFacts": null,
+    "postType": null,
+    "confidence": null,
+    "lastEvaluatedAt": null,
+    "providerAttempts": []
   },
   {
     "id": "story-1784729954713-p53ah0v",
@@ -350,14 +333,15 @@
     "publishedAt": "2026-07-20T19:00:00.000Z",
     "collectedAt": "2026-07-22T14:19:14.713Z",
     "evaluationStatus": "pending",
-    "score": 0,
-    "category": "",
-    "reason": "Max AI calls reached",
-    "shouldPost": false,
-    "verifiedFacts": [],
-    "postType": "",
-    "confidence": 0,
-    "lastEvaluatedAt": "2026-07-22T16:29:05.519Z"
+    "score": null,
+    "category": null,
+    "reason": null,
+    "shouldPost": null,
+    "verifiedFacts": null,
+    "postType": null,
+    "confidence": null,
+    "lastEvaluatedAt": null,
+    "providerAttempts": []
   },
   {
     "id": "story-1784729963030-pjhb0of",
@@ -373,14 +357,15 @@
     "publishedAt": "2026-07-21T20:00:27.000Z",
     "collectedAt": "2026-07-22T14:19:23.030Z",
     "evaluationStatus": "pending",
-    "score": 0,
-    "category": "",
-    "reason": "Max AI calls reached",
-    "shouldPost": false,
-    "verifiedFacts": [],
-    "postType": "",
-    "confidence": 0,
-    "lastEvaluatedAt": "2026-07-22T16:29:05.519Z"
+    "score": null,
+    "category": null,
+    "reason": null,
+    "shouldPost": null,
+    "verifiedFacts": null,
+    "postType": null,
+    "confidence": null,
+    "lastEvaluatedAt": null,
+    "providerAttempts": []
   },
   {
     "id": "story-1784729963030-yv4xggi",
@@ -396,14 +381,15 @@
     "publishedAt": "2026-07-21T00:00:00.000Z",
     "collectedAt": "2026-07-22T14:19:23.030Z",
     "evaluationStatus": "pending",
-    "score": 0,
-    "category": "",
-    "reason": "Max AI calls reached",
-    "shouldPost": false,
-    "verifiedFacts": [],
-    "postType": "",
-    "confidence": 0,
-    "lastEvaluatedAt": "2026-07-22T16:29:05.519Z"
+    "score": null,
+    "category": null,
+    "reason": null,
+    "shouldPost": null,
+    "verifiedFacts": null,
+    "postType": null,
+    "confidence": null,
+    "lastEvaluatedAt": null,
+    "providerAttempts": []
   },
   {
     "id": "story-1784729965557-xtgiqek",
@@ -419,14 +405,15 @@
     "publishedAt": "2026-07-22T13:20:35.000Z",
     "collectedAt": "2026-07-22T14:19:25.557Z",
     "evaluationStatus": "pending",
-    "score": 0,
-    "category": "",
-    "reason": "Max AI calls reached",
-    "shouldPost": false,
-    "verifiedFacts": [],
-    "postType": "",
-    "confidence": 0,
-    "lastEvaluatedAt": "2026-07-22T16:29:05.520Z"
+    "score": null,
+    "category": null,
+    "reason": null,
+    "shouldPost": null,
+    "verifiedFacts": null,
+    "postType": null,
+    "confidence": null,
+    "lastEvaluatedAt": null,
+    "providerAttempts": []
   },
   {
     "id": "story-1784729965557-f4osvdp",
@@ -442,14 +429,15 @@
     "publishedAt": "2026-07-22T13:00:00.000Z",
     "collectedAt": "2026-07-22T14:19:25.557Z",
     "evaluationStatus": "pending",
-    "score": 0,
-    "category": "",
-    "reason": "Max AI calls reached",
-    "shouldPost": false,
-    "verifiedFacts": [],
-    "postType": "",
-    "confidence": 0,
-    "lastEvaluatedAt": "2026-07-22T16:29:05.520Z"
+    "score": null,
+    "category": null,
+    "reason": null,
+    "shouldPost": null,
+    "verifiedFacts": null,
+    "postType": null,
+    "confidence": null,
+    "lastEvaluatedAt": null,
+    "providerAttempts": []
   },
   {
     "id": "story-1784729965557-ci0eqvu",
@@ -465,14 +453,15 @@
     "publishedAt": "2026-07-22T10:00:00.000Z",
     "collectedAt": "2026-07-22T14:19:25.557Z",
     "evaluationStatus": "pending",
-    "score": 0,
-    "category": "",
-    "reason": "Max AI calls reached",
-    "shouldPost": false,
-    "verifiedFacts": [],
-    "postType": "",
-    "confidence": 0,
-    "lastEvaluatedAt": "2026-07-22T16:29:05.520Z"
+    "score": null,
+    "category": null,
+    "reason": null,
+    "shouldPost": null,
+    "verifiedFacts": null,
+    "postType": null,
+    "confidence": null,
+    "lastEvaluatedAt": null,
+    "providerAttempts": []
   },
   {
     "id": "story-1784729965557-c9k0425",
@@ -488,14 +477,15 @@
     "publishedAt": "2026-07-22T08:00:00.000Z",
     "collectedAt": "2026-07-22T14:19:25.557Z",
     "evaluationStatus": "pending",
-    "score": 0,
-    "category": "",
-    "reason": "Max AI calls reached",
-    "shouldPost": false,
-    "verifiedFacts": [],
-    "postType": "",
-    "confidence": 0,
-    "lastEvaluatedAt": "2026-07-22T16:29:05.520Z"
+    "score": null,
+    "category": null,
+    "reason": null,
+    "shouldPost": null,
+    "verifiedFacts": null,
+    "postType": null,
+    "confidence": null,
+    "lastEvaluatedAt": null,
+    "providerAttempts": []
   },
   {
     "id": "story-1784729965557-oghicwt",
@@ -511,14 +501,15 @@
     "publishedAt": "2026-07-22T03:20:57.000Z",
     "collectedAt": "2026-07-22T14:19:25.557Z",
     "evaluationStatus": "pending",
-    "score": 0,
-    "category": "",
-    "reason": "Max AI calls reached",
-    "shouldPost": false,
-    "verifiedFacts": [],
-    "postType": "",
-    "confidence": 0,
-    "lastEvaluatedAt": "2026-07-22T16:29:05.520Z"
+    "score": null,
+    "category": null,
+    "reason": null,
+    "shouldPost": null,
+    "verifiedFacts": null,
+    "postType": null,
+    "confidence": null,
+    "lastEvaluatedAt": null,
+    "providerAttempts": []
   },
   {
     "id": "story-1784729965557-c8lv6mo",
@@ -534,14 +525,15 @@
     "publishedAt": "2026-07-21T23:55:10.000Z",
     "collectedAt": "2026-07-22T14:19:25.557Z",
     "evaluationStatus": "pending",
-    "score": 0,
-    "category": "",
-    "reason": "Max AI calls reached",
-    "shouldPost": false,
-    "verifiedFacts": [],
-    "postType": "",
-    "confidence": 0,
-    "lastEvaluatedAt": "2026-07-22T16:29:05.520Z"
+    "score": null,
+    "category": null,
+    "reason": null,
+    "shouldPost": null,
+    "verifiedFacts": null,
+    "postType": null,
+    "confidence": null,
+    "lastEvaluatedAt": null,
+    "providerAttempts": []
   },
   {
     "id": "story-1784729965557-184yi8o",
@@ -557,14 +549,15 @@
     "publishedAt": "2026-07-21T20:56:55.000Z",
     "collectedAt": "2026-07-22T14:19:25.557Z",
     "evaluationStatus": "pending",
-    "score": 0,
-    "category": "",
-    "reason": "Max AI calls reached",
-    "shouldPost": false,
-    "verifiedFacts": [],
-    "postType": "",
-    "confidence": 0,
-    "lastEvaluatedAt": "2026-07-22T16:29:05.520Z"
+    "score": null,
+    "category": null,
+    "reason": null,
+    "shouldPost": null,
+    "verifiedFacts": null,
+    "postType": null,
+    "confidence": null,
+    "lastEvaluatedAt": null,
+    "providerAttempts": []
   },
   {
     "id": "story-1784729965557-109vw53",
@@ -580,14 +573,15 @@
     "publishedAt": "2026-07-21T19:43:41.000Z",
     "collectedAt": "2026-07-22T14:19:25.557Z",
     "evaluationStatus": "pending",
-    "score": 0,
-    "category": "",
-    "reason": "Max AI calls reached",
-    "shouldPost": false,
-    "verifiedFacts": [],
-    "postType": "",
-    "confidence": 0,
-    "lastEvaluatedAt": "2026-07-22T16:29:05.520Z"
+    "score": null,
+    "category": null,
+    "reason": null,
+    "shouldPost": null,
+    "verifiedFacts": null,
+    "postType": null,
+    "confidence": null,
+    "lastEvaluatedAt": null,
+    "providerAttempts": []
   },
   {
     "id": "story-1784729965557-zj0ccri",
@@ -603,14 +597,15 @@
     "publishedAt": "2026-07-21T19:39:30.000Z",
     "collectedAt": "2026-07-22T14:19:25.557Z",
     "evaluationStatus": "pending",
-    "score": 0,
-    "category": "",
-    "reason": "Max AI calls reached",
-    "shouldPost": false,
-    "verifiedFacts": [],
-    "postType": "",
-    "confidence": 0,
-    "lastEvaluatedAt": "2026-07-22T16:29:05.520Z"
+    "score": null,
+    "category": null,
+    "reason": null,
+    "shouldPost": null,
+    "verifiedFacts": null,
+    "postType": null,
+    "confidence": null,
+    "lastEvaluatedAt": null,
+    "providerAttempts": []
   },
   {
     "id": "story-1784729965557-53xg11t",
@@ -626,13 +621,14 @@
     "publishedAt": "2026-07-21T18:06:38.000Z",
     "collectedAt": "2026-07-22T14:19:25.557Z",
     "evaluationStatus": "pending",
-    "score": 0,
-    "category": "",
-    "reason": "Max AI calls reached",
-    "shouldPost": false,
-    "verifiedFacts": [],
-    "postType": "",
-    "confidence": 0,
-    "lastEvaluatedAt": "2026-07-22T16:29:05.520Z"
+    "score": null,
+    "category": null,
+    "reason": null,
+    "shouldPost": null,
+    "verifiedFacts": null,
+    "postType": null,
+    "confidence": null,
+    "lastEvaluatedAt": null,
+    "providerAttempts": []
   }
 ]

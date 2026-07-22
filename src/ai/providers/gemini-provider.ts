@@ -66,7 +66,8 @@ export class GeminiProvider implements AIProvider {
         reason: 'Request budget exhausted',
         shouldPost: false,
         verifiedFacts: [],
-        postType: '',
+        primaryPost: { type: '', text: '' },
+        alternativePosts: [],
         confidence: 0,
         error: 'Request budget exhausted',
         httpStatus: null,
@@ -88,7 +89,8 @@ export class GeminiProvider implements AIProvider {
               reason: 'Request budget exhausted during retry',
               shouldPost: false,
               verifiedFacts: [],
-              postType: '',
+              primaryPost: { type: '', text: '' },
+              alternativePosts: [],
               confidence: 0,
               error: 'Request budget exhausted during retry',
               httpStatus: null,
@@ -118,7 +120,8 @@ export class GeminiProvider implements AIProvider {
             reason: `Gemini error: ${lastError}`,
             shouldPost: false,
             verifiedFacts: [],
-            postType: '',
+            primaryPost: { type: '', text: '' },
+            alternativePosts: [],
             confidence: 0,
             error: lastError,
             httpStatus,
@@ -136,7 +139,8 @@ export class GeminiProvider implements AIProvider {
       reason: `Gemini error after retries: ${lastError}`,
       shouldPost: false,
       verifiedFacts: [],
-      postType: '',
+      primaryPost: { type: '', text: '' },
+      alternativePosts: [],
       confidence: 0,
       error: lastError,
       httpStatus,
@@ -183,8 +187,10 @@ Return JSON with these fields:
   "reason": "",
   "shouldPost": false,
   "verifiedFacts": [],
-  "postType": "",
-  "postText": "",
+  "primaryPost": {
+    "type": "",
+    "text": ""
+  },
   "alternativePosts": [],
   "confidence": 0
 }
@@ -193,10 +199,10 @@ Rules:
 - score: 0-100 integer
 - shouldPost: true only if score >= 65
 - category: breaking_ai_news, model_update, tool_spotlight, creator_workflow, research_insight, business_observation, industry_trend, safety_ethics
-- postType: breaking_news, creator_insight, tool_spotlight, practical_tip, founder_take, research_insight, thoughtful_question, light_humor, comparison, industry_observation, trend_reaction, meme_caption
-- postText: 120-240 chars preferred, max 280 chars, natural tone, strong hook, no corporate language, no hashtags, no emojis by default, no "Here is a post", no "game-changing" / "revolutionary" / "insane"
+- primaryPost.type: breaking_news, creator_insight, tool_spotlight, practical_tip, founder_take, research_insight, thoughtful_question, light_humor, comparison, industry_observation, trend_reaction, meme_caption
+- primaryPost.text: 120-240 chars preferred, max 280 chars, natural tone, strong hook, no corporate language, no hashtags, no emojis by default, no "Here is a post", no "game-changing" / "revolutionary" / "insane"
 - alternativePosts: up to 2 alternative posts as array of {type, text}. Use types: breaking_news, creator_insight, tool_spotlight, practical_tip, founder_take, research_insight, thoughtful_question, light_humor, comparison, industry_observation, trend_reaction, meme_caption
-- Humor/light_humor/meme_caption: light, clever, relevant to AI creators/founders/developers/designers, understandable without context, not insulting, not fabricated, not based on fake quotes. OK for light topics only; avoid when topic is serious, sensitive, tragic, political, legal, or safety-related.
+- Humor/light_humor/meme_caption: light, clever, relevant to AI creators/founders/developers/designers, understandable without context, not insulting, not fabricated, not based on fake quotes. OK for light topics only; avoid when topic is serious, sensitive, tragic, political, legal, safety-related, or about harm.
 - confidence: 0-100 integer
 - Do NOT invent product names, model names, prices, features, dates, quotes, benchmarks, stats, partnerships, funding amounts, or technical specs.`;
   }
@@ -207,28 +213,21 @@ Rules:
       const parsed = JSON.parse(cleaned);
       const score = Math.max(0, Math.min(100, typeof parsed.score === 'number' ? parsed.score : 0));
       const confidence = Math.max(0, Math.min(100, typeof parsed.confidence === 'number' ? parsed.confidence : 0));
-      let postText = typeof parsed.postText === 'string' ? parsed.postText : '';
-      if (postText.length > 280) {
-        postText = postText.slice(0, 277) + '...';
-      }
-      const shouldPost = score >= 65 && postText.length >= 100 && postText.length <= 280;
+      const primaryPost = this.normalizePost(parsed.primaryPost);
       const alternativePosts = Array.isArray(parsed.alternativePosts)
         ? parsed.alternativePosts
-            .filter((p: any) => p && typeof p.type === 'string' && typeof p.text === 'string')
+            .map((p: any) => this.normalizePost(p))
+            .filter((p: { type: string; text: string }) => p.type && p.text && !this.isNearDuplicate(primaryPost.text, p.text))
             .slice(0, 2)
-            .map((p: any) => ({
-              type: p.type,
-              text: p.text.length > 280 ? p.text.slice(0, 277) + '...' : p.text,
-            }))
         : [];
+      const shouldPost = score >= 65 && primaryPost.text.length >= 100 && primaryPost.text.length <= 280;
       return {
         score,
         category: typeof parsed.category === 'string' ? parsed.category : '',
         reason: typeof parsed.reason === 'string' ? parsed.reason : '',
         shouldPost,
         verifiedFacts: Array.isArray(parsed.verifiedFacts) ? parsed.verifiedFacts : [],
-        postType: typeof parsed.postType === 'string' ? parsed.postType : '',
-        postText,
+        primaryPost,
         alternativePosts,
         confidence,
       };
@@ -239,11 +238,35 @@ Rules:
         reason: 'Failed to parse Gemini response',
         shouldPost: false,
         verifiedFacts: [],
-        postType: '',
-        postText: '',
+        primaryPost: { type: '', text: '' },
+        alternativePosts: [],
         confidence: 0,
       };
     }
+  }
+
+  private normalizePost(post: any): { type: string; text: string } {
+    const type = typeof post?.type === 'string' ? post.type : '';
+    let text = typeof post?.text === 'string' ? post.text : '';
+    if (text.length > 280) {
+      text = text.slice(0, 277) + '...';
+    }
+    return { type, text };
+  }
+
+  private isNearDuplicate(a: string, b: string): boolean {
+    const normalize = (s: string) => s.toLowerCase().replace(/\s+/g, ' ').trim();
+    const na = normalize(a);
+    const nb = normalize(b);
+    if (!na || !nb) return false;
+    const wordsA = na.split(' ');
+    const wordsB = nb.split(' ');
+    let matches = 0;
+    for (const w of wordsA) {
+      if (wordsB.includes(w)) matches++;
+    }
+    const similarity = matches / Math.max(wordsA.length, wordsB.length);
+    return similarity > 0.75;
   }
 
   private isRetryableError(error: string): boolean {

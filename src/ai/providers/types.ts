@@ -6,9 +6,11 @@ export interface EvaluationResult {
   reason: string;
   shouldPost: boolean;
   verifiedFacts: string[];
-  postType: string;
-  postText?: string;
-  alternativePosts?: Array<{
+  primaryPost: {
+    type: string;
+    text: string;
+  };
+  alternativePosts: Array<{
     type: string;
     text: string;
   }>;

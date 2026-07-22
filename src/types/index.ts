@@ -61,6 +61,9 @@ export interface GeneratedPost {
   aiModel: string;
   isAlternative: boolean;
   parentPostId?: string;
+  characterCount: number;
+  validationStatus: 'valid' | 'invalid' | 'review';
+  validationNotes: string[];
 }
 
 export interface PostQueueItem {

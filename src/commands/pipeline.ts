@@ -3,6 +3,8 @@ import { storyStorage, generatedPostStorage } from '../storage';
 import { Pipeline } from '../scheduler/pipeline';
 import { RssCollector } from '../collectors/rss-collector';
 import { ProviderFactory } from '../ai/provider-factory';
+import { PostValidator } from '../ai/post-validator';
+import { HumorSafety } from '../ai/humor-safety';
 import { Story } from '../types';
 
 function generateId(): string {
@@ -62,18 +64,41 @@ async function runPipeline() {
       ctx.stories[storyIndex].reason = result.reason;
       ctx.stories[storyIndex].shouldPost = result.shouldPost;
       ctx.stories[storyIndex].verifiedFacts = result.verifiedFacts;
-      ctx.stories[storyIndex].postType = result.postType;
+      ctx.stories[storyIndex].postType = result.primaryPost?.type || '';
       ctx.stories[storyIndex].confidence = result.confidence;
       ctx.stories[storyIndex].lastEvaluatedAt = new Date().toISOString();
       ctx.stories[storyIndex].evaluationStatus = result.error ? 'retry_pending' : 'evaluated';
     }
 
-    if (result.postText && result.shouldPost) {
-      const post = {
+    if (result.primaryPost?.text && result.shouldPost) {
+      const postType = result.primaryPost.type || story.postType || '';
+      const humorOk = HumorSafety.isHumorAppropriate(story.title, result.category || '');
+      const isHumorPost = postType === 'light_humor' || postType === 'meme_caption';
+
+      if (isHumorPost && !humorOk) {
+        if (storyIndex >= 0) {
+          ctx.stories[storyIndex].evaluationStatus = 'evaluated';
+          ctx.stories[storyIndex].reason = 'Humor not appropriate for this topic';
+        }
+        await storyStorage.writeAll(ctx.stories);
+        continue;
+      }
+
+      const primaryValidation = PostValidator.validate(result.primaryPost.text, postType, []);
+      if (!primaryValidation.valid) {
+        if (storyIndex >= 0) {
+          ctx.stories[storyIndex].evaluationStatus = 'evaluated';
+          ctx.stories[storyIndex].reason = primaryValidation.issues.join('; ');
+        }
+        await storyStorage.writeAll(ctx.stories);
+        continue;
+      }
+
+      const primaryPost = {
         id: generateId(),
         storyId: story.id,
-        text: result.postText,
-        postType: result.postType,
+        text: result.primaryPost.text,
+        postType,
         category: result.category,
         sourceName: story.sourceName,
         sourceUrl: story.sourceUrl,
@@ -84,8 +109,11 @@ async function runPipeline() {
         aiProvider: provider,
         aiModel: model,
         isAlternative: false,
+        characterCount: primaryValidation.characterCount,
+        validationStatus: primaryValidation.valid ? 'valid' as const : 'review' as const,
+        validationNotes: primaryValidation.notes,
       };
-      await generatedPostStorage.append(post);
+      await generatedPostStorage.append(primaryPost);
       approvedCount++;
     }
 
