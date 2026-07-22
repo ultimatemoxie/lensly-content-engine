@@ -8,6 +8,10 @@
     "build": "tsc",
     "start": "node dist/index.js",
     "test:mock": "tsc && node dist/index.mock.js",
+    "collect": "tsc && node dist/commands/collect.js",
+    "evaluate": "tsc && node dist/commands/evaluate.js",
+    "pipeline": "tsc && node dist/commands/pipeline.js",
+    "status": "tsc && node dist/commands/status.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -19,6 +23,7 @@
     "typescript": "^7.0.2"
   },
   "dependencies": {
+    "@google/generative-ai": "^0.24.1",
     "dotenv": "^16.6.1",
     "rss-parser": "^3.13.0"
   }

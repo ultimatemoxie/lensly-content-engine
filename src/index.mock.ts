@@ -6,11 +6,7 @@ import { loadConfig } from './config';
 
 async function bootstrap() {
   const config = loadConfig();
-  const pipeline = new Pipeline(
-    [new MockCollector()],
-    new MockAIClient(),
-    new MockPublisher()
-  );
+  const pipeline = new Pipeline([new MockCollector()]);
 
   const result = await pipeline.run();
   console.log('Mock pipeline result:', JSON.stringify(result, null, 2));

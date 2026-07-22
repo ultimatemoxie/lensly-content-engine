@@ -210,11 +210,16 @@ export class RssCollector implements Collector {
               id: generateId(),
               title: article.title,
               summary: article.summary,
+              rssSummary: article.summary,
+              articleText: '',
+              contentSource: 'rss',
+              fetchStatus: 'success',
               sourceName: feed.name,
               sourceUrl: feed.configuredUrl,
               articleUrl: article.link,
               publishedAt: article.publishedAt,
               collectedAt: new Date().toISOString(),
+              evaluationStatus: 'pending',
             };
 
             collectedStories.push(story);
@@ -273,11 +278,16 @@ export class RssCollector implements Collector {
               id: generateId(),
               title: item.title,
               summary: item.contentSnippet,
+              rssSummary: item.contentSnippet,
+              articleText: '',
+              contentSource: 'rss',
+              fetchStatus: 'success',
               sourceName: feed.name,
               sourceUrl: feed.configuredUrl,
               articleUrl: item.link,
               publishedAt: item.pubDate ? new Date(item.pubDate).toISOString() : undefined,
               collectedAt: new Date().toISOString(),
+              evaluationStatus: 'pending',
             };
 
             collectedStories.push(story);
