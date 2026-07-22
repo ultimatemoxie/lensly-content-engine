@@ -2,7 +2,7 @@ import { loadConfig } from '../config';
 import { storyStorage, generatedPostStorage } from '../storage';
 import { Pipeline } from '../scheduler/pipeline';
 import { RssCollector } from '../collectors/rss-collector';
-import { GeminiEvaluator } from '../gemini/evaluator';
+import { ProviderFactory } from '../ai/provider-factory';
 import { Story } from '../types';
 
 function generateId(): string {
@@ -11,26 +11,49 @@ function generateId(): string {
 
 async function runPipeline() {
   const config = loadConfig();
-
-  if (!config.GEMINI_API_KEY) {
-    console.error('GEMINI_API_KEY is not set in .env');
+  const primary = await ProviderFactory.createPrimary();
+  if (!primary) {
+    console.error('Failed to initialize AI provider. Check your configuration.');
     process.exit(1);
   }
+
+  const fallbacks = await ProviderFactory.createFallbacks();
 
   const pipeline = new Pipeline([new RssCollector()]);
   const ctx = await pipeline.run();
 
-  const evaluator = new GeminiEvaluator(config.GEMINI_API_KEY, config.GEMINI_MODEL, config.GEMINI_REQUEST_DELAY_MS, config.GEMINI_MAX_RETRIES, config.MIN_STORY_SCORE, config.MAX_GEMINI_CALLS_PER_RUN);
-
   const unevaluated = ctx.stories.filter((s) => s.evaluationStatus === 'pending' || s.evaluationStatus === 'retry_pending');
 
   let approvedCount = 0;
+  let totalAiRequests = 0;
+  let totalRetries = 0;
+  let totalFallbackCalls = 0;
 
   for (const story of unevaluated) {
-    if (evaluator.getCallCount() >= config.MAX_GEMINI_CALLS_PER_RUN) break;
-    if (approvedCount >= config.MAX_APPROVED_POSTS_PER_RUN) break;
+    if (approvedCount >= config.MAX_APPROVED_POSTS_PER_RUN) {
+      break;
+    }
 
-    const result = await evaluator.evaluateStory(story);
+    const startCalls = primary.getRequestCount() + fallbacks.reduce((sum, f) => sum + f.getRequestCount(), 0);
+    const { result, provider, model } = await ProviderFactory.evaluateWithFallback(
+      {
+        title: story.title,
+        summary: story.summary,
+        rssSummary: story.rssSummary,
+        articleText: story.articleText,
+        contentSource: story.contentSource,
+        sourceName: story.sourceName,
+        articleUrl: story.articleUrl,
+        publishedAt: story.publishedAt,
+      },
+      primary,
+      fallbacks
+    );
+    const endCalls = primary.getRequestCount() + fallbacks.reduce((sum, f) => sum + f.getRequestCount(), 0);
+    totalAiRequests += endCalls - startCalls;
+    if (result.error && provider !== primary.providerName) {
+      totalFallbackCalls += endCalls - startCalls;
+    }
 
     const storyIndex = ctx.stories.findIndex((s) => s.id === story.id);
     if (storyIndex >= 0) {
@@ -42,7 +65,7 @@ async function runPipeline() {
       ctx.stories[storyIndex].postType = result.postType;
       ctx.stories[storyIndex].confidence = result.confidence;
       ctx.stories[storyIndex].lastEvaluatedAt = new Date().toISOString();
-      ctx.stories[storyIndex].evaluationStatus = result.evaluationStatus === 'retry_pending' ? 'retry_pending' : 'evaluated';
+      ctx.stories[storyIndex].evaluationStatus = result.error ? 'retry_pending' : 'evaluated';
     }
 
     if (result.postText && result.shouldPost) {
@@ -58,14 +81,21 @@ async function runPipeline() {
         score: result.score,
         status: 'draft' as const,
         createdAt: new Date().toISOString(),
+        aiProvider: provider,
+        aiModel: model,
+        isAlternative: false,
       };
       await generatedPostStorage.append(post);
       approvedCount++;
     }
+
+    if (result.error) {
+      totalRetries++;
+    }
   }
 
   await storyStorage.writeAll(ctx.stories);
-  console.log('Pipeline complete. Approved posts: ' + approvedCount + ', Gemini calls: ' + evaluator.getCallCount());
+  console.log('Pipeline complete. Approved posts: ' + approvedCount + ', AI requests: ' + totalAiRequests + ', Retries: ' + totalRetries + ', Fallback calls: ' + totalFallbackCalls);
 }
 
 runPipeline().catch((err) => {

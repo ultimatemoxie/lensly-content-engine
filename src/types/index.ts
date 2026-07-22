@@ -12,7 +12,7 @@ export interface Story {
   articleUrl: string;
   publishedAt?: string;
   collectedAt: string;
-  evaluationStatus: 'pending' | 'evaluated' | 'retry_pending' | 'insufficient';
+  evaluationStatus: 'pending' | 'evaluated' | 'retry_pending' | 'insufficient' | 'failed_permanent';
   score?: number;
   category?: string;
   reason?: string;
@@ -21,6 +21,13 @@ export interface Story {
   postType?: string;
   confidence?: number;
   lastEvaluatedAt?: string;
+  providerAttempts?: Array<{
+    provider: string;
+    model: string;
+    result: 'success' | 'temporary_failure' | 'permanent_failure';
+    httpStatus: number | null;
+    error?: string;
+  }>;
 }
 
 export interface EvaluationResult {
@@ -31,6 +38,10 @@ export interface EvaluationResult {
   verifiedFacts: string[];
   postType: string;
   postText?: string;
+  alternativePosts?: Array<{
+    type: string;
+    text: string;
+  }>;
   confidence: number;
 }
 
@@ -46,6 +57,10 @@ export interface GeneratedPost {
   score: number;
   status: 'draft' | 'queued' | 'published' | 'failed';
   createdAt: string;
+  aiProvider: string;
+  aiModel: string;
+  isAlternative: boolean;
+  parentPostId?: string;
 }
 
 export interface PostQueueItem {
@@ -82,7 +97,14 @@ export interface PipelineStatus {
   approvedPosts: number;
   rejectedStories: number;
   retryPendingStories: number;
-  geminiCallsMade: number;
+  failedPermanentStories: number;
+  pendingStories: number;
+  totalHttpRequests: number;
+  initialRequests: number;
+  retryRequests: number;
+  fallbackRequests: number;
+  successfulProviderRequests: number;
+  failedProviderRequests: number;
   remainingCandidates: number;
 }
 

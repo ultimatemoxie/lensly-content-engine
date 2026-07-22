@@ -12,15 +12,18 @@
     "articleUrl": "https://openai.com/index/building-ai-infrastructure-with-the-effingham-county-community",
     "publishedAt": "2026-07-22T13:00:00.000Z",
     "collectedAt": "2026-07-22T14:19:11.033Z",
-    "evaluationStatus": "retry_pending",
-    "score": 0,
+    "evaluationStatus": "evaluated",
+    "score": 20,
     "category": "",
-    "reason": "Gemini error: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent: [429 Too Many Requests] You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-2.0-flash\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash\nPlease retry in 14.361320551s. [{\"@type\":\"type.googleapis.com/google.rpc.Help\",\"links\":[{\"description\":\"Learn more about Gemini API quotas\",\"url\":\"https://ai.google.dev/gemini-api/docs/rate-limits\"}]},{\"@type\":\"type.googleapis.com/google.rpc.QuotaFailure\",\"violations\":[{\"quotaMetric\":\"generativelanguage.googleapis.com/generate_content_free_tier_input_token_count\",\"quotaId\":\"GenerateContentInputTokensPerModelPerMinute-FreeTier\",\"quotaDimensions\":{\"model\":\"gemini-2.0-flash\",\"location\":\"global\"}},{\"quotaMetric\":\"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\"quotaId\":\"GenerateRequestsPerMinutePerProjectPerModel-FreeTier\",\"quotaDimensions\":{\"model\":\"gemini-2.0-flash\",\"location\":\"global\"}},{\"quotaMetric\":\"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\"quotaId\":\"GenerateRequestsPerDayPerProjectPerModel-FreeTier\",\"quotaDimensions\":{\"model\":\"gemini-2.0-flash\",\"location\":\"global\"}}]},{\"@type\":\"type.googleapis.com/google.rpc.RetryInfo\",\"retryDelay\":\"14s\"}]",
+    "reason": "Lack of specific details",
     "shouldPost": false,
-    "verifiedFacts": [],
-    "postType": "",
-    "confidence": 0,
-    "lastEvaluatedAt": "2026-07-22T14:21:45.409Z"
+    "verifiedFacts": [
+      "OpenAI announces Project Camellia",
+      "Effingham County, Georgia, is involved"
+    ],
+    "postType": "industry_trend",
+    "confidence": 20,
+    "lastEvaluatedAt": "2026-07-22T16:28:35.408Z"
   },
   {
     "id": "story-1784729951033-wurguhd",
@@ -35,15 +38,18 @@
     "articleUrl": "https://openai.com/index/introducing-openai-presence",
     "publishedAt": "2026-07-22T05:30:00.000Z",
     "collectedAt": "2026-07-22T14:19:11.033Z",
-    "evaluationStatus": "retry_pending",
-    "score": 0,
-    "category": "",
-    "reason": "Gemini error: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent: [429 Too Many Requests] You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-2.0-flash\nPlease retry in 3.859372622s. [{\"@type\":\"type.googleapis.com/google.rpc.Help\",\"links\":[{\"description\":\"Learn more about Gemini API quotas\",\"url\":\"https://ai.google.dev/gemini-api/docs/rate-limits\"}]},{\"@type\":\"type.googleapis.com/google.rpc.QuotaFailure\",\"violations\":[{\"quotaMetric\":\"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\"quotaId\":\"GenerateRequestsPerDayPerProjectPerModel-FreeTier\",\"quotaDimensions\":{\"location\":\"global\",\"model\":\"gemini-2.0-flash\"}},{\"quotaMetric\":\"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\"quotaId\":\"GenerateRequestsPerMinutePerProjectPerModel-FreeTier\",\"quotaDimensions\":{\"location\":\"global\",\"model\":\"gemini-2.0-flash\"}},{\"quotaMetric\":\"generativelanguage.googleapis.com/generate_content_free_tier_input_token_count\",\"quotaId\":\"GenerateContentInputTokensPerModelPerMinute-FreeTier\",\"quotaDimensions\":{\"model\":\"gemini-2.0-flash\",\"location\":\"global\"}}]},{\"@type\":\"type.googleapis.com/google.rpc.RetryInfo\",\"retryDelay\":\"3s\"}]",
-    "shouldPost": false,
-    "verifiedFacts": [],
-    "postType": "",
-    "confidence": 0,
-    "lastEvaluatedAt": "2026-07-22T14:21:55.901Z"
+    "evaluationStatus": "evaluated",
+    "score": 80,
+    "category": "tool_spotlight",
+    "reason": "OpenAI Presence is indeed an enterprise AI agent platform.",
+    "shouldPost": true,
+    "verifiedFacts": [
+      "OpenAI Presence is an enterprise AI agent platform.",
+      "OpenAI Presence helps deploy trusted voice and chat agents."
+    ],
+    "postType": "tool_spotlight",
+    "confidence": 75,
+    "lastEvaluatedAt": "2026-07-22T16:28:39.179Z"
   },
   {
     "id": "story-1784729951033-a9wcpom",
@@ -58,7 +64,17 @@
     "articleUrl": "https://openai.com/index/introducing-chatgpt-small-business-program",
     "publishedAt": "2026-07-21T17:00:00.000Z",
     "collectedAt": "2026-07-22T14:19:11.033Z",
-    "evaluationStatus": "pending"
+    "evaluationStatus": "evaluated",
+    "score": 55,
+    "category": "business_observation",
+    "reason": "",
+    "shouldPost": false,
+    "verifiedFacts": [
+      "OpenAI launches the ChatGPT for Small Businesses program"
+    ],
+    "postType": "industry_observation",
+    "confidence": 55,
+    "lastEvaluatedAt": "2026-07-22T16:28:42.978Z"
   },
   {
     "id": "story-1784729951033-1wn9oe9",
@@ -73,7 +89,19 @@
     "articleUrl": "https://openai.com/index/hugging-face-model-evaluation-security-incident",
     "publishedAt": "2026-07-21T07:00:00.000Z",
     "collectedAt": "2026-07-22T14:19:11.033Z",
-    "evaluationStatus": "pending"
+    "evaluationStatus": "evaluated",
+    "score": 50,
+    "category": "industry_trend",
+    "reason": "general interest but lacks depth in details",
+    "shouldPost": false,
+    "verifiedFacts": [
+      "OpenAI and Hugging Face partner",
+      "security incident during AI model evaluation",
+      "published on July 21, 2026"
+    ],
+    "postType": "industry_observation",
+    "confidence": 60,
+    "lastEvaluatedAt": "2026-07-22T16:28:46.786Z"
   },
   {
     "id": "story-1784729951033-2qycpn3",
@@ -88,7 +116,17 @@
     "articleUrl": "https://openai.com/index/david-velez-robin-vince-join-openai-boards",
     "publishedAt": "2026-07-21T00:00:00.000Z",
     "collectedAt": "2026-07-22T14:19:11.033Z",
-    "evaluationStatus": "pending"
+    "evaluationStatus": "evaluated",
+    "score": 25,
+    "category": "",
+    "reason": "The article has corporate language and lacks detail",
+    "shouldPost": false,
+    "verifiedFacts": [
+      "David Vélez and Robin Vince join the boards of the OpenAI Foundation and OpenAI Group PBC"
+    ],
+    "postType": "",
+    "confidence": 25,
+    "lastEvaluatedAt": "2026-07-22T16:28:50.654Z"
   },
   {
     "id": "story-1784729951033-73a7e16",
@@ -103,7 +141,23 @@
     "articleUrl": "https://openai.com/index/safety-alignment-long-horizon-models",
     "publishedAt": "2026-07-20T10:00:00.000Z",
     "collectedAt": "2026-07-22T14:19:11.033Z",
-    "evaluationStatus": "pending"
+    "evaluationStatus": "evaluated",
+    "score": 45,
+    "category": "research_insight",
+    "reason": "",
+    "shouldPost": false,
+    "verifiedFacts": [],
+    "postType": "research_insight",
+    "confidence": 75,
+    "lastEvaluatedAt": "2026-07-22T17:09:40.911Z",
+    "providerAttempts": [
+      {
+        "provider": "groq",
+        "model": "llama-3.1-8b-instant",
+        "result": "success",
+        "httpStatus": 200
+      }
+    ]
   },
   {
     "id": "story-1784729954713-ycuzirs",
@@ -118,7 +172,27 @@
     "articleUrl": "https://blog.google/products-and-platforms/platforms/android/galaxy-unpacked-switch-from-iphone-to-android/",
     "publishedAt": "2026-07-22T13:00:00.000Z",
     "collectedAt": "2026-07-22T14:19:14.713Z",
-    "evaluationStatus": "pending"
+    "evaluationStatus": "evaluated",
+    "score": 60,
+    "category": "industry_trend",
+    "reason": "",
+    "shouldPost": false,
+    "verifiedFacts": [
+      "Android 17",
+      "wireless data transfer from iPhone",
+      "Google AI Blog"
+    ],
+    "postType": "industry_observation",
+    "confidence": 50,
+    "lastEvaluatedAt": "2026-07-22T17:09:44.560Z",
+    "providerAttempts": [
+      {
+        "provider": "groq",
+        "model": "llama-3.1-8b-instant",
+        "result": "success",
+        "httpStatus": 200
+      }
+    ]
   },
   {
     "id": "story-1784729954713-0xawfhh",
@@ -133,7 +207,39 @@
     "articleUrl": "https://blog.google/products-and-platforms/platforms/android/galaxy-unpacked-2026/",
     "publishedAt": "2026-07-22T13:00:00.000Z",
     "collectedAt": "2026-07-22T14:19:14.713Z",
-    "evaluationStatus": "pending"
+    "evaluationStatus": "evaluated",
+    "score": 25,
+    "category": "",
+    "reason": "",
+    "shouldPost": false,
+    "verifiedFacts": [
+      {
+        "fact": "The story was shared on Google AI Blog.",
+        "source": "The story itself",
+        "date": "2026-07-22"
+      },
+      {
+        "fact": "There were updates from Galaxy Unpacked 2026.",
+        "source": "The story itself",
+        "date": "2026-07-22"
+      },
+      {
+        "fact": "The updates were related to Samsung products.",
+        "source": "The story itself",
+        "date": "2026-07-22"
+      }
+    ],
+    "postType": "",
+    "confidence": 25,
+    "lastEvaluatedAt": "2026-07-22T17:09:48.355Z",
+    "providerAttempts": [
+      {
+        "provider": "groq",
+        "model": "llama-3.1-8b-instant",
+        "result": "success",
+        "httpStatus": 200
+      }
+    ]
   },
   {
     "id": "story-1784729954713-twoiufr",
@@ -148,7 +254,26 @@
     "articleUrl": "https://blog.google/products-and-platforms/products/education/summer-productivity-tips-google-ai-tools/",
     "publishedAt": "2026-07-21T20:00:00.000Z",
     "collectedAt": "2026-07-22T14:19:14.713Z",
-    "evaluationStatus": "pending"
+    "evaluationStatus": "evaluated",
+    "score": 50,
+    "category": "research_insight",
+    "reason": "Title is informative but lacks a hook",
+    "shouldPost": false,
+    "verifiedFacts": [
+      "Published on 2026-07-21T20:00:00.000Z",
+      "Source: Google AI Blog"
+    ],
+    "postType": "research_insight",
+    "confidence": 40,
+    "lastEvaluatedAt": "2026-07-22T17:09:51.955Z",
+    "providerAttempts": [
+      {
+        "provider": "groq",
+        "model": "llama-3.1-8b-instant",
+        "result": "success",
+        "httpStatus": 200
+      }
+    ]
   },
   {
     "id": "story-1784729954713-5bqy2sx",
@@ -163,7 +288,30 @@
     "articleUrl": "https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-3-6-flash-3-5-flash-lite-3-5-flash-cyber/",
     "publishedAt": "2026-07-21T15:00:00.000Z",
     "collectedAt": "2026-07-22T14:19:14.713Z",
-    "evaluationStatus": "pending"
+    "evaluationStatus": "evaluated",
+    "score": 80,
+    "category": "model_update",
+    "reason": "",
+    "shouldPost": true,
+    "verifiedFacts": [
+      {
+        "text": "Gemini 3.6 Flash, 3.5 Flash-Lite and 3.5 Flash Cyber are new Gemini models."
+      },
+      {
+        "text": "Models were introduced by Google AI Blog on 2026-07-21T15:00:00.000Z."
+      }
+    ],
+    "postType": "research_insight",
+    "confidence": 85,
+    "lastEvaluatedAt": "2026-07-22T17:09:55.519Z",
+    "providerAttempts": [
+      {
+        "provider": "groq",
+        "model": "llama-3.1-8b-instant",
+        "result": "success",
+        "httpStatus": 200
+      }
+    ]
   },
   {
     "id": "story-1784729954713-yrogtjn",
@@ -178,7 +326,15 @@
     "articleUrl": "https://blog.google/company-news/outreach-and-initiatives/creating-opportunity/alliance-america-skilled-trades/",
     "publishedAt": "2026-07-21T14:00:00.000Z",
     "collectedAt": "2026-07-22T14:19:14.713Z",
-    "evaluationStatus": "pending"
+    "evaluationStatus": "pending",
+    "score": 0,
+    "category": "",
+    "reason": "Max AI calls reached",
+    "shouldPost": false,
+    "verifiedFacts": [],
+    "postType": "",
+    "confidence": 0,
+    "lastEvaluatedAt": "2026-07-22T16:29:05.519Z"
   },
   {
     "id": "story-1784729954713-p53ah0v",
@@ -193,7 +349,15 @@
     "articleUrl": "https://blog.google/products-and-platforms/products/gemini/launch-business-with-gemini/",
     "publishedAt": "2026-07-20T19:00:00.000Z",
     "collectedAt": "2026-07-22T14:19:14.713Z",
-    "evaluationStatus": "pending"
+    "evaluationStatus": "pending",
+    "score": 0,
+    "category": "",
+    "reason": "Max AI calls reached",
+    "shouldPost": false,
+    "verifiedFacts": [],
+    "postType": "",
+    "confidence": 0,
+    "lastEvaluatedAt": "2026-07-22T16:29:05.519Z"
   },
   {
     "id": "story-1784729963030-pjhb0of",
@@ -208,7 +372,15 @@
     "articleUrl": "https://huggingface.co/blog/nvidia/state-of-simulation-for-physical-ai",
     "publishedAt": "2026-07-21T20:00:27.000Z",
     "collectedAt": "2026-07-22T14:19:23.030Z",
-    "evaluationStatus": "pending"
+    "evaluationStatus": "pending",
+    "score": 0,
+    "category": "",
+    "reason": "Max AI calls reached",
+    "shouldPost": false,
+    "verifiedFacts": [],
+    "postType": "",
+    "confidence": 0,
+    "lastEvaluatedAt": "2026-07-22T16:29:05.519Z"
   },
   {
     "id": "story-1784729963030-yv4xggi",
@@ -223,7 +395,15 @@
     "articleUrl": "https://huggingface.co/blog/grabette",
     "publishedAt": "2026-07-21T00:00:00.000Z",
     "collectedAt": "2026-07-22T14:19:23.030Z",
-    "evaluationStatus": "pending"
+    "evaluationStatus": "pending",
+    "score": 0,
+    "category": "",
+    "reason": "Max AI calls reached",
+    "shouldPost": false,
+    "verifiedFacts": [],
+    "postType": "",
+    "confidence": 0,
+    "lastEvaluatedAt": "2026-07-22T16:29:05.519Z"
   },
   {
     "id": "story-1784729965557-xtgiqek",
@@ -238,7 +418,15 @@
     "articleUrl": "https://techcrunch.com/2026/07/22/as-the-browser-wars-heat-up-here-are-the-hottest-alternatives-to-chrome-and-safari-in-2026/",
     "publishedAt": "2026-07-22T13:20:35.000Z",
     "collectedAt": "2026-07-22T14:19:25.557Z",
-    "evaluationStatus": "pending"
+    "evaluationStatus": "pending",
+    "score": 0,
+    "category": "",
+    "reason": "Max AI calls reached",
+    "shouldPost": false,
+    "verifiedFacts": [],
+    "postType": "",
+    "confidence": 0,
+    "lastEvaluatedAt": "2026-07-22T16:29:05.520Z"
   },
   {
     "id": "story-1784729965557-f4osvdp",
@@ -253,7 +441,15 @@
     "articleUrl": "https://techcrunch.com/2026/07/22/passionfroot-raises-15m-to-expand-its-b2b-creator-marketplace-to-the-us/",
     "publishedAt": "2026-07-22T13:00:00.000Z",
     "collectedAt": "2026-07-22T14:19:25.557Z",
-    "evaluationStatus": "pending"
+    "evaluationStatus": "pending",
+    "score": 0,
+    "category": "",
+    "reason": "Max AI calls reached",
+    "shouldPost": false,
+    "verifiedFacts": [],
+    "postType": "",
+    "confidence": 0,
+    "lastEvaluatedAt": "2026-07-22T16:29:05.520Z"
   },
   {
     "id": "story-1784729965557-ci0eqvu",
@@ -268,7 +464,15 @@
     "articleUrl": "https://techcrunch.com/2026/07/22/glow-emerges-from-stealth-at-1-2b-valuation-to-challenge-endpoint-security-in-the-ai-era/",
     "publishedAt": "2026-07-22T10:00:00.000Z",
     "collectedAt": "2026-07-22T14:19:25.557Z",
-    "evaluationStatus": "pending"
+    "evaluationStatus": "pending",
+    "score": 0,
+    "category": "",
+    "reason": "Max AI calls reached",
+    "shouldPost": false,
+    "verifiedFacts": [],
+    "postType": "",
+    "confidence": 0,
+    "lastEvaluatedAt": "2026-07-22T16:29:05.520Z"
   },
   {
     "id": "story-1784729965557-c9k0425",
@@ -283,7 +487,15 @@
     "articleUrl": "https://techcrunch.com/2026/07/22/synthesias-ai-training-platform-is-moving-beyond-videos-into-live-coaching/",
     "publishedAt": "2026-07-22T08:00:00.000Z",
     "collectedAt": "2026-07-22T14:19:25.557Z",
-    "evaluationStatus": "pending"
+    "evaluationStatus": "pending",
+    "score": 0,
+    "category": "",
+    "reason": "Max AI calls reached",
+    "shouldPost": false,
+    "verifiedFacts": [],
+    "postType": "",
+    "confidence": 0,
+    "lastEvaluatedAt": "2026-07-22T16:29:05.520Z"
   },
   {
     "id": "story-1784729965557-oghicwt",
@@ -298,7 +510,15 @@
     "articleUrl": "https://techcrunch.com/2026/07/21/the-anthropic-physical-intelligence-rumor-roiling-ai-twitter/",
     "publishedAt": "2026-07-22T03:20:57.000Z",
     "collectedAt": "2026-07-22T14:19:25.557Z",
-    "evaluationStatus": "pending"
+    "evaluationStatus": "pending",
+    "score": 0,
+    "category": "",
+    "reason": "Max AI calls reached",
+    "shouldPost": false,
+    "verifiedFacts": [],
+    "postType": "",
+    "confidence": 0,
+    "lastEvaluatedAt": "2026-07-22T16:29:05.520Z"
   },
   {
     "id": "story-1784729965557-c8lv6mo",
@@ -313,7 +533,15 @@
     "articleUrl": "https://techcrunch.com/2026/07/21/meta-is-testing-an-ai-bedtime-story-app-for-people-with-no-imagination/",
     "publishedAt": "2026-07-21T23:55:10.000Z",
     "collectedAt": "2026-07-22T14:19:25.557Z",
-    "evaluationStatus": "pending"
+    "evaluationStatus": "pending",
+    "score": 0,
+    "category": "",
+    "reason": "Max AI calls reached",
+    "shouldPost": false,
+    "verifiedFacts": [],
+    "postType": "",
+    "confidence": 0,
+    "lastEvaluatedAt": "2026-07-22T16:29:05.520Z"
   },
   {
     "id": "story-1784729965557-184yi8o",
@@ -328,7 +556,15 @@
     "articleUrl": "https://techcrunch.com/2026/07/21/openai-says-hugging-face-was-breached-by-its-pre-release-models/",
     "publishedAt": "2026-07-21T20:56:55.000Z",
     "collectedAt": "2026-07-22T14:19:25.557Z",
-    "evaluationStatus": "pending"
+    "evaluationStatus": "pending",
+    "score": 0,
+    "category": "",
+    "reason": "Max AI calls reached",
+    "shouldPost": false,
+    "verifiedFacts": [],
+    "postType": "",
+    "confidence": 0,
+    "lastEvaluatedAt": "2026-07-22T16:29:05.520Z"
   },
   {
     "id": "story-1784729965557-109vw53",
@@ -343,7 +579,15 @@
     "articleUrl": "https://techcrunch.com/2026/07/21/jack-dorsey-is-taking-on-slack-with-buzz-a-group-chat-platform-for-teams-and-their-ai-agents/",
     "publishedAt": "2026-07-21T19:43:41.000Z",
     "collectedAt": "2026-07-22T14:19:25.557Z",
-    "evaluationStatus": "pending"
+    "evaluationStatus": "pending",
+    "score": 0,
+    "category": "",
+    "reason": "Max AI calls reached",
+    "shouldPost": false,
+    "verifiedFacts": [],
+    "postType": "",
+    "confidence": 0,
+    "lastEvaluatedAt": "2026-07-22T16:29:05.520Z"
   },
   {
     "id": "story-1784729965557-zj0ccri",
@@ -358,7 +602,15 @@
     "articleUrl": "https://techcrunch.com/2026/07/21/ai-and-the-rise-of-the-universal-entertainment-app/",
     "publishedAt": "2026-07-21T19:39:30.000Z",
     "collectedAt": "2026-07-22T14:19:25.557Z",
-    "evaluationStatus": "pending"
+    "evaluationStatus": "pending",
+    "score": 0,
+    "category": "",
+    "reason": "Max AI calls reached",
+    "shouldPost": false,
+    "verifiedFacts": [],
+    "postType": "",
+    "confidence": 0,
+    "lastEvaluatedAt": "2026-07-22T16:29:05.520Z"
   },
   {
     "id": "story-1784729965557-53xg11t",
@@ -373,6 +625,14 @@
     "articleUrl": "https://techcrunch.com/2026/07/21/data-centers-expected-to-use-4x-more-electricity-by-2035/",
     "publishedAt": "2026-07-21T18:06:38.000Z",
     "collectedAt": "2026-07-22T14:19:25.557Z",
-    "evaluationStatus": "pending"
+    "evaluationStatus": "pending",
+    "score": 0,
+    "category": "",
+    "reason": "Max AI calls reached",
+    "shouldPost": false,
+    "verifiedFacts": [],
+    "postType": "",
+    "confidence": 0,
+    "lastEvaluatedAt": "2026-07-22T16:29:05.520Z"
   }
 ]
