@@ -1,68 +1,266 @@
 [
   {
-    "id": "post-1784724783056-xrwbjbj",
-    "storyId": "story-1784724768647-06lrxjg",
+    "id": "post-1784727741650-ethmjyo",
+    "storyId": "story-1784727728560-2fpx4ka",
+    "platform": "threads",
+    "content": "AI generated draft for: Write a short post about: Building AI infrastructure with the Effingham County community. Context: OpenAI announces Project Camellia in Effingham County, Georgia, with commitments to responsible energy, community investment, jobs, and access to Codex.",
+    "hashtags": [
+      "#lensly"
+    ],
+    "status": "queued",
+    "createdAt": "2026-07-22T13:42:21.650Z"
+  },
+  {
+    "id": "post-1784727741654-i3g0ebo",
+    "storyId": "story-1784727728561-hl9oqfr",
+    "platform": "threads",
+    "content": "AI generated draft for: Write a short post about: Introducing OpenAI Presence. Context: Introducing OpenAI Presence, a proven enterprise AI agent platform that helps organizations deploy trusted voice and chat agents for customer and internal workflows.",
+    "hashtags": [
+      "#lensly"
+    ],
+    "status": "queued",
+    "createdAt": "2026-07-22T13:42:21.654Z"
+  },
+  {
+    "id": "post-1784727741659-3iezz3x",
+    "storyId": "story-1784727728562-5ezsabm",
     "platform": "threads",
     "content": "AI generated draft for: Write a short post about: Introducing the ChatGPT for small business program. Context: OpenAI launches the ChatGPT for Small Businesses program, helping entrepreneurs build AI skills, automate work, and grow with ChatGPT Work.",
     "hashtags": [
       "#lensly"
     ],
     "status": "queued",
-    "createdAt": "2026-07-22T12:53:03.056Z"
+    "createdAt": "2026-07-22T13:42:21.659Z"
   },
   {
-    "id": "post-1784724783058-6tmczgj",
-    "storyId": "story-1784724768648-mf0y4qe",
+    "id": "post-1784727741663-i8h67ly",
+    "storyId": "story-1784727728562-w2yx7a7",
     "platform": "threads",
     "content": "AI generated draft for: Write a short post about: OpenAI and Hugging Face partner to address security incident during model evaluation. Context: OpenAI and Hugging Face share early findings from a security incident during AI model evaluation, highlighting advanced cyber capabilities and lessons for defenders.",
     "hashtags": [
       "#lensly"
     ],
     "status": "queued",
-    "createdAt": "2026-07-22T12:53:03.058Z"
+    "createdAt": "2026-07-22T13:42:21.663Z"
   },
   {
-    "id": "post-1784724783061-so1y6wl",
-    "storyId": "story-1784724768648-pcdgh4e",
+    "id": "post-1784727741670-74dv3l8",
+    "storyId": "story-1784727728562-o5zx6l2",
     "platform": "threads",
     "content": "AI generated draft for: Write a short post about: David Vélez and Robin Vince join the boards of the OpenAI Foundation and OpenAI Group PBC. Context: David Vélez and Robin Vince join the boards of the OpenAI Foundation and OpenAI Group PBC, bringing global leadership in finance, technology, and governance.",
     "hashtags": [
       "#lensly"
     ],
     "status": "queued",
-    "createdAt": "2026-07-22T12:53:03.061Z"
+    "createdAt": "2026-07-22T13:42:21.670Z"
   },
   {
-    "id": "post-1784724783064-zfl9d89",
-    "storyId": "story-1784724768648-ytxvw6s",
+    "id": "post-1784727741674-svxisn6",
+    "storyId": "story-1784727728562-93m2hr7",
     "platform": "threads",
     "content": "AI generated draft for: Write a short post about: Safety and alignment in an era of long-horizon models. Context: OpenAI shares lessons from deploying long-running AI models, highlighting new safety risks, observed failures, and improved safeguards through iterative deployment.",
     "hashtags": [
       "#lensly"
     ],
     "status": "queued",
-    "createdAt": "2026-07-22T12:53:03.064Z"
+    "createdAt": "2026-07-22T13:42:21.674Z"
   },
   {
-    "id": "post-1784724783068-a665xqf",
-    "storyId": "story-1784724780823-x2lzoj6",
+    "id": "post-1784727741678-3473s93",
+    "storyId": "story-1784727731358-hq1j5ti",
+    "platform": "threads",
+    "content": "AI generated draft for: Write a short post about: Switch to Android easily — and bring your data with you.. Context: A new migration experience built directly into Android 17 that lets you transfer more data wirelessly from an iPhone.",
+    "hashtags": [
+      "#lensly"
+    ],
+    "status": "queued",
+    "createdAt": "2026-07-22T13:42:21.678Z"
+  },
+  {
+    "id": "post-1784727741683-diq7t6x",
+    "storyId": "story-1784727731358-2oulsyb",
+    "platform": "threads",
+    "content": "AI generated draft for: Write a short post about: 3 Google updates from Galaxy Unpacked 2026. Context: We shared how Samsung users can boost productivity and get time back on new foldables, watches, and glasses coming soon.",
+    "hashtags": [
+      "#lensly"
+    ],
+    "status": "queued",
+    "createdAt": "2026-07-22T13:42:21.683Z"
+  },
+  {
+    "id": "post-1784727741687-reppula",
+    "storyId": "story-1784727731359-pfulhs5",
+    "platform": "threads",
+    "content": "AI generated draft for: Write a short post about: 13 Google tips for a fun, productive summer off from college. Context: Discover how college students can use Google AI tools, like Gemini and AI Mode, to prep for grad school, internships and fall courses.",
+    "hashtags": [
+      "#lensly"
+    ],
+    "status": "queued",
+    "createdAt": "2026-07-22T13:42:21.687Z"
+  },
+  {
+    "id": "post-1784727741694-llaf8da",
+    "storyId": "story-1784727731359-383pndx",
+    "platform": "threads",
+    "content": "AI generated draft for: Write a short post about: Introducing Gemini 3.6 Flash, 3.5 Flash-Lite, and 3.5 Flash Cyber. Context: We’re introducing new Gemini models, including Gemini 3.6 Flash, 3.5 Flash-Lite and 3.5 Flash Cyber.",
+    "hashtags": [
+      "#lensly"
+    ],
+    "status": "queued",
+    "createdAt": "2026-07-22T13:42:21.694Z"
+  },
+  {
+    "id": "post-1784727741720-ptvw0x2",
+    "storyId": "story-1784727731359-9kkkndz",
+    "platform": "threads",
+    "content": "AI generated draft for: Write a short post about: We’re announcing the Alliance for America’s Skilled Trades.. Context: Google is joining BlackRock, Carhartt and Ford to launch the Alliance for America’s Skilled Trades.",
+    "hashtags": [
+      "#lensly"
+    ],
+    "status": "queued",
+    "createdAt": "2026-07-22T13:42:21.720Z"
+  },
+  {
+    "id": "post-1784727741725-jcmk0cr",
+    "storyId": "story-1784727731359-3jjv3sf",
+    "platform": "threads",
+    "content": "AI generated draft for: Write a short post about: 5 ways to build a side hustle with Gemini. Context: Launching a side business? Use Gemini to design your side hustle, conduct market research and automate logistics.",
+    "hashtags": [
+      "#lensly"
+    ],
+    "status": "queued",
+    "createdAt": "2026-07-22T13:42:21.725Z"
+  },
+  {
+    "id": "post-1784727741743-dr9sfem",
+    "storyId": "story-1784727740080-xgmye2z",
     "platform": "threads",
     "content": "AI generated draft for: Write a short post about: The State of Simulation for Physical AI: An Overview. Context: ",
     "hashtags": [
       "#lensly"
     ],
     "status": "queued",
-    "createdAt": "2026-07-22T12:53:03.068Z"
+    "createdAt": "2026-07-22T13:42:21.743Z"
   },
   {
-    "id": "post-1784724783080-5kfbom2",
-    "storyId": "story-1784724780823-0l9bozo",
+    "id": "post-1784727741785-dft5xxp",
+    "storyId": "story-1784727740081-llfmvsn",
     "platform": "threads",
     "content": "AI generated draft for: Write a short post about: Grabette: an open system to record robot-manipulation data. Context: ",
     "hashtags": [
       "#lensly"
     ],
     "status": "queued",
-    "createdAt": "2026-07-22T12:53:03.080Z"
+    "createdAt": "2026-07-22T13:42:21.785Z"
+  },
+  {
+    "id": "post-1784727741803-1e6rlrn",
+    "storyId": "story-1784727741642-99zrulk",
+    "platform": "threads",
+    "content": "AI generated draft for: Write a short post about: The browser wars aren’t about search anymore — here are the best alternatives to Chrome and Safari. Context: We’ve compiled an overview of some of the top alternative browsers available today aiming to challenge Chrome and Safari.",
+    "hashtags": [
+      "#lensly"
+    ],
+    "status": "queued",
+    "createdAt": "2026-07-22T13:42:21.803Z"
+  },
+  {
+    "id": "post-1784727741807-vqsmllb",
+    "storyId": "story-1784727741643-ozho3do",
+    "platform": "threads",
+    "content": "AI generated draft for: Write a short post about: Passionfroot raises $15M to expand its B2B creator marketplace to the US. Context: Passionfroot, a German startup building a marketplace connecting B2B creators with brands, has raised $15M in a Series A round led by Insight Partners.",
+    "hashtags": [
+      "#lensly"
+    ],
+    "status": "queued",
+    "createdAt": "2026-07-22T13:42:21.807Z"
+  },
+  {
+    "id": "post-1784727741812-uhohy5i",
+    "storyId": "story-1784727741643-hze4tog",
+    "platform": "threads",
+    "content": "AI generated draft for: Write a short post about: Glow emerges from stealth at $1.2B valuation to challenge endpoint security in the AI era. Context: Glow is targeting a new class of endpoint risks created by the rapid adoption of AI agents and developer tools inside enterprises.",
+    "hashtags": [
+      "#lensly"
+    ],
+    "status": "queued",
+    "createdAt": "2026-07-22T13:42:21.812Z"
+  },
+  {
+    "id": "post-1784727741820-e3tzsby",
+    "storyId": "story-1784727741643-g5nprvt",
+    "platform": "threads",
+    "content": "AI generated draft for: Write a short post about: Synthesia’s AI training platform is moving beyond videos into live coaching. Context: Synthesia launched AI Roleplay Sessions, an interactive enterprise training platform where employees practice workplace conversations with AI avatars that provide feedback, scoring, and analytics to help companies measure training effectiveness.",
+    "hashtags": [
+      "#lensly"
+    ],
+    "status": "queued",
+    "createdAt": "2026-07-22T13:42:21.820Z"
+  },
+  {
+    "id": "post-1784727741824-agc5anj",
+    "storyId": "story-1784727741643-943316n",
+    "platform": "threads",
+    "content": "AI generated draft for: Write a short post about: The Anthropic-Physical Intelligence rumor roiling AI Twitter. Context: Anthropic and OpenAI's aggressive 2026 acquisition sprees set the stage for a weekend rumor.",
+    "hashtags": [
+      "#lensly"
+    ],
+    "status": "queued",
+    "createdAt": "2026-07-22T13:42:21.824Z"
+  },
+  {
+    "id": "post-1784727741833-mb7clr9",
+    "storyId": "story-1784727741643-zlzgvja",
+    "platform": "threads",
+    "content": "AI generated draft for: Write a short post about: Meta is testing an AI bedtime story app for people with no imagination. Context: At last, a tech company has found a way to outsource humanity's oldest pastime: using our imaginations.",
+    "hashtags": [
+      "#lensly"
+    ],
+    "status": "queued",
+    "createdAt": "2026-07-22T13:42:21.833Z"
+  },
+  {
+    "id": "post-1784727741839-jxgd6yt",
+    "storyId": "story-1784727741643-237z3d2",
+    "platform": "threads",
+    "content": "AI generated draft for: Write a short post about: OpenAI says Hugging Face was breached by its pre-release models. Context: OpenAI has come forward to claim responsibility for the Hugging Face breach, saying it was the result of internal testing gone awry.",
+    "hashtags": [
+      "#lensly"
+    ],
+    "status": "queued",
+    "createdAt": "2026-07-22T13:42:21.839Z"
+  },
+  {
+    "id": "post-1784727741843-bvw74d7",
+    "storyId": "story-1784727741643-cknke36",
+    "platform": "threads",
+    "content": "AI generated draft for: Write a short post about: Jack Dorsey is taking on Slack with Buzz, a group chat platform for teams and their AI agents. Context: Buzz is a group chat platform for the workplace that puts humans and their AI agents in the same conversation.",
+    "hashtags": [
+      "#lensly"
+    ],
+    "status": "queued",
+    "createdAt": "2026-07-22T13:42:21.843Z"
+  },
+  {
+    "id": "post-1784727741848-ju730zm",
+    "storyId": "story-1784727741643-vlfld0d",
+    "platform": "threads",
+    "content": "AI generated draft for: Write a short post about: AI and the rise of the universal entertainment app. Context: Over the past decade, streaming platforms competed by dominating individual formats like music, video, podcasts, or audiobooks. Now, as AI makes it easier to create, organize, and recommend content, those distinctions are fading, pushing companies like Spotify, Netflix, YouTube, and TikTok to become all-purpose entertainment destinations instead.",
+    "hashtags": [
+      "#lensly"
+    ],
+    "status": "queued",
+    "createdAt": "2026-07-22T13:42:21.848Z"
+  },
+  {
+    "id": "post-1784727741852-swd8jtq",
+    "storyId": "story-1784727741643-855lm3o",
+    "platform": "threads",
+    "content": "AI generated draft for: Write a short post about: Data centers expected to use 4x more electricity by 2035. Context: New data centers built through 2033 could consume as much electricity as India uses today.",
+    "hashtags": [
+      "#lensly"
+    ],
+    "status": "queued",
+    "createdAt": "2026-07-22T13:42:21.852Z"
   }
 ]

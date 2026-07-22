@@ -36,4 +36,15 @@ export interface PublishLog {
   publishedAt: string;
 }
 
+export interface SourceHealthReport {
+  sourceName: string;
+  configuredUrl: string;
+  finalUrl: string;
+  mode: 'rss' | 'atom' | 'html';
+  status: number | null;
+  itemsFound: number;
+  recentItemsAccepted: number;
+  error: string | null;
+}
+
 export type Platform = 'threads' | 'instagram' | 'twitter';

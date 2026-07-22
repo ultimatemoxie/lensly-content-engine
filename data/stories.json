@@ -1,62 +1,242 @@
 [
   {
-    "id": "story-1784724768647-06lrxjg",
+    "id": "story-1784727728560-2fpx4ka",
+    "title": "Building AI infrastructure with the Effingham County community",
+    "summary": "OpenAI announces Project Camellia in Effingham County, Georgia, with commitments to responsible energy, community investment, jobs, and access to Codex.",
+    "sourceName": "OpenAI Blog",
+    "sourceUrl": "https://openai.com/blog/rss.xml",
+    "articleUrl": "https://openai.com/index/building-ai-infrastructure-with-the-effingham-county-community",
+    "publishedAt": "2026-07-22T13:00:00.000Z",
+    "collectedAt": "2026-07-22T13:42:08.561Z"
+  },
+  {
+    "id": "story-1784727728561-hl9oqfr",
+    "title": "Introducing OpenAI Presence",
+    "summary": "Introducing OpenAI Presence, a proven enterprise AI agent platform that helps organizations deploy trusted voice and chat agents for customer and internal workflows.",
+    "sourceName": "OpenAI Blog",
+    "sourceUrl": "https://openai.com/blog/rss.xml",
+    "articleUrl": "https://openai.com/index/introducing-openai-presence",
+    "publishedAt": "2026-07-22T05:30:00.000Z",
+    "collectedAt": "2026-07-22T13:42:08.561Z"
+  },
+  {
+    "id": "story-1784727728562-5ezsabm",
     "title": "Introducing the ChatGPT for small business program",
     "summary": "OpenAI launches the ChatGPT for Small Businesses program, helping entrepreneurs build AI skills, automate work, and grow with ChatGPT Work.",
     "sourceName": "OpenAI Blog",
     "sourceUrl": "https://openai.com/blog/rss.xml",
     "articleUrl": "https://openai.com/index/introducing-chatgpt-small-business-program",
     "publishedAt": "2026-07-21T17:00:00.000Z",
-    "collectedAt": "2026-07-22T12:52:48.648Z"
+    "collectedAt": "2026-07-22T13:42:08.562Z"
   },
   {
-    "id": "story-1784724768648-mf0y4qe",
+    "id": "story-1784727728562-w2yx7a7",
     "title": "OpenAI and Hugging Face partner to address security incident during model evaluation",
     "summary": "OpenAI and Hugging Face share early findings from a security incident during AI model evaluation, highlighting advanced cyber capabilities and lessons for defenders.",
     "sourceName": "OpenAI Blog",
     "sourceUrl": "https://openai.com/blog/rss.xml",
     "articleUrl": "https://openai.com/index/hugging-face-model-evaluation-security-incident",
     "publishedAt": "2026-07-21T07:00:00.000Z",
-    "collectedAt": "2026-07-22T12:52:48.648Z"
+    "collectedAt": "2026-07-22T13:42:08.562Z"
   },
   {
-    "id": "story-1784724768648-pcdgh4e",
+    "id": "story-1784727728562-o5zx6l2",
     "title": "David Vélez and Robin Vince join the boards of the OpenAI Foundation and OpenAI Group PBC",
     "summary": "David Vélez and Robin Vince join the boards of the OpenAI Foundation and OpenAI Group PBC, bringing global leadership in finance, technology, and governance.",
     "sourceName": "OpenAI Blog",
     "sourceUrl": "https://openai.com/blog/rss.xml",
     "articleUrl": "https://openai.com/index/david-velez-robin-vince-join-openai-boards",
     "publishedAt": "2026-07-21T00:00:00.000Z",
-    "collectedAt": "2026-07-22T12:52:48.648Z"
+    "collectedAt": "2026-07-22T13:42:08.562Z"
   },
   {
-    "id": "story-1784724768648-ytxvw6s",
+    "id": "story-1784727728562-93m2hr7",
     "title": "Safety and alignment in an era of long-horizon models",
     "summary": "OpenAI shares lessons from deploying long-running AI models, highlighting new safety risks, observed failures, and improved safeguards through iterative deployment.",
     "sourceName": "OpenAI Blog",
     "sourceUrl": "https://openai.com/blog/rss.xml",
     "articleUrl": "https://openai.com/index/safety-alignment-long-horizon-models",
     "publishedAt": "2026-07-20T10:00:00.000Z",
-    "collectedAt": "2026-07-22T12:52:48.648Z"
+    "collectedAt": "2026-07-22T13:42:08.562Z"
   },
   {
-    "id": "story-1784724780823-x2lzoj6",
+    "id": "story-1784727731358-hq1j5ti",
+    "title": "Switch to Android easily — and bring your data with you.",
+    "summary": "A new migration experience built directly into Android 17 that lets you transfer more data wirelessly from an iPhone.",
+    "sourceName": "Google AI Blog",
+    "sourceUrl": "https://blog.google/rss/",
+    "articleUrl": "https://blog.google/products-and-platforms/platforms/android/galaxy-unpacked-switch-from-iphone-to-android/",
+    "publishedAt": "2026-07-22T13:00:00.000Z",
+    "collectedAt": "2026-07-22T13:42:11.358Z"
+  },
+  {
+    "id": "story-1784727731358-2oulsyb",
+    "title": "3 Google updates from Galaxy Unpacked 2026",
+    "summary": "We shared how Samsung users can boost productivity and get time back on new foldables, watches, and glasses coming soon.",
+    "sourceName": "Google AI Blog",
+    "sourceUrl": "https://blog.google/rss/",
+    "articleUrl": "https://blog.google/products-and-platforms/platforms/android/galaxy-unpacked-2026/",
+    "publishedAt": "2026-07-22T13:00:00.000Z",
+    "collectedAt": "2026-07-22T13:42:11.358Z"
+  },
+  {
+    "id": "story-1784727731359-pfulhs5",
+    "title": "13 Google tips for a fun, productive summer off from college",
+    "summary": "Discover how college students can use Google AI tools, like Gemini and AI Mode, to prep for grad school, internships and fall courses.",
+    "sourceName": "Google AI Blog",
+    "sourceUrl": "https://blog.google/rss/",
+    "articleUrl": "https://blog.google/products-and-platforms/products/education/summer-productivity-tips-google-ai-tools/",
+    "publishedAt": "2026-07-21T20:00:00.000Z",
+    "collectedAt": "2026-07-22T13:42:11.359Z"
+  },
+  {
+    "id": "story-1784727731359-383pndx",
+    "title": "Introducing Gemini 3.6 Flash, 3.5 Flash-Lite, and 3.5 Flash Cyber",
+    "summary": "We’re introducing new Gemini models, including Gemini 3.6 Flash, 3.5 Flash-Lite and 3.5 Flash Cyber.",
+    "sourceName": "Google AI Blog",
+    "sourceUrl": "https://blog.google/rss/",
+    "articleUrl": "https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-3-6-flash-3-5-flash-lite-3-5-flash-cyber/",
+    "publishedAt": "2026-07-21T15:00:00.000Z",
+    "collectedAt": "2026-07-22T13:42:11.359Z"
+  },
+  {
+    "id": "story-1784727731359-9kkkndz",
+    "title": "We’re announcing the Alliance for America’s Skilled Trades.",
+    "summary": "Google is joining BlackRock, Carhartt and Ford to launch the Alliance for America’s Skilled Trades.",
+    "sourceName": "Google AI Blog",
+    "sourceUrl": "https://blog.google/rss/",
+    "articleUrl": "https://blog.google/company-news/outreach-and-initiatives/creating-opportunity/alliance-america-skilled-trades/",
+    "publishedAt": "2026-07-21T14:00:00.000Z",
+    "collectedAt": "2026-07-22T13:42:11.359Z"
+  },
+  {
+    "id": "story-1784727731359-3jjv3sf",
+    "title": "5 ways to build a side hustle with Gemini",
+    "summary": "Launching a side business? Use Gemini to design your side hustle, conduct market research and automate logistics.",
+    "sourceName": "Google AI Blog",
+    "sourceUrl": "https://blog.google/rss/",
+    "articleUrl": "https://blog.google/products-and-platforms/products/gemini/launch-business-with-gemini/",
+    "publishedAt": "2026-07-20T19:00:00.000Z",
+    "collectedAt": "2026-07-22T13:42:11.359Z"
+  },
+  {
+    "id": "story-1784727740080-xgmye2z",
     "title": "The State of Simulation for Physical AI: An Overview",
     "summary": "",
     "sourceName": "Hugging Face Blog",
     "sourceUrl": "https://huggingface.co/blog/feed.xml",
     "articleUrl": "https://huggingface.co/blog/nvidia/state-of-simulation-for-physical-ai",
     "publishedAt": "2026-07-21T20:00:27.000Z",
-    "collectedAt": "2026-07-22T12:53:00.823Z"
+    "collectedAt": "2026-07-22T13:42:20.080Z"
   },
   {
-    "id": "story-1784724780823-0l9bozo",
+    "id": "story-1784727740081-llfmvsn",
     "title": "Grabette: an open system to record robot-manipulation data",
     "summary": "",
     "sourceName": "Hugging Face Blog",
     "sourceUrl": "https://huggingface.co/blog/feed.xml",
     "articleUrl": "https://huggingface.co/blog/grabette",
     "publishedAt": "2026-07-21T00:00:00.000Z",
-    "collectedAt": "2026-07-22T12:53:00.823Z"
+    "collectedAt": "2026-07-22T13:42:20.081Z"
+  },
+  {
+    "id": "story-1784727741642-99zrulk",
+    "title": "The browser wars aren’t about search anymore — here are the best alternatives to Chrome and Safari",
+    "summary": "We’ve compiled an overview of some of the top alternative browsers available today aiming to challenge Chrome and Safari.",
+    "sourceName": "TechCrunch AI",
+    "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+    "articleUrl": "https://techcrunch.com/2026/07/22/as-the-browser-wars-heat-up-here-are-the-hottest-alternatives-to-chrome-and-safari-in-2026/",
+    "publishedAt": "2026-07-22T13:20:35.000Z",
+    "collectedAt": "2026-07-22T13:42:21.642Z"
+  },
+  {
+    "id": "story-1784727741643-ozho3do",
+    "title": "Passionfroot raises $15M to expand its B2B creator marketplace to the US",
+    "summary": "Passionfroot, a German startup building a marketplace connecting B2B creators with brands, has raised $15M in a Series A round led by Insight Partners.",
+    "sourceName": "TechCrunch AI",
+    "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+    "articleUrl": "https://techcrunch.com/2026/07/22/passionfroot-raises-15m-to-expand-its-b2b-creator-marketplace-to-the-us/",
+    "publishedAt": "2026-07-22T13:00:00.000Z",
+    "collectedAt": "2026-07-22T13:42:21.643Z"
+  },
+  {
+    "id": "story-1784727741643-hze4tog",
+    "title": "Glow emerges from stealth at $1.2B valuation to challenge endpoint security in the AI era",
+    "summary": "Glow is targeting a new class of endpoint risks created by the rapid adoption of AI agents and developer tools inside enterprises.",
+    "sourceName": "TechCrunch AI",
+    "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+    "articleUrl": "https://techcrunch.com/2026/07/22/glow-emerges-from-stealth-at-1-2b-valuation-to-challenge-endpoint-security-in-the-ai-era/",
+    "publishedAt": "2026-07-22T10:00:00.000Z",
+    "collectedAt": "2026-07-22T13:42:21.643Z"
+  },
+  {
+    "id": "story-1784727741643-g5nprvt",
+    "title": "Synthesia’s AI training platform is moving beyond videos into live coaching",
+    "summary": "Synthesia launched AI Roleplay Sessions, an interactive enterprise training platform where employees practice workplace conversations with AI avatars that provide feedback, scoring, and analytics to help companies measure training effectiveness.",
+    "sourceName": "TechCrunch AI",
+    "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+    "articleUrl": "https://techcrunch.com/2026/07/22/synthesias-ai-training-platform-is-moving-beyond-videos-into-live-coaching/",
+    "publishedAt": "2026-07-22T08:00:00.000Z",
+    "collectedAt": "2026-07-22T13:42:21.643Z"
+  },
+  {
+    "id": "story-1784727741643-943316n",
+    "title": "The Anthropic-Physical Intelligence rumor roiling AI Twitter",
+    "summary": "Anthropic and OpenAI's aggressive 2026 acquisition sprees set the stage for a weekend rumor.",
+    "sourceName": "TechCrunch AI",
+    "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+    "articleUrl": "https://techcrunch.com/2026/07/21/the-anthropic-physical-intelligence-rumor-roiling-ai-twitter/",
+    "publishedAt": "2026-07-22T03:20:57.000Z",
+    "collectedAt": "2026-07-22T13:42:21.643Z"
+  },
+  {
+    "id": "story-1784727741643-zlzgvja",
+    "title": "Meta is testing an AI bedtime story app for people with no imagination",
+    "summary": "At last, a tech company has found a way to outsource humanity's oldest pastime: using our imaginations.",
+    "sourceName": "TechCrunch AI",
+    "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+    "articleUrl": "https://techcrunch.com/2026/07/21/meta-is-testing-an-ai-bedtime-story-app-for-people-with-no-imagination/",
+    "publishedAt": "2026-07-21T23:55:10.000Z",
+    "collectedAt": "2026-07-22T13:42:21.643Z"
+  },
+  {
+    "id": "story-1784727741643-237z3d2",
+    "title": "OpenAI says Hugging Face was breached by its pre-release models",
+    "summary": "OpenAI has come forward to claim responsibility for the Hugging Face breach, saying it was the result of internal testing gone awry.",
+    "sourceName": "TechCrunch AI",
+    "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+    "articleUrl": "https://techcrunch.com/2026/07/21/openai-says-hugging-face-was-breached-by-its-pre-release-models/",
+    "publishedAt": "2026-07-21T20:56:55.000Z",
+    "collectedAt": "2026-07-22T13:42:21.643Z"
+  },
+  {
+    "id": "story-1784727741643-cknke36",
+    "title": "Jack Dorsey is taking on Slack with Buzz, a group chat platform for teams and their AI agents",
+    "summary": "Buzz is a group chat platform for the workplace that puts humans and their AI agents in the same conversation.",
+    "sourceName": "TechCrunch AI",
+    "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+    "articleUrl": "https://techcrunch.com/2026/07/21/jack-dorsey-is-taking-on-slack-with-buzz-a-group-chat-platform-for-teams-and-their-ai-agents/",
+    "publishedAt": "2026-07-21T19:43:41.000Z",
+    "collectedAt": "2026-07-22T13:42:21.643Z"
+  },
+  {
+    "id": "story-1784727741643-vlfld0d",
+    "title": "AI and the rise of the universal entertainment app",
+    "summary": "Over the past decade, streaming platforms competed by dominating individual formats like music, video, podcasts, or audiobooks. Now, as AI makes it easier to create, organize, and recommend content, those distinctions are fading, pushing companies like Spotify, Netflix, YouTube, and TikTok to become all-purpose entertainment destinations instead.",
+    "sourceName": "TechCrunch AI",
+    "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+    "articleUrl": "https://techcrunch.com/2026/07/21/ai-and-the-rise-of-the-universal-entertainment-app/",
+    "publishedAt": "2026-07-21T19:39:30.000Z",
+    "collectedAt": "2026-07-22T13:42:21.643Z"
+  },
+  {
+    "id": "story-1784727741643-855lm3o",
+    "title": "Data centers expected to use 4x more electricity by 2035",
+    "summary": "New data centers built through 2033 could consume as much electricity as India uses today.",
+    "sourceName": "TechCrunch AI",
+    "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+    "articleUrl": "https://techcrunch.com/2026/07/21/data-centers-expected-to-use-4x-more-electricity-by-2035/",
+    "publishedAt": "2026-07-21T18:06:38.000Z",
+    "collectedAt": "2026-07-22T13:42:21.643Z"
   }
 ]
