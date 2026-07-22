@@ -1,0 +1,24 @@
+[
+  {
+    "id": "post-1784720083632-38k9xjp",
+    "storyId": "story-1",
+    "platform": "threads",
+    "content": "AI generated draft for: Write a short post about: Sample Story. Context: This is a sample collected story for testing.",
+    "hashtags": [
+      "#lensly"
+    ],
+    "status": "queued",
+    "createdAt": "2026-07-22T11:34:43.633Z"
+  },
+  {
+    "id": "post-1784720513975-p7py8v9",
+    "storyId": "story-1",
+    "platform": "threads",
+    "content": "AI generated draft for: Write a short post about: Sample Story. Context: This is a sample collected story for testing.",
+    "hashtags": [
+      "#lensly"
+    ],
+    "status": "queued",
+    "createdAt": "2026-07-22T11:41:53.976Z"
+  }
+]

@@ -1,0 +1,18 @@
+[
+  {
+    "id": "story-1",
+    "source": "mock",
+    "title": "Sample Story",
+    "content": "This is a sample collected story for testing.",
+    "url": "https://example.com/story-1",
+    "collectedAt": "2026-07-22T11:34:43.622Z"
+  },
+  {
+    "id": "story-1",
+    "source": "mock",
+    "title": "Sample Story",
+    "content": "This is a sample collected story for testing.",
+    "url": "https://example.com/story-1",
+    "collectedAt": "2026-07-22T11:41:53.969Z"
+  }
+]
