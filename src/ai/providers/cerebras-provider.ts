@@ -69,7 +69,8 @@ export class CerebrasProvider implements AIProvider {
   }, budget?: RequestBudget): Promise<EvaluationResult & { error?: string; httpStatus?: number | null }> {
     if (budget && !budget.canRequest()) {
       return {
-        score: 0,
+        storyScore: 0,
+        postQualityScore: 0,
         category: '',
         reason: 'Request budget exhausted',
         shouldPost: false,
@@ -92,9 +93,10 @@ export class CerebrasProvider implements AIProvider {
         if (budget) {
           if (!budget.canRequest()) {
             return {
-              score: 0,
-              category: '',
-              reason: 'Request budget exhausted during retry',
+storyScore: 0,
+        postQualityScore: 0,
+        category: '',
+        reason: 'Request budget exhausted during retry',
               shouldPost: false,
               verifiedFacts: [],
               primaryPost: { type: '', text: '' },
@@ -123,9 +125,10 @@ export class CerebrasProvider implements AIProvider {
         const isRetryable = this.isRetryableError(lastError);
         if (!isRetryable || attempt >= this.maxRetries - 1) {
           return {
-            score: 0,
-            category: '',
-            reason: `Cerebras error: ${lastError}`,
+storyScore: 0,
+        postQualityScore: 0,
+        category: '',
+        reason: `Cerebras error: ${lastError}`,
             shouldPost: false,
             verifiedFacts: [],
             primaryPost: { type: '', text: '' },
@@ -142,9 +145,10 @@ export class CerebrasProvider implements AIProvider {
     }
 
     return {
-      score: 0,
-      category: '',
-      reason: `Cerebras error after retries: ${lastError}`,
+storyScore: 0,
+        postQualityScore: 0,
+        category: '',
+        reason: `Cerebras error after retries: ${lastError}`,
       shouldPost: false,
       verifiedFacts: [],
       primaryPost: { type: '', text: '' },
@@ -280,7 +284,7 @@ Rules:
             .filter((p: { type: string; text: string }) => p.type && p.text && !this.isNearDuplicate(primaryPost.text, p.text))
             .slice(0, 2)
         : [];
-      const shouldPost = storyScore >= 65 && primaryPost.text.length >= 100 && primaryPost.text.length <= 280;
+      const shouldPost = storyScore >= 65;
       return {
         storyScore,
         postQualityScore,

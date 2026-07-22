@@ -59,7 +59,8 @@ async function runPipeline() {
 
     const storyIndex = ctx.stories.findIndex((s) => s.id === story.id);
     if (storyIndex >= 0) {
-      ctx.stories[storyIndex].score = result.score;
+      ctx.stories[storyIndex].storyScore = result.storyScore;
+      ctx.stories[storyIndex].postQualityScore = result.postQualityScore;
       ctx.stories[storyIndex].category = result.category;
       ctx.stories[storyIndex].reason = result.reason;
       ctx.stories[storyIndex].shouldPost = result.shouldPost;
@@ -103,7 +104,7 @@ async function runPipeline() {
         sourceName: story.sourceName,
         sourceUrl: story.sourceUrl,
         confidence: result.confidence,
-        score: result.score,
+        score: result.storyScore,
         status: 'draft' as const,
         createdAt: new Date().toISOString(),
         aiProvider: provider,

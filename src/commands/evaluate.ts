@@ -27,6 +27,35 @@ function isPermanentFailure(error: string | undefined): boolean {
   return permanentPatterns.some((pattern) => error.toLowerCase().includes(pattern.toLowerCase()));
 }
 
+function pickBalancedSample(stories: Story[]): Story[] {
+  const groups: Record<string, Story[]> = {};
+  for (const s of stories) {
+    const key = s.sourceName || 'unknown';
+    if (!groups[key]) groups[key] = [];
+    groups[key].push(s);
+  }
+
+  const selected: Story[] = [];
+  const prioritySources = ['OpenAI Blog', 'Google AI Blog', 'Hugging Face Blog', 'TechCrunch AI'];
+  for (const src of prioritySources) {
+    const pool = groups[src] || [];
+    if (pool.length > 0) {
+      selected.push(pool[0]);
+    }
+  }
+
+  if (selected.length < 5) {
+    const remaining = stories.filter(s => !selected.includes(s));
+    remaining.sort((a, b) => (b.articleText?.length || 0) - (a.articleText?.length || 0));
+    for (const s of remaining) {
+      if (selected.length >= 5) break;
+      if (!selected.includes(s)) selected.push(s);
+    }
+  }
+
+  return selected.slice(0, 5);
+}
+
 async function evaluate() {
   const config = loadConfig();
   const primary = await ProviderFactory.createPrimary();
@@ -46,6 +75,8 @@ async function evaluate() {
     console.log('No unevaluated stories found.');
     return;
   }
+
+  const sample = pickBalancedSample(unevaluated);
 
   let approvedCount = 0;
   let totalHttpRequests = 0;
@@ -73,7 +104,12 @@ async function evaluate() {
     remainingCandidates: 0,
   };
 
-  for (const story of unevaluated) {
+  console.log('Selected sample:');
+  for (const s of sample) {
+    console.log(`  - ${s.title} [${s.sourceName}]`);
+  }
+
+  for (const story of sample) {
     if (approvedCount >= config.MAX_APPROVED_POSTS_PER_RUN) {
       break;
     }
@@ -125,18 +161,21 @@ async function evaluate() {
     status.successfulProviderRequests = successfulProviderRequests;
     status.failedProviderRequests = failedProviderRequests;
 
-    story.score = result.score;
+    const normalizedType = PostValidator.normalizePostType(result.primaryPost?.type || '');
+
+    story.storyScore = result.storyScore;
+    story.postQualityScore = result.postQualityScore;
     story.category = result.category;
     story.reason = result.reason ? result.reason : (result.shouldPost ? 'Approved' : pickFallbackReason());
     story.shouldPost = result.shouldPost;
     story.verifiedFacts = result.verifiedFacts;
-    story.postType = result.primaryPost?.type || '';
+    story.postType = normalizedType;
     story.confidence = result.confidence;
     story.lastEvaluatedAt = new Date().toISOString();
 
     if (result.primaryPost?.text && result.shouldPost) {
       const humorOk = HumorSafety.isHumorAppropriate(story.title, story.category || '');
-      const isHumorPost = story.postType === 'light_humor' || story.postType === 'meme_caption';
+      const isHumorPost = normalizedType === 'light_humor' || normalizedType === 'meme_caption';
 
       if (isHumorPost && !humorOk) {
         story.evaluationStatus = 'evaluated';
@@ -147,20 +186,15 @@ async function evaluate() {
         continue;
       }
 
-      const primaryValidation = PostValidator.validate(result.primaryPost.text, story.postType, []);
+      let primaryValidation = PostValidator.validate(result.primaryPost.text, normalizedType, []);
+      let primaryText = result.primaryPost.text;
       if (!primaryValidation.valid) {
-        const cleanup = tryCleanup(result.primaryPost.text);
-        const cleanupValidation = PostValidator.validate(cleanup, story.postType, []);
+        const cleanup = tryCleanup(primaryText);
+        const cleanupValidation = PostValidator.validate(cleanup, normalizedType, []);
         if (cleanupValidation.valid) {
-          result.primaryPost.text = cleanup;
+          primaryText = cleanup;
+          primaryValidation = cleanupValidation;
           primaryValidation.notes.push('Cleaned up invalid primary post');
-        } else {
-          story.evaluationStatus = 'evaluated';
-          story.reason = primaryValidation.issues.join('; ');
-          status.rejectedStories++;
-          console.log('  -> REJECTED (validation failed: ' + primaryValidation.issues.join(', ') + ')');
-          await storyStorage.writeAll(stories);
-          continue;
         }
       }
 
@@ -171,34 +205,35 @@ async function evaluate() {
       const primaryPost: GeneratedPost = {
         id: generateId(),
         storyId: story.id,
-        text: result.primaryPost.text,
-        postType: story.postType,
+        text: primaryText,
+        postType: normalizedType,
         category: result.category,
         sourceName: story.sourceName,
         sourceUrl: story.sourceUrl,
         confidence: result.confidence,
-        score: result.score,
-        status: 'draft',
+        score: result.storyScore,
+        status: primaryValidation.valid ? 'draft' : 'review',
         createdAt: new Date().toISOString(),
         aiProvider: provider,
         aiModel: model,
         isAlternative: false,
         characterCount: primaryValidation.characterCount,
         validationStatus: primaryValidation.valid ? 'valid' : 'review',
-        validationNotes: primaryValidation.notes,
+        validationNotes: primaryValidation.issues.length > 0 ? primaryValidation.issues : primaryValidation.notes,
       };
       await generatedPostStorage.append(primaryPost);
       approvedCount++;
-      console.log('  -> APPROVED PRIMARY (score=' + result.score + ', type=' + story.postType + ', provider=' + provider + ', chars=' + primaryValidation.characterCount + ')');
+      console.log('  -> APPROVED PRIMARY (storyScore=' + result.storyScore + ', postQuality=' + result.postQualityScore + ', type=' + normalizedType + ', status=' + (primaryValidation.valid ? 'valid' : 'review') + ', provider=' + provider + ', chars=' + primaryValidation.characterCount + ')');
 
-      if (story.postType === 'light_humor' || story.postType === 'meme_caption') {
+      if (normalizedType === 'light_humor' || normalizedType === 'meme_caption') {
         humorPosts++;
       }
 
       if (result.alternativePosts && result.alternativePosts.length > 0) {
         const existingTexts = [result.primaryPost.text];
         for (const alt of result.alternativePosts) {
-          const altValidation = PostValidator.validate(alt.text, alt.type, existingTexts);
+          const altType = PostValidator.normalizePostType(alt.type);
+          const altValidation = PostValidator.validate(alt.text, altType, existingTexts);
           if (!altValidation.valid) {
             console.log('  -> SKIPPED ALTERNATIVE (validation failed: ' + altValidation.issues.join(', ') + ')');
             continue;
@@ -207,12 +242,12 @@ async function evaluate() {
             id: generateId(),
             storyId: story.id,
             text: alt.text,
-            postType: alt.type,
+            postType: altType,
             category: result.category,
             sourceName: story.sourceName,
             sourceUrl: story.sourceUrl,
             confidence: result.confidence,
-            score: result.score,
+            score: result.storyScore,
             status: 'draft',
             createdAt: new Date().toISOString(),
             aiProvider: provider,
@@ -225,18 +260,18 @@ async function evaluate() {
           };
           await generatedPostStorage.append(altPost);
           existingTexts.push(alt.text);
-          console.log('  -> ALTERNATIVE (type=' + alt.type + ', chars=' + altValidation.characterCount + ')');
+          console.log('  -> ALTERNATIVE (type=' + altType + ', chars=' + altValidation.characterCount + ')');
         }
       }
     } else {
       if (result.error && !isPermanentFailure(result.error)) {
         story.evaluationStatus = 'retry_pending';
         status.retryPendingStories++;
-        console.log('  -> RETRY PENDING (score=' + result.score + ', reason=' + story.reason + ')');
+        console.log('  -> RETRY PENDING (storyScore=' + result.storyScore + ', reason=' + story.reason + ')');
       } else {
         story.evaluationStatus = isPermanentFailure(result.error) ? 'failed_permanent' : 'evaluated';
         status.rejectedStories++;
-        console.log('  -> REJECTED (score=' + result.score + ', reason=' + story.reason + ')');
+        console.log('  -> REJECTED (storyScore=' + result.storyScore + ', reason=' + story.reason + ')');
       }
     }
   }

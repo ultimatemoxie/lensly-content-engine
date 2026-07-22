@@ -49,7 +49,7 @@ export class PostValidator {
     }
 
     const isHumorType = normalizedType === 'light_humor' || normalizedType === 'meme_caption';
-    const minLength = isHumorType ? 60 : 100;
+    const minLength = isHumorType ? 60 : 80;
     if (characterCount < minLength && !isHumorType) {
       issues.push(`Post below minimum length (${characterCount} < ${minLength})`);
     } else if (characterCount < minLength && isHumorType) {

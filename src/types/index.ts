@@ -13,7 +13,8 @@ export interface Story {
   publishedAt?: string;
   collectedAt: string;
   evaluationStatus: 'pending' | 'evaluated' | 'retry_pending' | 'insufficient' | 'failed_permanent';
-  score?: number;
+  storyScore?: number;
+  postQualityScore?: number;
   category?: string;
   reason?: string;
   shouldPost?: boolean;
@@ -55,7 +56,7 @@ export interface GeneratedPost {
   sourceUrl: string;
   confidence: number;
   score: number;
-  status: 'draft' | 'queued' | 'published' | 'failed';
+  status: 'draft' | 'queued' | 'published' | 'failed' | 'review';
   createdAt: string;
   aiProvider: string;
   aiModel: string;
