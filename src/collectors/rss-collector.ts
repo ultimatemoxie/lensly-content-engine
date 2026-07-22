@@ -3,13 +3,6 @@ import { Collector } from './index';
 import { Story } from '../types';
 import { storyStorage } from '../storage';
 
-const parser = new Parser({
-  timeout: 10000,
-  headers: {
-    'User-Agent': 'Lensly/0.1',
-  },
-});
-
 interface FeedSource {
   name: string;
   url: string;
@@ -25,8 +18,35 @@ const FEEDS: FeedSource[] = [
 
 const CUTOFF_MS = 72 * 60 * 60 * 1000;
 
-function normalize(text: string): string {
+const parser = new Parser({
+  timeout: 10000,
+  headers: {
+    'User-Agent': 'Lensly/0.1',
+  },
+});
+
+function normalizeText(text: string): string {
   return text.toLowerCase().replace(/\s+/g, ' ').trim();
+}
+
+function normalizeUrl(url: string): string {
+  try {
+    const parsed = new URL(url);
+    const cleanSearch = parsed.search
+      .split('&')
+      .filter((param) => {
+        const key = param.split('=')[0]?.toLowerCase() || '';
+        return !['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content'].includes(key);
+      })
+      .join('&');
+
+    let cleanPathname = parsed.pathname.replace(/\/+$/, '');
+    if (!cleanPathname) cleanPathname = '/';
+
+    return `${parsed.protocol}//${parsed.host}${cleanPathname}${cleanSearch ? '?' + cleanSearch : ''}`;
+  } catch {
+    return url.replace(/\/+$/, '').toLowerCase();
+  }
 }
 
 function generateId(): string {
@@ -39,9 +59,18 @@ export class RssCollector implements Collector {
   async collect(): Promise<Story[]> {
     const collectedStories: Story[] = [];
     const seen = new Set<string>();
+    const existing = await storyStorage.readAll();
     const now = Date.now();
     const cutoff = now - CUTOFF_MS;
     let failedSources = 0;
+
+    for (const existingStory of existing) {
+      if (!existingStory.sourceName || existingStory.sourceName === 'mock') {
+        continue;
+      }
+      const dedupKey = `${normalizeText(existingStory.title)}|${normalizeUrl(existingStory.articleUrl)}`;
+      seen.add(dedupKey);
+    }
 
     for (const feed of FEEDS) {
       try {
@@ -66,7 +95,7 @@ export class RssCollector implements Collector {
           const link = item.link || item.url || '';
           const summary = item.contentSnippet || item.content || '';
 
-          const dedupKey = `${normalize(title)}|${normalize(link)}`;
+          const dedupKey = `${normalizeText(title)}|${normalizeUrl(link)}`;
           if (seen.has(dedupKey)) {
             filtered++;
             continue;
@@ -85,7 +114,6 @@ export class RssCollector implements Collector {
           };
 
           collectedStories.push(story);
-          await storyStorage.append(story);
           collected++;
         }
 
@@ -96,8 +124,30 @@ export class RssCollector implements Collector {
       }
     }
 
-    console.log(`[rss-collector] total collected: ${collectedStories.length}, failed sources: ${failedSources}`);
+    const validExisting = existing.filter((s) => s.sourceName && s.sourceName !== 'mock');
+    const merged = [...validExisting, ...collectedStories];
+    const deduped = this.deduplicate(merged);
+    const fresh = deduped.filter((story) => {
+      if (!story.publishedAt) return true;
+      const publishedTime = new Date(story.publishedAt).getTime();
+      return !isNaN(publishedTime) && publishedTime >= cutoff;
+    });
+
+    await storyStorage.writeAll(fresh);
+
+    console.log(`[rss-collector] total collected: ${collectedStories.length}, failed sources: ${failedSources}, total stories: ${fresh.length}`);
 
     return collectedStories;
+  }
+
+  private deduplicate(stories: Story[]): Story[] {
+    const seen = new Map<string, Story>();
+    for (const story of stories) {
+      const key = `${normalizeText(story.title)}|${normalizeUrl(story.articleUrl)}`;
+      if (!seen.has(key)) {
+        seen.set(key, story);
+      }
+    }
+    return Array.from(seen.values());
   }
 }
