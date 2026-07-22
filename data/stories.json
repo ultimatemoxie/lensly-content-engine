@@ -14,13 +14,22 @@
     "collectedAt": "2026-07-22T14:19:11.033Z",
     "evaluationStatus": "evaluated",
     "score": 55,
-    "category": "breaking_ai_news",
-    "reason": "useful story with a relevant and newsworthy topic",
+    "category": "industry_trend",
+    "reason": "Industry trend announcement with a useful Lensly angle",
     "shouldPost": true,
-    "verifiedFacts": [],
+    "verifiedFacts": [
+      {
+        "claim": "OpenAI is building AI infrastructure with the Effingham County community",
+        "sourceEvidence": "OpenAI Blog, Published 2026-07-22T13:00:00.000Z, Title: Building AI infrastructure with the Effingham County community, Summary: OpenAI..."
+      },
+      {
+        "claim": "Project Camellia is an initiative for responsible energy and community investment",
+        "sourceEvidence": "OpenAI Blog, Published 2026-07-22T13:00:00.000Z, Summary: ...commitments to responsible energy, community investment, jobs, and access to Codex"
+      }
+    ],
     "postType": "breaking_news",
-    "confidence": 90,
-    "lastEvaluatedAt": "2026-07-22T18:44:03.793Z",
+    "confidence": 85,
+    "lastEvaluatedAt": "2026-07-22T20:56:24.895Z",
     "providerAttempts": [
       {
         "provider": "groq",
@@ -29,8 +38,8 @@
         "httpStatus": 200
       }
     ],
-    "storyScore": 85,
-    "postQualityScore": 70
+    "storyScore": 75,
+    "postQualityScore": 50
   },
   {
     "id": "story-1784729951033-wurguhd",
@@ -71,18 +80,34 @@
     "articleUrl": "https://openai.com/index/introducing-chatgpt-small-business-program",
     "publishedAt": "2026-07-21T17:00:00.000Z",
     "collectedAt": "2026-07-22T14:19:11.033Z",
-    "evaluationStatus": "pending",
+    "evaluationStatus": "evaluated",
     "score": 83,
-    "category": null,
-    "reason": null,
-    "shouldPost": null,
-    "verifiedFacts": null,
-    "postType": null,
-    "confidence": null,
-    "lastEvaluatedAt": null,
-    "providerAttempts": [],
-    "storyScore": null,
-    "postQualityScore": null
+    "category": "breaking_ai_news",
+    "reason": "Major AI model update",
+    "shouldPost": true,
+    "verifiedFacts": [
+      {
+        "claim": "OpenAI launches the ChatGPT for Small Businesses program",
+        "sourceEvidence": "OpenAI Blog"
+      },
+      {
+        "claim": "The program helps entrepreneurs build AI skills, automate work, and grow with ChatGPT Work",
+        "sourceEvidence": "OpenAI launches the ChatGPT for Small Businesses program, helping entrepreneurs build AI skills, automate work, and grow with ChatGPT Work."
+      }
+    ],
+    "postType": "breaking_news",
+    "confidence": 95,
+    "lastEvaluatedAt": "2026-07-22T20:56:29.062Z",
+    "providerAttempts": [
+      {
+        "provider": "groq",
+        "model": "llama-3.1-8b-instant",
+        "result": "success",
+        "httpStatus": 200
+      }
+    ],
+    "storyScore": 90,
+    "postQualityScore": 85
   },
   {
     "id": "story-1784729951033-1wn9oe9",
@@ -149,18 +174,38 @@
     "articleUrl": "https://openai.com/index/safety-alignment-long-horizon-models",
     "publishedAt": "2026-07-20T10:00:00.000Z",
     "collectedAt": "2026-07-22T14:19:11.033Z",
-    "evaluationStatus": "pending",
+    "evaluationStatus": "evaluated",
     "score": null,
-    "category": null,
-    "reason": null,
-    "shouldPost": null,
-    "verifiedFacts": null,
-    "postType": null,
-    "confidence": null,
-    "lastEvaluatedAt": null,
-    "providerAttempts": [],
-    "storyScore": null,
-    "postQualityScore": null
+    "category": "research_insight",
+    "reason": "Approved",
+    "shouldPost": true,
+    "verifiedFacts": [
+      {
+        "claim": "OpenAI shares lessons from deploying long-running AI models.",
+        "sourceEvidence": "OpenAI Blog"
+      },
+      {
+        "claim": "New safety risks and observed failures are highlighted.",
+        "sourceEvidence": "OpenAI shares lessons from deploying long-running AI models, highlighting new safety risks, observed failures,"
+      },
+      {
+        "claim": "Improved safeguards are discussed through iterative deployment.",
+        "sourceEvidence": "OpenAI shares lessons from deploying long-running AI models, highlighting new safety risks, observed failures, and improved safeguards through iterative deployment."
+      }
+    ],
+    "postType": "research_insight",
+    "confidence": 90,
+    "lastEvaluatedAt": "2026-07-22T20:56:33.059Z",
+    "providerAttempts": [
+      {
+        "provider": "groq",
+        "model": "llama-3.1-8b-instant",
+        "result": "success",
+        "httpStatus": 200
+      }
+    ],
+    "storyScore": 100,
+    "postQualityScore": 75
   },
   {
     "id": "story-1784729954713-ycuzirs",
@@ -175,30 +220,18 @@
     "articleUrl": "https://blog.google/products-and-platforms/platforms/android/galaxy-unpacked-switch-from-iphone-to-android/",
     "publishedAt": "2026-07-22T13:00:00.000Z",
     "collectedAt": "2026-07-22T14:19:14.713Z",
-    "evaluationStatus": "evaluated",
+    "evaluationStatus": "pending",
     "score": null,
-    "category": "industry_trend",
-    "reason": "Android migration experience for iPhone users",
-    "shouldPost": true,
-    "verifiedFacts": [
-      {
-        "text": "A new migration experience is built directly into Android 17.",
-        "source": "Google AI Blog"
-      }
-    ],
-    "postType": "practical_tip",
-    "confidence": 90,
-    "lastEvaluatedAt": "2026-07-22T18:44:07.518Z",
-    "providerAttempts": [
-      {
-        "provider": "groq",
-        "model": "llama-3.1-8b-instant",
-        "result": "success",
-        "httpStatus": 200
-      }
-    ],
-    "storyScore": 77,
-    "postQualityScore": 63
+    "category": null,
+    "reason": null,
+    "shouldPost": null,
+    "verifiedFacts": null,
+    "postType": null,
+    "confidence": null,
+    "lastEvaluatedAt": null,
+    "providerAttempts": [],
+    "storyScore": null,
+    "postQualityScore": null
   },
   {
     "id": "story-1784729954713-0xawfhh",
@@ -291,18 +324,30 @@
     "articleUrl": "https://blog.google/company-news/outreach-and-initiatives/creating-opportunity/alliance-america-skilled-trades/",
     "publishedAt": "2026-07-21T14:00:00.000Z",
     "collectedAt": "2026-07-22T14:19:14.713Z",
-    "evaluationStatus": "pending",
+    "evaluationStatus": "evaluated",
     "score": null,
-    "category": null,
-    "reason": null,
-    "shouldPost": null,
-    "verifiedFacts": null,
-    "postType": null,
-    "confidence": null,
-    "lastEvaluatedAt": null,
-    "providerAttempts": [],
-    "storyScore": null,
-    "postQualityScore": null
+    "category": "industry_trend",
+    "reason": "Approved",
+    "shouldPost": true,
+    "verifiedFacts": [
+      {
+        "claim": "Google is joining BlackRock, Carhartt and Ford to launch the Alliance for America’s Skilled Trades.",
+        "sourceEvidence": "Google is joining BlackRock, Carhartt and Ford to launch the Alliance for America’s Skilled Trades."
+      }
+    ],
+    "postType": "breaking_news",
+    "confidence": 50,
+    "lastEvaluatedAt": "2026-07-22T20:56:36.940Z",
+    "providerAttempts": [
+      {
+        "provider": "groq",
+        "model": "llama-3.1-8b-instant",
+        "result": "success",
+        "httpStatus": 200
+      }
+    ],
+    "storyScore": 65,
+    "postQualityScore": 40
   },
   {
     "id": "story-1784729954713-p53ah0v",
@@ -317,18 +362,40 @@
     "articleUrl": "https://blog.google/products-and-platforms/products/gemini/launch-business-with-gemini/",
     "publishedAt": "2026-07-20T19:00:00.000Z",
     "collectedAt": "2026-07-22T14:19:14.713Z",
-    "evaluationStatus": "pending",
+    "evaluationStatus": "retry_pending",
     "score": null,
-    "category": null,
-    "reason": null,
-    "shouldPost": null,
-    "verifiedFacts": null,
-    "postType": null,
-    "confidence": null,
-    "lastEvaluatedAt": null,
-    "providerAttempts": [],
-    "storyScore": null,
-    "postQualityScore": null
+    "category": "",
+    "reason": "Request budget exhausted",
+    "shouldPost": false,
+    "verifiedFacts": [],
+    "postType": "industry_observation",
+    "confidence": 0,
+    "lastEvaluatedAt": "2026-07-22T20:56:52.222Z",
+    "providerAttempts": [
+      {
+        "provider": "groq",
+        "model": "llama-3.1-8b-instant",
+        "result": "permanent_failure",
+        "httpStatus": null,
+        "error": "Request budget exhausted during retry"
+      },
+      {
+        "provider": "cerebras",
+        "model": "gpt-oss-120b",
+        "result": "permanent_failure",
+        "httpStatus": null,
+        "error": "Request budget exhausted"
+      },
+      {
+        "provider": "gemini",
+        "model": "gemini-2.0-flash",
+        "result": "permanent_failure",
+        "httpStatus": null,
+        "error": "Request budget exhausted"
+      }
+    ],
+    "storyScore": 0,
+    "postQualityScore": 0
   },
   {
     "id": "story-1784729963030-pjhb0of",
@@ -343,27 +410,18 @@
     "articleUrl": "https://huggingface.co/blog/nvidia/state-of-simulation-for-physical-ai",
     "publishedAt": "2026-07-21T20:00:27.000Z",
     "collectedAt": "2026-07-22T14:19:23.030Z",
-    "evaluationStatus": "evaluated",
+    "evaluationStatus": "pending",
     "score": null,
-    "category": "research_insight",
-    "reason": "Detailed overview on simulation for physical AI",
-    "shouldPost": true,
-    "verifiedFacts": [
-      "Hugging Face Blog post on simulation for physical AI"
-    ],
-    "postType": "research_insight",
-    "confidence": 90,
-    "lastEvaluatedAt": "2026-07-22T18:44:11.054Z",
-    "providerAttempts": [
-      {
-        "provider": "groq",
-        "model": "llama-3.1-8b-instant",
-        "result": "success",
-        "httpStatus": 200
-      }
-    ],
-    "storyScore": 85,
-    "postQualityScore": 75
+    "category": null,
+    "reason": null,
+    "shouldPost": null,
+    "verifiedFacts": null,
+    "postType": null,
+    "confidence": null,
+    "lastEvaluatedAt": null,
+    "providerAttempts": [],
+    "storyScore": null,
+    "postQualityScore": null
   },
   {
     "id": "story-1784729963030-yv4xggi",

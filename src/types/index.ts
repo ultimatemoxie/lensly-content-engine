@@ -1,3 +1,8 @@
+export interface VerifiedFact {
+  claim: string;
+  sourceEvidence: string;
+}
+
 export interface Story {
   id: string;
   title: string;
@@ -18,7 +23,7 @@ export interface Story {
   category?: string;
   reason?: string;
   shouldPost?: boolean;
-  verifiedFacts?: string[];
+  verifiedFacts?: VerifiedFact[];
   postType?: string;
   confidence?: number;
   lastEvaluatedAt?: string;
@@ -32,14 +37,17 @@ export interface Story {
 }
 
 export interface EvaluationResult {
-  score: number;
+  storyScore: number;
+  postQualityScore: number;
   category: string;
   reason: string;
   shouldPost: boolean;
-  verifiedFacts: string[];
-  postType: string;
-  postText?: string;
-  alternativePosts?: Array<{
+  verifiedFacts: VerifiedFact[];
+  primaryPost: {
+    type: string;
+    text: string;
+  };
+  alternativePosts: Array<{
     type: string;
     text: string;
   }>;
@@ -55,7 +63,8 @@ export interface GeneratedPost {
   sourceName: string;
   sourceUrl: string;
   confidence: number;
-  score: number;
+  storyScore: number;
+  postQualityScore: number;
   status: 'draft' | 'queued' | 'published' | 'failed' | 'review';
   createdAt: string;
   aiProvider: string;
@@ -65,6 +74,18 @@ export interface GeneratedPost {
   characterCount: number;
   validationStatus: 'valid' | 'invalid' | 'review';
   validationNotes: string[];
+  factualValidationStatus: 'passed' | 'failed' | 'review';
+  unsupportedClaims: string[];
+  evidenceCount: number;
+  qualityRubric: {
+    hookStrength: number;
+    clarity: number;
+    usefulness: number;
+    originality: number;
+    factualGrounding: number;
+    naturalVoice: number;
+    overallPostQuality: number;
+  };
 }
 
 export interface PostQueueItem {

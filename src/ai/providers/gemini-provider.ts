@@ -184,19 +184,43 @@ Story:
 - URL: ${story.articleUrl}
 ${sourceMaterial}
 
-Return JSON with these fields:
+Return JSON:
 {
   "storyScore": 0,
   "postQualityScore": 0,
   "category": "",
   "reason": "",
   "shouldPost": false,
-  "verifiedFacts": [],
+  "verifiedFacts": [
+    {
+      "claim": "",
+      "sourceEvidence": ""
+    }
+  ],
   "primaryPost": {
     "type": "",
-    "text": ""
+    "text": "",
+    "hookStrength": 0,
+    "clarity": 0,
+    "usefulness": 0,
+    "originality": 0,
+    "factualGrounding": 0,
+    "naturalVoice": 0,
+    "overallPostQuality": 0
   },
-  "alternativePosts": [],
+  "alternativePosts": [
+    {
+      "type": "",
+      "text": "",
+      "hookStrength": 0,
+      "clarity": 0,
+      "usefulness": 0,
+      "originality": 0,
+      "factualGrounding": 0,
+      "naturalVoice": 0,
+      "overallPostQuality": 0
+    }
+  ],
   "confidence": 0
 }
 
@@ -206,8 +230,10 @@ Rules:
 - shouldPost: true only if storyScore >= 65. Post quality affects draft readiness, not story approval.
 - category: breaking_ai_news, model_update, tool_spotlight, creator_workflow, research_insight, business_observation, industry_trend, safety_ethics
 - primaryPost.type: breaking_news, creator_insight, tool_spotlight, practical_tip, founder_take, research_insight, thoughtful_question, light_humor, comparison, industry_observation, trend_reaction, meme_caption. If the model returns a reasonable but unsupported label, map it: model_update/product_update/news -> breaking_news; business_update -> industry_observation; workflow -> practical_tip; opinion -> founder_take; question -> thoughtful_question; humor -> light_humor; meme -> meme_caption.
-- primaryPost.text: 120-240 chars preferred, max 280 chars, natural tone, strong hook, no corporate language, no hashtags, no emojis by default, no "Here is a post", no "game-changing" / "revolutionary" / "insane"
-- alternativePosts: up to 2 alternative posts as array of {type, text}. Use the same type set and mapping rules.
+- verifiedFacts: array of objects with "claim" and "sourceEvidence". Every concrete claim in primaryPost.text and alternativePosts.text must have an entry. "sourceEvidence" must be a verbatim substring from the provided source material above. If a claim cannot be matched to the source, do NOT include it in the post text.
+- primaryPost.text: 100-240 chars preferred, max 280 chars. Lead with the implication, tension, usefulness, or surprising detail — never just rewrite the headline. Use short, natural sentences. Sound like a sharp AI media account. Give creators, founders, designers, developers, or marketers a reason to care. Avoid: "This blog post explores", "announces", "discussing latest research and trends", "is a notable shift", vague commentary, unnecessary company praise, "helps organizations" without saying how. If the post could apply to almost any AI story, rewrite it with a specific angle.
+- primaryPost quality rubric: hookStrength, clarity, usefulness, originality, factualGrounding, naturalVoice, overallPostQuality — all 0-100 integers.
+- alternativePosts: up to 2 alternative posts as array of {type, text, hookStrength, clarity, usefulness, originality, factualGrounding, naturalVoice, overallPostQuality}. Each alternative MUST use a genuinely different angle from the primary. Primary = factual news, insight, or tool angle. Alternative 1 = creator insight, practical tip, founder take, comparison, or question. Alternative 2 = light humor, meme caption, or trend reaction when safe and relevant. Reject alternatives with high similarity to the primary. Use the same type set and mapping rules.
 - Humor/light_humor/meme_caption: light, clever, relevant to AI creators/founders/developers/designers, understandable without context, not insulting, not fabricated, not based on fake quotes. OK for light topics only; avoid when topic is serious, sensitive, tragic, political, legal, safety-related, or about harm.
 - Do NOT reject a story simply because it is corporate or promotional. Look for a useful Lensly angle. Ask whether the audience can learn, react, discuss, or apply something from it. A neutral business announcement can become an industry observation. A product launch can become a creator insight or thoughtful question. A partnership can become a founder take, comparison, or industry observation. Promotional language should be removed, not automatically treated as disqualifying.
 - A story may be valuable even when the generated draft needs cleanup. storyScore reflects the story, postQualityScore reflects the draft.
@@ -229,6 +255,11 @@ Rules:
             .filter((p: { type: string; text: string }) => p.type && p.text && !this.isNearDuplicate(primaryPost.text, p.text))
             .slice(0, 2)
         : [];
+      const verifiedFacts: Array<{claim: string; sourceEvidence: string}> = Array.isArray(parsed.verifiedFacts)
+        ? parsed.verifiedFacts
+            .filter((f: any) => typeof f?.claim === 'string' && typeof f?.sourceEvidence === 'string')
+            .slice(0, 20)
+        : [];
       const shouldPost = storyScore >= 65;
       return {
         storyScore,
@@ -236,7 +267,7 @@ Rules:
         category: typeof parsed.category === 'string' ? parsed.category : '',
         reason: typeof parsed.reason === 'string' ? parsed.reason : '',
         shouldPost,
-        verifiedFacts: Array.isArray(parsed.verifiedFacts) ? parsed.verifiedFacts : [],
+        verifiedFacts,
         primaryPost,
         alternativePosts,
         confidence,

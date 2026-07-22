@@ -1,12 +1,17 @@
 import { RequestBudget } from '../request-budget';
 
+export interface VerifiedFact {
+  claim: string;
+  sourceEvidence: string;
+}
+
 export interface EvaluationResult {
   storyScore: number;
   postQualityScore: number;
   category: string;
   reason: string;
   shouldPost: boolean;
-  verifiedFacts: string[];
+  verifiedFacts: VerifiedFact[];
   primaryPost: {
     type: string;
     text: string;

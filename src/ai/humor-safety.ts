@@ -10,6 +10,18 @@ const SERIOUS_KEYWORDS = [
   'suicide', 'mental health crisis'
 ];
 
+const HUMOR_FRIENDLY_SIGNALS = [
+  'browser', 'tool', 'workflow', 'startup', 'launch', 'model', 'naming',
+  'competition', 'marketing', 'side hustle', 'tips', 'hustle', 'app',
+  'trend', 'alternatives', 'comparison'
+];
+
+const HUMOR_ANGLES: Record<string, string> = {
+  light_humor: 'light_humor',
+  meme_caption: 'meme_caption',
+  trend_reaction: 'trend_reaction'
+};
+
 export class HumorSafety {
   static isHumorAppropriate(storyTitle: string, category: string): boolean {
     const title = storyTitle.toLowerCase();
@@ -24,5 +36,47 @@ export class HumorSafety {
     }
 
     return true;
+  }
+
+  static getHumorOpportunity(story: { title: string; category?: string; summary?: string; rssSummary?: string }): { allowed: boolean; reason: string; suggestedAngle: string } {
+    const title = story.title.toLowerCase();
+    const summary = ((story.rssSummary || story.summary || '') + ' ' + story.title).toLowerCase();
+
+    if (SERIOUS_CATEGORIES.some(c => (story.category || '').toLowerCase().includes(c))) {
+      return { allowed: false, reason: 'Serious category detected', suggestedAngle: '' };
+    }
+
+    if (SERIOUS_KEYWORDS.some(k => title.includes(k))) {
+      return { allowed: false, reason: 'Serious topic detected in title', suggestedAngle: '' };
+    }
+
+    const friendlySignals = HUMOR_FRIENDLY_SIGNALS.filter(s => summary.includes(s));
+    if (friendlySignals.length === 0) {
+      return { allowed: false, reason: 'No appropriate humor angle detected', suggestedAngle: '' };
+    }
+
+    const angle = friendlySignals[0];
+    let suggestedAngle = '';
+    if (angle === 'browser' || angle === 'alternatives') {
+      suggestedAngle = 'picking a browser used to be easy';
+    } else if (angle === 'tool' || angle === 'workflow') {
+      suggestedAngle = 'another tool, another workflow reset';
+    } else if (angle === 'model' || angle === 'naming') {
+      suggestedAngle = 'keeping up with model names is a full-time job';
+    } else if (angle === 'startup' || angle === 'launch') {
+      suggestedAngle = 'another startup, another "we built X for Y"';
+    } else if (angle === 'marketing') {
+      suggestedAngle = 'AI marketing is reaching peak adjective density';
+    } else if (angle === 'competition') {
+      suggestedAngle = 'tech rivalry never changes, only the players';
+    } else if (angle === 'tips' || angle === 'side hustle') {
+      suggestedAngle = 'another listicle, another side hustle pitch';
+    } else if (angle === 'trend') {
+      suggestedAngle = 'following the trend treadmill';
+    } else {
+      suggestedAngle = 'light observation about the topic';
+    }
+
+    return { allowed: true, reason: `Humor-friendly signal: ${angle}`, suggestedAngle };
   }
 }

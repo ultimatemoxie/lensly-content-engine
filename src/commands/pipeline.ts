@@ -104,7 +104,8 @@ async function runPipeline() {
         sourceName: story.sourceName,
         sourceUrl: story.sourceUrl,
         confidence: result.confidence,
-        score: result.storyScore,
+        storyScore: result.storyScore,
+        postQualityScore: result.postQualityScore,
         status: 'draft' as const,
         createdAt: new Date().toISOString(),
         aiProvider: provider,
@@ -113,6 +114,18 @@ async function runPipeline() {
         characterCount: primaryValidation.characterCount,
         validationStatus: primaryValidation.valid ? 'valid' as const : 'review' as const,
         validationNotes: primaryValidation.notes,
+        factualValidationStatus: 'review' as const,
+        unsupportedClaims: [],
+        evidenceCount: 0,
+        qualityRubric: {
+          hookStrength: 0,
+          clarity: 0,
+          usefulness: 0,
+          originality: 0,
+          factualGrounding: 0,
+          naturalVoice: 0,
+          overallPostQuality: 0,
+        },
       };
       await generatedPostStorage.append(primaryPost);
       approvedCount++;

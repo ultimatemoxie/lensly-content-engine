@@ -4,6 +4,7 @@ import { ProviderFactory } from '../ai/provider-factory';
 import { RequestBudget } from '../ai/request-budget';
 import { PostValidator } from '../ai/post-validator';
 import { HumorSafety } from '../ai/humor-safety';
+import { PostGrader } from '../ai/post-grader';
 import { Story, EvaluationResult, GeneratedPost, PipelineStatus } from '../types';
 
 function generateId(): string {
@@ -27,33 +28,50 @@ function isPermanentFailure(error: string | undefined): boolean {
   return permanentPatterns.some((pattern) => error.toLowerCase().includes(pattern.toLowerCase()));
 }
 
-function pickBalancedSample(stories: Story[]): Story[] {
-  const groups: Record<string, Story[]> = {};
-  for (const s of stories) {
-    const key = s.sourceName || 'unknown';
-    if (!groups[key]) groups[key] = [];
-    groups[key].push(s);
-  }
+function classifyStory(story: Story): string[] {
+  const text = (story.title + ' ' + (story.summary || '') + ' ' + (story.rssSummary || '')).toLowerCase();
+  const categories: string[] = [];
+  if (/\b(product|model|launch|release|gemini|galaxy|android|openai|chatgpt|project camellia)\b/.test(text)) categories.push('product_model');
+  if (/\b(creator|workflow|tip|side hustle|tools for|builders|makers|small business|program)\b/.test(text)) categories.push('creator_workflow');
+  if (/\b(research|simulation|overview|paper|study|alignment|safety)\b/.test(text)) categories.push('research');
+  if (/\b(industry|business|market|data center|alliance|energy|investment|community)\b/.test(text)) categories.push('industry');
+  if (/\b(browser|app|hustle|trend|startup|marketing|competition|naming|bedtime|universal)\b/.test(text)) categories.push('humor_friendly');
+  if (categories.length === 0) categories.push('other');
+  return categories;
+}
 
+function pickBalancedSample(stories: Story[]): Story[] {
+  const targets = ['product_model', 'creator_workflow', 'research', 'industry', 'humor_friendly'];
   const selected: Story[] = [];
-  const prioritySources = ['OpenAI Blog', 'Google AI Blog', 'Hugging Face Blog', 'TechCrunch AI'];
-  for (const src of prioritySources) {
-    const pool = groups[src] || [];
-    if (pool.length > 0) {
-      selected.push(pool[0]);
+  const used = new Set<string>();
+
+  for (const target of targets) {
+    for (const s of stories) {
+      if (used.has(s.id)) continue;
+      const cats = classifyStory(s);
+      if (cats.includes(target)) {
+        selected.push(s);
+        used.add(s.id);
+        break;
+      }
     }
   }
 
   if (selected.length < 5) {
-    const remaining = stories.filter(s => !selected.includes(s));
+    const remaining = stories.filter(s => !used.has(s.id));
     remaining.sort((a, b) => (b.articleText?.length || 0) - (a.articleText?.length || 0));
     for (const s of remaining) {
       if (selected.length >= 5) break;
-      if (!selected.includes(s)) selected.push(s);
+      selected.push(s);
+      used.add(s.id);
     }
   }
 
   return selected.slice(0, 5);
+}
+
+function getSourceText(story: Story): string {
+  return story.articleText || story.rssSummary || story.summary || '';
 }
 
 async function evaluate() {
@@ -86,6 +104,8 @@ async function evaluate() {
   let successfulProviderRequests = 0;
   let failedProviderRequests = 0;
   let humorPosts = 0;
+  let queueReadyCount = 0;
+  let reviewCount = 0;
 
   const status: PipelineStatus = {
     totalStories: stories.length,
@@ -106,7 +126,8 @@ async function evaluate() {
 
   console.log('Selected sample:');
   for (const s of sample) {
-    console.log(`  - ${s.title} [${s.sourceName}]`);
+    const cats = classifyStory(s);
+    console.log(`  - ${s.title} [${s.sourceName}] (${cats.join(', ') || 'general'})`);
   }
 
   for (const story of sample) {
@@ -173,9 +194,11 @@ async function evaluate() {
     story.confidence = result.confidence;
     story.lastEvaluatedAt = new Date().toISOString();
 
+    const humorOpportunity = HumorSafety.getHumorOpportunity(story);
+
     if (result.primaryPost?.text && result.shouldPost) {
       const humorOk = HumorSafety.isHumorAppropriate(story.title, story.category || '');
-      const isHumorPost = normalizedType === 'light_humor' || normalizedType === 'meme_caption';
+      const isHumorPost = normalizedType === 'light_humor' || normalizedType === 'meme_caption' || normalizedType === 'trend_reaction';
 
       if (isHumorPost && !humorOk) {
         story.evaluationStatus = 'evaluated';
@@ -186,8 +209,8 @@ async function evaluate() {
         continue;
       }
 
-      let primaryValidation = PostValidator.validate(result.primaryPost.text, normalizedType, []);
       let primaryText = result.primaryPost.text;
+      let primaryValidation = PostValidator.validate(primaryText, normalizedType, []);
       if (!primaryValidation.valid) {
         const cleanup = tryCleanup(primaryText);
         const cleanupValidation = PostValidator.validate(cleanup, normalizedType, []);
@@ -197,6 +220,33 @@ async function evaluate() {
           primaryValidation.notes.push('Cleaned up invalid primary post');
         }
       }
+
+      const sourceText = getSourceText(story);
+      let primaryGrades = PostGrader.gradePost(primaryText, normalizedType, sourceText, result.verifiedFacts || []);
+      if (primaryGrades.unsupportedClaims.length > 0) {
+        const stripped = PostGrader.stripUnsupportedClaims(primaryText, primaryGrades.unsupportedClaims);
+        const strippedValidation = PostValidator.validate(stripped, normalizedType, []);
+        if (strippedValidation.valid && stripped.length >= 80) {
+          primaryText = stripped;
+          primaryGrades = PostGrader.gradePost(primaryText, normalizedType, sourceText, result.verifiedFacts || []);
+          primaryValidation = strippedValidation;
+        }
+      }
+      const isWeak = PostGrader.isWeakOrGeneric(primaryText, result.verifiedFacts || [], sourceText, normalizedType);
+
+      let factualValidationStatus: 'passed' | 'failed' | 'review' = 'passed';
+      if (primaryGrades.unsupportedClaims.length > 0 && primaryGrades.factualGrounding < 90) {
+        factualValidationStatus = 'failed';
+      } else if (primaryGrades.factualGrounding < 90) {
+        factualValidationStatus = 'review';
+      }
+
+      if (isWeak) {
+        factualValidationStatus = 'review';
+        primaryValidation.issues.push('Post is generic or lacks meaningful verified detail');
+      }
+
+      const isQueueReady = PostGrader.isQueueReady(result.storyScore, primaryGrades, factualValidationStatus, primaryText.length);
 
       story.evaluationStatus = 'evaluated';
       status.evaluatedStories++;
@@ -211,8 +261,9 @@ async function evaluate() {
         sourceName: story.sourceName,
         sourceUrl: story.sourceUrl,
         confidence: result.confidence,
-        score: result.storyScore,
-        status: primaryValidation.valid ? 'draft' : 'review',
+        storyScore: result.storyScore,
+        postQualityScore: result.postQualityScore,
+        status: isQueueReady ? 'draft' : 'review',
         createdAt: new Date().toISOString(),
         aiProvider: provider,
         aiModel: model,
@@ -220,35 +271,78 @@ async function evaluate() {
         characterCount: primaryValidation.characterCount,
         validationStatus: primaryValidation.valid ? 'valid' : 'review',
         validationNotes: primaryValidation.issues.length > 0 ? primaryValidation.issues : primaryValidation.notes,
+        factualValidationStatus,
+        unsupportedClaims: primaryGrades.unsupportedClaims,
+        evidenceCount: primaryGrades.evidenceCount,
+        qualityRubric: {
+          hookStrength: primaryGrades.hookStrength,
+          clarity: primaryGrades.clarity,
+          usefulness: primaryGrades.usefulness,
+          originality: primaryGrades.originality,
+          factualGrounding: primaryGrades.factualGrounding,
+          naturalVoice: primaryGrades.naturalVoice,
+          overallPostQuality: primaryGrades.overallPostQuality,
+        },
       };
       await generatedPostStorage.append(primaryPost);
       approvedCount++;
-      console.log('  -> APPROVED PRIMARY (storyScore=' + result.storyScore + ', postQuality=' + result.postQualityScore + ', type=' + normalizedType + ', status=' + (primaryValidation.valid ? 'valid' : 'review') + ', provider=' + provider + ', chars=' + primaryValidation.characterCount + ')');
+      if (isQueueReady) {
+        queueReadyCount++;
+      } else {
+        reviewCount++;
+      }
 
-      if (normalizedType === 'light_humor' || normalizedType === 'meme_caption') {
+      console.log('  -> APPROVED PRIMARY (storyScore=' + result.storyScore + ', postQuality=' + result.postQualityScore + ', overall=' + primaryGrades.overallPostQuality + ', factual=' + primaryGrades.factualGrounding + ', type=' + normalizedType + ', status=' + primaryPost.status + ', provider=' + provider + ', chars=' + primaryValidation.characterCount + ')');
+      console.log('     verifiedFacts=' + primaryGrades.evidenceCount + '/' + (result.verifiedFacts?.length || 0) + ' unsupportedClaims=' + primaryGrades.unsupportedClaims.length);
+      console.log('     rubric: hook=' + primaryGrades.hookStrength + ' clarity=' + primaryGrades.clarity + ' usefulness=' + primaryGrades.usefulness + ' originality=' + primaryGrades.originality + ' voice=' + primaryGrades.naturalVoice);
+
+      if (normalizedType === 'light_humor' || normalizedType === 'meme_caption' || normalizedType === 'trend_reaction') {
         humorPosts++;
       }
 
       if (result.alternativePosts && result.alternativePosts.length > 0) {
-        const existingTexts = [result.primaryPost.text];
+        const existingTexts = [primaryText];
         for (const alt of result.alternativePosts) {
           const altType = PostValidator.normalizePostType(alt.type);
-          const altValidation = PostValidator.validate(alt.text, altType, existingTexts);
+          let altText = alt.text;
+          const altValidation = PostValidator.validate(altText, altType, existingTexts);
           if (!altValidation.valid) {
             console.log('  -> SKIPPED ALTERNATIVE (validation failed: ' + altValidation.issues.join(', ') + ')');
             continue;
           }
+          let altGrades = PostGrader.gradePost(altText, altType, sourceText, result.verifiedFacts || []);
+          if (altGrades.unsupportedClaims.length > 0) {
+            const altStripped = PostGrader.stripUnsupportedClaims(altText, altGrades.unsupportedClaims);
+            const altStrippedValidation = PostValidator.validate(altStripped, altType, existingTexts);
+            if (altStrippedValidation.valid && altStripped.length >= 80) {
+              altText = altStripped;
+              altGrades = PostGrader.gradePost(altText, altType, sourceText, result.verifiedFacts || []);
+            }
+          }
+          const altWeak = PostGrader.isWeakOrGeneric(altText, result.verifiedFacts || [], sourceText, altType);
+          let altFactualStatus: 'passed' | 'failed' | 'review' = 'passed';
+          if (altGrades.unsupportedClaims.length > 0 && altGrades.factualGrounding < 90) {
+            altFactualStatus = 'failed';
+          } else if (altGrades.factualGrounding < 90) {
+            altFactualStatus = 'review';
+          }
+          if (altWeak) {
+            altFactualStatus = 'review';
+          }
+          const altQueueReady = PostGrader.isQueueReady(result.storyScore, altGrades, altFactualStatus, altText.length);
+
           const altPost: GeneratedPost = {
             id: generateId(),
             storyId: story.id,
-            text: alt.text,
+            text: altText,
             postType: altType,
             category: result.category,
             sourceName: story.sourceName,
             sourceUrl: story.sourceUrl,
             confidence: result.confidence,
-            score: result.storyScore,
-            status: 'draft',
+            storyScore: result.storyScore,
+            postQualityScore: result.postQualityScore,
+            status: altQueueReady ? 'draft' : 'review',
             createdAt: new Date().toISOString(),
             aiProvider: provider,
             aiModel: model,
@@ -257,12 +351,26 @@ async function evaluate() {
             characterCount: altValidation.characterCount,
             validationStatus: altValidation.valid ? 'valid' : 'review',
             validationNotes: altValidation.notes,
+            factualValidationStatus: altFactualStatus,
+            unsupportedClaims: altGrades.unsupportedClaims,
+            evidenceCount: altGrades.evidenceCount,
+            qualityRubric: {
+              hookStrength: altGrades.hookStrength,
+              clarity: altGrades.clarity,
+              usefulness: altGrades.usefulness,
+              originality: altGrades.originality,
+              factualGrounding: altGrades.factualGrounding,
+              naturalVoice: altGrades.naturalVoice,
+              overallPostQuality: altGrades.overallPostQuality,
+            },
           };
           await generatedPostStorage.append(altPost);
-          existingTexts.push(alt.text);
-          console.log('  -> ALTERNATIVE (type=' + altType + ', chars=' + altValidation.characterCount + ')');
+          existingTexts.push(altText);
+          console.log('  -> ALTERNATIVE (type=' + altType + ', overall=' + altGrades.overallPostQuality + ', factual=' + altGrades.factualGrounding + ', chars=' + altValidation.characterCount + ', status=' + altPost.status + ')');
         }
       }
+
+      console.log('     humorOpportunity: allowed=' + humorOpportunity.allowed + ' angle=' + humorOpportunity.suggestedAngle);
     } else {
       if (result.error && !isPermanentFailure(result.error)) {
         story.evaluationStatus = 'retry_pending';
@@ -296,6 +404,8 @@ async function evaluate() {
   console.log('Failed-permanent stories: ' + status.failedPermanentStories);
   console.log('Pending stories (not attempted): ' + status.pendingStories);
   console.log('Humor/meme posts: ' + humorPosts);
+  console.log('Queue-ready posts: ' + queueReadyCount);
+  console.log('Review posts: ' + reviewCount);
   console.log('Remaining candidates: ' + status.remainingCandidates);
 }
 
