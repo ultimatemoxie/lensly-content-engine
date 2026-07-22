@@ -9,10 +9,11 @@ export class MockCollector implements Collector {
     const stories: Story[] = [
       {
         id: 'story-1',
-        source: 'mock',
         title: 'Sample Story',
-        content: 'This is a sample collected story for testing.',
-        url: 'https://example.com/story-1',
+        summary: 'This is a sample collected story for testing.',
+        sourceName: 'mock',
+        sourceUrl: 'https://example.com',
+        articleUrl: 'https://example.com/story-1',
         collectedAt: new Date().toISOString(),
       },
     ];

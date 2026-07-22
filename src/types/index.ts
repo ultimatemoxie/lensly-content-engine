@@ -1,9 +1,10 @@
 export interface Story {
   id: string;
-  source: string;
   title: string;
-  content: string;
-  url: string;
+  summary: string;
+  sourceName: string;
+  sourceUrl: string;
+  articleUrl: string;
   publishedAt?: string;
   collectedAt: string;
 }

@@ -14,5 +14,65 @@
     "content": "This is a sample collected story for testing.",
     "url": "https://example.com/story-1",
     "collectedAt": "2026-07-22T11:41:53.969Z"
+  },
+  {
+    "id": "story-1784721561181-w06c51i",
+    "title": "Introducing the ChatGPT for small business program",
+    "summary": "OpenAI launches the ChatGPT for Small Businesses program, helping entrepreneurs build AI skills, automate work, and grow with ChatGPT Work.",
+    "sourceName": "OpenAI Blog",
+    "sourceUrl": "https://openai.com/blog/rss.xml",
+    "articleUrl": "https://openai.com/index/introducing-chatgpt-small-business-program",
+    "publishedAt": "2026-07-21T17:00:00.000Z",
+    "collectedAt": "2026-07-22T11:59:21.181Z"
+  },
+  {
+    "id": "story-1784721561183-satm827",
+    "title": "OpenAI and Hugging Face partner to address security incident during model evaluation",
+    "summary": "OpenAI and Hugging Face share early findings from a security incident during AI model evaluation, highlighting advanced cyber capabilities and lessons for defenders.",
+    "sourceName": "OpenAI Blog",
+    "sourceUrl": "https://openai.com/blog/rss.xml",
+    "articleUrl": "https://openai.com/index/hugging-face-model-evaluation-security-incident",
+    "publishedAt": "2026-07-21T07:00:00.000Z",
+    "collectedAt": "2026-07-22T11:59:21.183Z"
+  },
+  {
+    "id": "story-1784721561187-oy54d0s",
+    "title": "David Vélez and Robin Vince join the boards of the OpenAI Foundation and OpenAI Group PBC",
+    "summary": "David Vélez and Robin Vince join the boards of the OpenAI Foundation and OpenAI Group PBC, bringing global leadership in finance, technology, and governance.",
+    "sourceName": "OpenAI Blog",
+    "sourceUrl": "https://openai.com/blog/rss.xml",
+    "articleUrl": "https://openai.com/index/david-velez-robin-vince-join-openai-boards",
+    "publishedAt": "2026-07-21T00:00:00.000Z",
+    "collectedAt": "2026-07-22T11:59:21.187Z"
+  },
+  {
+    "id": "story-1784721561188-4mjt4c6",
+    "title": "Safety and alignment in an era of long-horizon models",
+    "summary": "OpenAI shares lessons from deploying long-running AI models, highlighting new safety risks, observed failures, and improved safeguards through iterative deployment.",
+    "sourceName": "OpenAI Blog",
+    "sourceUrl": "https://openai.com/blog/rss.xml",
+    "articleUrl": "https://openai.com/index/safety-alignment-long-horizon-models",
+    "publishedAt": "2026-07-20T10:00:00.000Z",
+    "collectedAt": "2026-07-22T11:59:21.188Z"
+  },
+  {
+    "id": "story-1784721574048-mp5jp1e",
+    "title": "The State of Simulation for Physical AI: An Overview",
+    "summary": "",
+    "sourceName": "Hugging Face Blog",
+    "sourceUrl": "https://huggingface.co/blog/feed.xml",
+    "articleUrl": "https://huggingface.co/blog/nvidia/state-of-simulation-for-physical-ai",
+    "publishedAt": "2026-07-21T20:00:27.000Z",
+    "collectedAt": "2026-07-22T11:59:34.048Z"
+  },
+  {
+    "id": "story-1784721574049-ih8pel2",
+    "title": "Grabette: an open system to record robot-manipulation data",
+    "summary": "",
+    "sourceName": "Hugging Face Blog",
+    "sourceUrl": "https://huggingface.co/blog/feed.xml",
+    "articleUrl": "https://huggingface.co/blog/grabette",
+    "publishedAt": "2026-07-21T00:00:00.000Z",
+    "collectedAt": "2026-07-22T11:59:34.049Z"
   }
 ]

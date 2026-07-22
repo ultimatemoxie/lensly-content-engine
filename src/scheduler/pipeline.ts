@@ -39,7 +39,7 @@ export class Pipeline {
 
   private async generatePost(story: Story, platform: Platform): Promise<GeneratedPost> {
     const response = await this.ai.complete({
-      prompt: `Write a short post about: ${story.title}. Context: ${story.content}`,
+      prompt: `Write a short post about: ${story.title}. Context: ${story.summary}`,
     });
 
     return {

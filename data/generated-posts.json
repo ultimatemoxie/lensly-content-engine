@@ -20,5 +20,71 @@
     ],
     "status": "queued",
     "createdAt": "2026-07-22T11:41:53.976Z"
+  },
+  {
+    "id": "post-1784721578634-bg348yj",
+    "storyId": "story-1784721561181-w06c51i",
+    "platform": "threads",
+    "content": "AI generated draft for: Write a short post about: Introducing the ChatGPT for small business program. Context: OpenAI launches the ChatGPT for Small Businesses program, helping entrepreneurs build AI skills, automate work, and grow with ChatGPT Work.",
+    "hashtags": [
+      "#lensly"
+    ],
+    "status": "queued",
+    "createdAt": "2026-07-22T11:59:38.634Z"
+  },
+  {
+    "id": "post-1784721578642-qs2howw",
+    "storyId": "story-1784721561183-satm827",
+    "platform": "threads",
+    "content": "AI generated draft for: Write a short post about: OpenAI and Hugging Face partner to address security incident during model evaluation. Context: OpenAI and Hugging Face share early findings from a security incident during AI model evaluation, highlighting advanced cyber capabilities and lessons for defenders.",
+    "hashtags": [
+      "#lensly"
+    ],
+    "status": "queued",
+    "createdAt": "2026-07-22T11:59:38.642Z"
+  },
+  {
+    "id": "post-1784721578647-klfwvuv",
+    "storyId": "story-1784721561187-oy54d0s",
+    "platform": "threads",
+    "content": "AI generated draft for: Write a short post about: David Vélez and Robin Vince join the boards of the OpenAI Foundation and OpenAI Group PBC. Context: David Vélez and Robin Vince join the boards of the OpenAI Foundation and OpenAI Group PBC, bringing global leadership in finance, technology, and governance.",
+    "hashtags": [
+      "#lensly"
+    ],
+    "status": "queued",
+    "createdAt": "2026-07-22T11:59:38.647Z"
+  },
+  {
+    "id": "post-1784721578652-sxb8owu",
+    "storyId": "story-1784721561188-4mjt4c6",
+    "platform": "threads",
+    "content": "AI generated draft for: Write a short post about: Safety and alignment in an era of long-horizon models. Context: OpenAI shares lessons from deploying long-running AI models, highlighting new safety risks, observed failures, and improved safeguards through iterative deployment.",
+    "hashtags": [
+      "#lensly"
+    ],
+    "status": "queued",
+    "createdAt": "2026-07-22T11:59:38.653Z"
+  },
+  {
+    "id": "post-1784721578658-w03asiq",
+    "storyId": "story-1784721574048-mp5jp1e",
+    "platform": "threads",
+    "content": "AI generated draft for: Write a short post about: The State of Simulation for Physical AI: An Overview. Context: ",
+    "hashtags": [
+      "#lensly"
+    ],
+    "status": "queued",
+    "createdAt": "2026-07-22T11:59:38.658Z"
+  },
+  {
+    "id": "post-1784721578662-8gmehly",
+    "storyId": "story-1784721574049-ih8pel2",
+    "platform": "threads",
+    "content": "AI generated draft for: Write a short post about: Grabette: an open system to record robot-manipulation data. Context: ",
+    "hashtags": [
+      "#lensly"
+    ],
+    "status": "queued",
+    "createdAt": "2026-07-22T11:59:38.662Z"
   }
 ]

@@ -1,5 +1,5 @@
 import { Pipeline } from './scheduler/pipeline';
-import { MockCollector } from './collectors/mock-collector';
+import { RssCollector } from './collectors/rss-collector';
 import { MockAIClient } from './ai/mock-client';
 import { MockPublisher } from './publisher/mock-publisher';
 import { loadConfig } from './config';
@@ -7,7 +7,7 @@ import { loadConfig } from './config';
 async function bootstrap() {
   const config = loadConfig();
   const pipeline = new Pipeline(
-    [new MockCollector()],
+    [new RssCollector()],
     new MockAIClient(),
     new MockPublisher()
   );
