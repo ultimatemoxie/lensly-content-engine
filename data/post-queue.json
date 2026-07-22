@@ -1,1 +1,42 @@
-[]
+[
+  {
+    "id": "queue-1784755313729-oiondyo",
+    "generatedPostId": "post-1784755240931-59p9lrw",
+    "storyId": "story-1784729954713-yrogtjn",
+    "text": "Google partners with industry leaders to launch Alliance for America’s Skilled Trades, addressing workforce development in the US.",
+    "postType": "breaking_news",
+    "category": "industry_trend",
+    "sourceName": "Google AI Blog",
+    "sourceUrl": "https://blog.google/rss/",
+    "aiProvider": "groq",
+    "aiModel": "llama-3.1-8b-instant",
+    "storyScore": 80,
+    "overallPostQuality": 82,
+    "factualGrounding": 100,
+    "scheduledForUtc": "2026-07-23T06:09:53.627Z",
+    "scheduledForLocal": "2026-07-23T14:09:00.000Z",
+    "timezone": "Africa/Lagos",
+    "status": "queued",
+    "createdAt": "2026-07-22T21:21:53.730Z"
+  },
+  {
+    "id": "queue-1784755313730-8wv6dux",
+    "generatedPostId": "post-1784755228809-784i20m",
+    "storyId": "story-1784729951033-qiwf7fv",
+    "text": "OpenAI's Project Camellia brings AI infrastructure and jobs to Effingham County, Georgia, while prioritizing responsible energy and community investment",
+    "postType": "breaking_news",
+    "category": "breaking_ai_news",
+    "sourceName": "OpenAI Blog",
+    "sourceUrl": "https://openai.com/blog/rss.xml",
+    "aiProvider": "groq",
+    "aiModel": "llama-3.1-8b-instant",
+    "storyScore": 95,
+    "overallPostQuality": 78,
+    "factualGrounding": 100,
+    "scheduledForUtc": "2026-07-23T07:11:53.627Z",
+    "scheduledForLocal": "2026-07-23T15:11:00.000Z",
+    "timezone": "Africa/Lagos",
+    "status": "queued",
+    "createdAt": "2026-07-22T21:21:53.730Z"
+  }
+]

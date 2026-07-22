@@ -22,6 +22,18 @@ const HUMOR_ANGLES: Record<string, string> = {
   trend_reaction: 'trend_reaction'
 };
 
+const UNSUPPORTED_HUMOR_PATTERNS = [
+  /\b(goes? rogue|take over the world|destroy humanity|end of the world|apocalypse|doomsday)\b/gi,
+  /\b(fake|fabricated|invented)\s+(quote|statement|claim|fact)\b/gi,
+  /\b(probably|likely|surely|definitely)\s+(will|going to|cause|trigger|lead to)\b/gi,
+  /\b(will|going to)\s+(kill|destroy|end|collapse|wipe out|eliminate)\b/gi,
+  /\b(unless|if we don't|or else)\b/gi,
+  /\b(fear|scary|terrifying|horrifying|alarming)\b/gi,
+  /\b(catastrophic|disastrous|devastating)\b/gi,
+  /\b(who knows what|what if|imagine if)\b/gi,
+  /\b(risk is real|risks are real|danger is real)\b/gi,
+];
+
 export class HumorSafety {
   static isHumorAppropriate(storyTitle: string, category: string): boolean {
     const title = storyTitle.toLowerCase();
@@ -36,6 +48,17 @@ export class HumorSafety {
     }
 
     return true;
+  }
+
+  static validateHumorText(text: string): { valid: boolean; reason: string } {
+    const lower = text.toLowerCase();
+    for (const pattern of UNSUPPORTED_HUMOR_PATTERNS) {
+      pattern.lastIndex = 0;
+      if (pattern.test(lower)) {
+        return { valid: false, reason: 'Humor introduces unsupported implication or speculative fear' };
+      }
+    }
+    return { valid: true, reason: '' };
   }
 
   static getHumorOpportunity(story: { title: string; category?: string; summary?: string; rssSummary?: string }): { allowed: boolean; reason: string; suggestedAngle: string } {

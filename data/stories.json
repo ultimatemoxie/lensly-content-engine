@@ -14,22 +14,22 @@
     "collectedAt": "2026-07-22T14:19:11.033Z",
     "evaluationStatus": "evaluated",
     "score": 55,
-    "category": "industry_trend",
-    "reason": "Industry trend announcement with a useful Lensly angle",
+    "category": "breaking_ai_news",
+    "reason": "Approved",
     "shouldPost": true,
     "verifiedFacts": [
       {
-        "claim": "OpenAI is building AI infrastructure with the Effingham County community",
-        "sourceEvidence": "OpenAI Blog, Published 2026-07-22T13:00:00.000Z, Title: Building AI infrastructure with the Effingham County community, Summary: OpenAI..."
+        "claim": "OpenAI announces Project Camellia in Effingham County, Georgia",
+        "sourceEvidence": "OpenAI announces Project Camellia in Effingham County, Georgia, with commitments to responsible energy, community investment, jobs, and access to Codex."
       },
       {
-        "claim": "Project Camellia is an initiative for responsible energy and community investment",
-        "sourceEvidence": "OpenAI Blog, Published 2026-07-22T13:00:00.000Z, Summary: ...commitments to responsible energy, community investment, jobs, and access to Codex"
+        "claim": "Project Camellia commits to responsible energy, community investment, and jobs",
+        "sourceEvidence": "OpenAI announces Project Camellia in Effingham County, Georgia, with commitments to responsible energy, community investment, jobs, and access to Codex."
       }
     ],
     "postType": "breaking_news",
-    "confidence": 85,
-    "lastEvaluatedAt": "2026-07-22T20:56:24.895Z",
+    "confidence": 98,
+    "lastEvaluatedAt": "2026-07-22T21:20:28.802Z",
     "providerAttempts": [
       {
         "provider": "groq",
@@ -38,8 +38,8 @@
         "httpStatus": 200
       }
     ],
-    "storyScore": 75,
-    "postQualityScore": 50
+    "storyScore": 95,
+    "postQualityScore": 80
   },
   {
     "id": "story-1784729951033-wurguhd",
@@ -82,22 +82,22 @@
     "collectedAt": "2026-07-22T14:19:11.033Z",
     "evaluationStatus": "evaluated",
     "score": 83,
-    "category": "breaking_ai_news",
-    "reason": "Major AI model update",
+    "category": "model_update",
+    "reason": "OpenAI launches ChatGPT for Small Businesses program to help entrepreneurs build AI skills, automate work, and grow",
     "shouldPost": true,
     "verifiedFacts": [
       {
         "claim": "OpenAI launches the ChatGPT for Small Businesses program",
-        "sourceEvidence": "OpenAI Blog"
+        "sourceEvidence": "https://openai.com/index/introducing-chatgpt-small-business-program"
       },
       {
-        "claim": "The program helps entrepreneurs build AI skills, automate work, and grow with ChatGPT Work",
-        "sourceEvidence": "OpenAI launches the ChatGPT for Small Businesses program, helping entrepreneurs build AI skills, automate work, and grow with ChatGPT Work."
+        "claim": "Helping entrepreneurs build AI skills, automate work, and grow",
+        "sourceEvidence": "OpenAI launches the ChatGPT for Small Businesses program"
       }
     ],
     "postType": "breaking_news",
-    "confidence": 95,
-    "lastEvaluatedAt": "2026-07-22T20:56:29.062Z",
+    "confidence": 92,
+    "lastEvaluatedAt": "2026-07-22T21:20:32.818Z",
     "providerAttempts": [
       {
         "provider": "groq",
@@ -106,8 +106,8 @@
         "httpStatus": 200
       }
     ],
-    "storyScore": 90,
-    "postQualityScore": 85
+    "storyScore": 86,
+    "postQualityScore": 74
   },
   {
     "id": "story-1784729951033-1wn9oe9",
@@ -176,26 +176,18 @@
     "collectedAt": "2026-07-22T14:19:11.033Z",
     "evaluationStatus": "evaluated",
     "score": null,
-    "category": "research_insight",
+    "category": "breaking_ai_news",
     "reason": "Approved",
     "shouldPost": true,
     "verifiedFacts": [
       {
-        "claim": "OpenAI shares lessons from deploying long-running AI models.",
-        "sourceEvidence": "OpenAI Blog"
-      },
-      {
-        "claim": "New safety risks and observed failures are highlighted.",
-        "sourceEvidence": "OpenAI shares lessons from deploying long-running AI models, highlighting new safety risks, observed failures,"
-      },
-      {
-        "claim": "Improved safeguards are discussed through iterative deployment.",
-        "sourceEvidence": "OpenAI shares lessons from deploying long-running AI models, highlighting new safety risks, observed failures, and improved safeguards through iterative deployment."
+        "claim": "OpenAI shares lessons from deploying long-running AI models, highlighting new safety risks and improved safeguards.",
+        "sourceEvidence": "OpenAI Blog: https://openai.com/index/safety-alignment-long-horizon-models"
       }
     ],
-    "postType": "research_insight",
+    "postType": "breaking_news",
     "confidence": 90,
-    "lastEvaluatedAt": "2026-07-22T20:56:33.059Z",
+    "lastEvaluatedAt": "2026-07-22T21:20:36.932Z",
     "providerAttempts": [
       {
         "provider": "groq",
@@ -204,8 +196,8 @@
         "httpStatus": 200
       }
     ],
-    "storyScore": 100,
-    "postQualityScore": 75
+    "storyScore": 85,
+    "postQualityScore": 71
   },
   {
     "id": "story-1784729954713-ycuzirs",
@@ -336,8 +328,8 @@
       }
     ],
     "postType": "breaking_news",
-    "confidence": 50,
-    "lastEvaluatedAt": "2026-07-22T20:56:36.940Z",
+    "confidence": 85,
+    "lastEvaluatedAt": "2026-07-22T21:20:40.929Z",
     "providerAttempts": [
       {
         "provider": "groq",
@@ -346,8 +338,8 @@
         "httpStatus": 200
       }
     ],
-    "storyScore": 65,
-    "postQualityScore": 40
+    "storyScore": 80,
+    "postQualityScore": 70
   },
   {
     "id": "story-1784729954713-p53ah0v",
@@ -370,7 +362,7 @@
     "verifiedFacts": [],
     "postType": "industry_observation",
     "confidence": 0,
-    "lastEvaluatedAt": "2026-07-22T20:56:52.222Z",
+    "lastEvaluatedAt": "2026-07-22T21:20:55.267Z",
     "providerAttempts": [
       {
         "provider": "groq",

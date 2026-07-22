@@ -209,6 +209,18 @@ async function evaluate() {
         continue;
       }
 
+      if (isHumorPost) {
+        const humorTextCheck = HumorSafety.validateHumorText(result.primaryPost.text);
+        if (!humorTextCheck.valid) {
+          story.evaluationStatus = 'evaluated';
+          story.reason = 'Humor rejected: ' + humorTextCheck.reason;
+          status.rejectedStories++;
+          console.log('  -> REJECTED (humor text: ' + humorTextCheck.reason + ')');
+          await storyStorage.writeAll(stories);
+          continue;
+        }
+      }
+
       let primaryText = result.primaryPost.text;
       let primaryValidation = PostValidator.validate(primaryText, normalizedType, []);
       if (!primaryValidation.valid) {
@@ -309,6 +321,14 @@ async function evaluate() {
           if (!altValidation.valid) {
             console.log('  -> SKIPPED ALTERNATIVE (validation failed: ' + altValidation.issues.join(', ') + ')');
             continue;
+          }
+          const isAltHumor = altType === 'light_humor' || altType === 'meme_caption' || altType === 'trend_reaction';
+          if (isAltHumor) {
+            const altHumorCheck = HumorSafety.validateHumorText(altText);
+            if (!altHumorCheck.valid) {
+              console.log('  -> SKIPPED ALTERNATIVE (humor text: ' + altHumorCheck.reason + ')');
+              continue;
+            }
           }
           let altGrades = PostGrader.gradePost(altText, altType, sourceText, result.verifiedFacts || []);
           if (altGrades.unsupportedClaims.length > 0) {
