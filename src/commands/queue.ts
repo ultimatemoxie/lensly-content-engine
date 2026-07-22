@@ -2,11 +2,8 @@ import { loadConfig } from '../config';
 import { storyStorage, generatedPostStorage } from '../storage';
 import { QueueBuilder } from '../queue/queue-builder';
 import { QueueValidator, QueueItem } from '../queue/queue-validator';
+import { DateTime } from 'luxon';
 import type { GeneratedPost } from '../types';
-
-function generateId(): string {
-  return 'queue-' + Date.now() + '-' + Math.random().toString(36).slice(2, 9);
-}
 
 async function buildQueue() {
   const config = loadConfig();
@@ -25,25 +22,28 @@ async function queueStatus() {
   const rawPosts = await generatedPostStorage.readAll();
   const posts: GeneratedPost[] = rawPosts as GeneratedPost[];
   const queue = await readQueue();
-  const now = new Date();
+  const now = DateTime.now().setZone('Africa/Lagos');
 
+  const queuedGeneratedIds = new Set(queue.map(q => q.generatedPostId));
   const queueReadyCount = posts.filter(p => {
     const { eligible } = QueueValidator.isQueueReady(p);
-    return eligible && p.status === 'draft';
+    return eligible && p.status === 'draft' && !queuedGeneratedIds.has(p.id);
   }).length;
   const reviewCount = posts.filter(p => p.status === 'review').length;
 
   const typeCounts: Record<string, number> = {};
   const sourceCounts: Record<string, number> = {};
   const companyCounts: Record<string, number> = {};
+  const storySlots: Record<string, number> = {};
   for (const q of queue) {
     typeCounts[q.postType] = (typeCounts[q.postType] || 0) + 1;
     sourceCounts[q.sourceName] = (sourceCounts[q.sourceName] || 0) + 1;
     const company = QueueValidator.extractCompany(q.text);
     if (company) companyCounts[company] = (companyCounts[company] || 0) + 1;
+    storySlots[q.storyId] = (storySlots[q.storyId] || 0) + 1;
   }
 
-  const future = queue.filter(q => new Date(q.scheduledForUtc) > now).sort((a, b) => new Date(a.scheduledForUtc).getTime() - new Date(b.scheduledForUtc).getTime());
+  const future = queue.filter(q => DateTime.fromISO(q.scheduledForUtc, { zone: 'utc' }).toMillis() > now.toMillis()).sort((a, b) => DateTime.fromISO(a.scheduledForUtc, { zone: 'utc' }).toMillis() - DateTime.fromISO(b.scheduledForUtc, { zone: 'utc' }).toMillis());
   const next = future[0];
 
   console.log('Queue Status');
@@ -55,16 +55,80 @@ async function queueStatus() {
   console.log('Type distribution: ' + JSON.stringify(typeCounts));
   console.log('Source distribution: ' + JSON.stringify(sourceCounts));
   console.log('Company distribution: ' + JSON.stringify(companyCounts));
+  console.log('Story variation slots used: ' + JSON.stringify(storySlots));
   if (next) {
     console.log('Next scheduled post: ' + next.text.slice(0, 60) + '...');
     console.log('  scheduledForLocal: ' + next.scheduledForLocal);
     console.log('  scheduledForUtc: ' + next.scheduledForUtc);
+    console.log('  timezone: ' + next.timezone);
+    console.log('  timezone consistency: ' + QueueBuilder.validateTimezoneConsistency(next));
   }
   const mixGaps = Object.entries(MIX_TARGETS).filter(([type, target]) => (typeCounts[type] || 0) < target);
   if (mixGaps.length > 0) {
     console.log('Mix gaps preventing full 15-post queue: ' + mixGaps.map(([t, g]) => t + ' (need ' + g + ')').join(', '));
   } else {
     console.log('Mix gaps: none');
+  }
+
+  const eligibleExcluded = posts.filter(p => {
+    const { eligible, reasons } = QueueValidator.isQueueReady(p);
+    return !eligible && p.status === 'draft';
+  });
+  if (eligibleExcluded.length > 0) {
+    console.log('Eligible drafts excluded by constraints:');
+    for (const p of eligibleExcluded) {
+      const reasons = QueueValidator.isQueueReady(p).reasons;
+      console.log('  - ' + p.text.slice(0, 50) + '... [' + reasons.join(', ') + ']');
+    }
+  }
+
+  const sameStorySpacing: Record<string, string> = {};
+  const storyTimes: Record<string, number[]> = {};
+  for (const q of future) {
+    if (!storyTimes[q.storyId]) storyTimes[q.storyId] = [];
+    storyTimes[q.storyId].push(DateTime.fromISO(q.scheduledForUtc, { zone: 'utc' }).toMillis());
+  }
+  for (const [storyId, times] of Object.entries(storyTimes)) {
+    if (times.length > 1) {
+      times.sort((a, b) => a - b);
+      const gaps = [];
+      for (let i = 1; i < times.length; i++) {
+        gaps.push(Math.round((times[i] - times[i - 1]) / 60000) + 'min');
+      }
+      sameStorySpacing[storyId] = gaps.join(', ');
+    }
+  }
+  if (Object.keys(sameStorySpacing).length > 0) {
+    console.log('Same-story spacing (minutes):');
+    for (const [storyId, gaps] of Object.entries(sameStorySpacing)) {
+      console.log('  ' + storyId + ': ' + gaps);
+    }
+  }
+
+  const slotsRemaining = Math.max(0, 15 - future.length);
+  const typesNeeded = Object.entries(MIX_TARGETS)
+    .filter(([type, target]) => (typeCounts[type] || 0) < target)
+    .map(([type, target]) => type + ' (need ' + (target - (typeCounts[type] || 0)) + ')');
+  const sourcesAtCap = Object.entries(sourceCounts).filter(([, count]) => count >= 3).map(([src]) => src);
+  const reviewPosts = posts.filter(p => p.status === 'review');
+  const pendingStories = await getPendingStories();
+
+  console.log('\nQueue Replenishment Report');
+  console.log('==========================');
+  console.log('Slots remaining: ' + slotsRemaining);
+  console.log('Types needed: ' + (typesNeeded.length > 0 ? typesNeeded.join(', ') : 'none'));
+  console.log('Sources at cap: ' + (sourcesAtCap.length > 0 ? sourcesAtCap.join(', ') : 'none'));
+  console.log('Pending stories available for future evaluation: ' + pendingStories);
+  console.log('Review posts that may become eligible after rewriting: ' + reviewPosts.length);
+  console.log('Estimated additional AI evaluations needed: ' + Math.ceil((15 - future.length) / 3));
+}
+
+async function getPendingStories(): Promise<number> {
+  try {
+    const stories = await storyStorage.readAll();
+    return stories.filter(s => s.evaluationStatus === 'pending' || s.evaluationStatus === 'retry_pending').length;
+  } catch {
+    return 0;
   }
 }
 

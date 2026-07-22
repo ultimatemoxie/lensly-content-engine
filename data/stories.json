@@ -19,17 +19,17 @@
     "shouldPost": true,
     "verifiedFacts": [
       {
-        "claim": "OpenAI announces Project Camellia in Effingham County, Georgia",
-        "sourceEvidence": "OpenAI announces Project Camellia in Effingham County, Georgia, with commitments to responsible energy, community investment, jobs, and access to Codex."
+        "claim": "OpenAI announces Project Camellia in Effingham County, Georgia.",
+        "sourceEvidence": "OpenAI announces Project Camellia in Effingham County, Georgia,"
       },
       {
-        "claim": "Project Camellia commits to responsible energy, community investment, and jobs",
-        "sourceEvidence": "OpenAI announces Project Camellia in Effingham County, Georgia, with commitments to responsible energy, community investment, jobs, and access to Codex."
+        "claim": "Commitments to responsible energy, community investment, jobs, and access to Codex are made.",
+        "sourceEvidence": "commitments to responsible energy, community investment, jobs, and access to Codex"
       }
     ],
     "postType": "breaking_news",
-    "confidence": 98,
-    "lastEvaluatedAt": "2026-07-22T21:20:28.802Z",
+    "confidence": 86,
+    "lastEvaluatedAt": "2026-07-22T21:47:21.974Z",
     "providerAttempts": [
       {
         "provider": "groq",
@@ -38,8 +38,8 @@
         "httpStatus": 200
       }
     ],
-    "storyScore": 95,
-    "postQualityScore": 80
+    "storyScore": 80,
+    "postQualityScore": 72
   },
   {
     "id": "story-1784729951033-wurguhd",
@@ -83,21 +83,21 @@
     "evaluationStatus": "evaluated",
     "score": 83,
     "category": "model_update",
-    "reason": "OpenAI launches ChatGPT for Small Businesses program to help entrepreneurs build AI skills, automate work, and grow",
+    "reason": "Approved",
     "shouldPost": true,
     "verifiedFacts": [
       {
-        "claim": "OpenAI launches the ChatGPT for Small Businesses program",
-        "sourceEvidence": "https://openai.com/index/introducing-chatgpt-small-business-program"
+        "claim": "OpenAI launches the ChatGPT for Small Businesses program.",
+        "sourceEvidence": "OpenAI launches the ChatGPT for Small Businesses program..."
       },
       {
-        "claim": "Helping entrepreneurs build AI skills, automate work, and grow",
-        "sourceEvidence": "OpenAI launches the ChatGPT for Small Businesses program"
+        "claim": "Helping entrepreneurs build AI skills, automate work, and grow with ChatGPT Work.",
+        "sourceEvidence": "Helping entrepreneurs build AI skills, automate work, and grow with ChatGPT Work."
       }
     ],
     "postType": "breaking_news",
-    "confidence": 92,
-    "lastEvaluatedAt": "2026-07-22T21:20:32.818Z",
+    "confidence": 100,
+    "lastEvaluatedAt": "2026-07-22T21:47:26.018Z",
     "providerAttempts": [
       {
         "provider": "groq",
@@ -106,8 +106,8 @@
         "httpStatus": 200
       }
     ],
-    "storyScore": 86,
-    "postQualityScore": 74
+    "storyScore": 80,
+    "postQualityScore": 90
   },
   {
     "id": "story-1784729951033-1wn9oe9",
@@ -174,30 +174,40 @@
     "articleUrl": "https://openai.com/index/safety-alignment-long-horizon-models",
     "publishedAt": "2026-07-20T10:00:00.000Z",
     "collectedAt": "2026-07-22T14:19:11.033Z",
-    "evaluationStatus": "evaluated",
+    "evaluationStatus": "retry_pending",
     "score": null,
-    "category": "breaking_ai_news",
-    "reason": "Approved",
-    "shouldPost": true,
-    "verifiedFacts": [
-      {
-        "claim": "OpenAI shares lessons from deploying long-running AI models, highlighting new safety risks and improved safeguards.",
-        "sourceEvidence": "OpenAI Blog: https://openai.com/index/safety-alignment-long-horizon-models"
-      }
-    ],
-    "postType": "breaking_news",
-    "confidence": 90,
-    "lastEvaluatedAt": "2026-07-22T21:20:36.932Z",
+    "category": "",
+    "reason": "Gemini error: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent: fetch failed",
+    "shouldPost": false,
+    "verifiedFacts": [],
+    "postType": "industry_observation",
+    "confidence": 0,
+    "lastEvaluatedAt": "2026-07-22T21:47:56.101Z",
     "providerAttempts": [
       {
         "provider": "groq",
         "model": "llama-3.1-8b-instant",
-        "result": "success",
-        "httpStatus": 200
+        "result": "permanent_failure",
+        "httpStatus": null,
+        "error": "This operation was aborted"
+      },
+      {
+        "provider": "cerebras",
+        "model": "gpt-oss-120b",
+        "result": "permanent_failure",
+        "httpStatus": null,
+        "error": "fetch failed"
+      },
+      {
+        "provider": "gemini",
+        "model": "gemini-2.0-flash",
+        "result": "permanent_failure",
+        "httpStatus": null,
+        "error": "[GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent: fetch failed"
       }
     ],
-    "storyScore": 85,
-    "postQualityScore": 71
+    "storyScore": 0,
+    "postQualityScore": 0
   },
   {
     "id": "story-1784729954713-ycuzirs",
@@ -316,30 +326,18 @@
     "articleUrl": "https://blog.google/company-news/outreach-and-initiatives/creating-opportunity/alliance-america-skilled-trades/",
     "publishedAt": "2026-07-21T14:00:00.000Z",
     "collectedAt": "2026-07-22T14:19:14.713Z",
-    "evaluationStatus": "evaluated",
+    "evaluationStatus": "pending",
     "score": null,
-    "category": "industry_trend",
-    "reason": "Approved",
-    "shouldPost": true,
-    "verifiedFacts": [
-      {
-        "claim": "Google is joining BlackRock, Carhartt and Ford to launch the Alliance for America’s Skilled Trades.",
-        "sourceEvidence": "Google is joining BlackRock, Carhartt and Ford to launch the Alliance for America’s Skilled Trades."
-      }
-    ],
-    "postType": "breaking_news",
-    "confidence": 85,
-    "lastEvaluatedAt": "2026-07-22T21:20:40.929Z",
-    "providerAttempts": [
-      {
-        "provider": "groq",
-        "model": "llama-3.1-8b-instant",
-        "result": "success",
-        "httpStatus": 200
-      }
-    ],
-    "storyScore": 80,
-    "postQualityScore": 70
+    "category": null,
+    "reason": null,
+    "shouldPost": null,
+    "verifiedFacts": null,
+    "postType": null,
+    "confidence": null,
+    "lastEvaluatedAt": null,
+    "providerAttempts": [],
+    "storyScore": null,
+    "postQualityScore": null
   },
   {
     "id": "story-1784729954713-p53ah0v",
@@ -354,40 +352,18 @@
     "articleUrl": "https://blog.google/products-and-platforms/products/gemini/launch-business-with-gemini/",
     "publishedAt": "2026-07-20T19:00:00.000Z",
     "collectedAt": "2026-07-22T14:19:14.713Z",
-    "evaluationStatus": "retry_pending",
+    "evaluationStatus": "pending",
     "score": null,
-    "category": "",
-    "reason": "Request budget exhausted",
-    "shouldPost": false,
-    "verifiedFacts": [],
-    "postType": "industry_observation",
-    "confidence": 0,
-    "lastEvaluatedAt": "2026-07-22T21:20:55.267Z",
-    "providerAttempts": [
-      {
-        "provider": "groq",
-        "model": "llama-3.1-8b-instant",
-        "result": "permanent_failure",
-        "httpStatus": null,
-        "error": "Request budget exhausted during retry"
-      },
-      {
-        "provider": "cerebras",
-        "model": "gpt-oss-120b",
-        "result": "permanent_failure",
-        "httpStatus": null,
-        "error": "Request budget exhausted"
-      },
-      {
-        "provider": "gemini",
-        "model": "gemini-2.0-flash",
-        "result": "permanent_failure",
-        "httpStatus": null,
-        "error": "Request budget exhausted"
-      }
-    ],
-    "storyScore": 0,
-    "postQualityScore": 0
+    "category": null,
+    "reason": null,
+    "shouldPost": null,
+    "verifiedFacts": null,
+    "postType": null,
+    "confidence": null,
+    "lastEvaluatedAt": null,
+    "providerAttempts": [],
+    "storyScore": null,
+    "postQualityScore": null
   },
   {
     "id": "story-1784729963030-pjhb0of",
