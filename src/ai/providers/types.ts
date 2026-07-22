@@ -1,7 +1,8 @@
 import { RequestBudget } from '../request-budget';
 
 export interface EvaluationResult {
-  score: number;
+  storyScore: number;
+  postQualityScore: number;
   category: string;
   reason: string;
   shouldPost: boolean;

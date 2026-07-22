@@ -182,7 +182,8 @@ ${sourceMaterial}
 
 Return JSON with these fields:
 {
-  "score": 0,
+  "storyScore": 0,
+  "postQualityScore": 0,
   "category": "",
   "reason": "",
   "shouldPost": false,
@@ -196,13 +197,16 @@ Return JSON with these fields:
 }
 
 Rules:
-- score: 0-100 integer
-- shouldPost: true only if score >= 65
+- storyScore: 0-100 integer measuring the story's value to Lensly's audience. 80-100 = major launch/research/industry event. 65-79 = useful product update, workflow, creator opportunity, business use case, partnership, tool announcement, or industry observation. 50-64 = potentially useful but weak/incomplete. Below 50 = irrelevant, insufficient, no usable angle.
+- postQualityScore: 0-100 integer measuring how well the primaryPost is written. 80-100 = sharp, specific, ready to publish. 65-79 = solid draft, minor cleanup needed. 50-64 = weak or generic. Below 50 = unusable draft.
+- shouldPost: true only if storyScore >= 65. Post quality affects draft readiness, not story approval.
 - category: breaking_ai_news, model_update, tool_spotlight, creator_workflow, research_insight, business_observation, industry_trend, safety_ethics
-- primaryPost.type: breaking_news, creator_insight, tool_spotlight, practical_tip, founder_take, research_insight, thoughtful_question, light_humor, comparison, industry_observation, trend_reaction, meme_caption
+- primaryPost.type: breaking_news, creator_insight, tool_spotlight, practical_tip, founder_take, research_insight, thoughtful_question, light_humor, comparison, industry_observation, trend_reaction, meme_caption. If the model returns a reasonable but unsupported label, map it: model_update/product_update/news -> breaking_news; business_update -> industry_observation; workflow -> practical_tip; opinion -> founder_take; question -> thoughtful_question; humor -> light_humor; meme -> meme_caption.
 - primaryPost.text: 120-240 chars preferred, max 280 chars, natural tone, strong hook, no corporate language, no hashtags, no emojis by default, no "Here is a post", no "game-changing" / "revolutionary" / "insane"
-- alternativePosts: up to 2 alternative posts as array of {type, text}. Use types: breaking_news, creator_insight, tool_spotlight, practical_tip, founder_take, research_insight, thoughtful_question, light_humor, comparison, industry_observation, trend_reaction, meme_caption
+- alternativePosts: up to 2 alternative posts as array of {type, text}. Use the same type set and mapping rules.
 - Humor/light_humor/meme_caption: light, clever, relevant to AI creators/founders/developers/designers, understandable without context, not insulting, not fabricated, not based on fake quotes. OK for light topics only; avoid when topic is serious, sensitive, tragic, political, legal, safety-related, or about harm.
+- Do NOT reject a story simply because it is corporate or promotional. Look for a useful Lensly angle. Ask whether the audience can learn, react, discuss, or apply something from it. A neutral business announcement can become an industry observation. A product launch can become a creator insight or thoughtful question. A partnership can become a founder take, comparison, or industry observation. Promotional language should be removed, not automatically treated as disqualifying.
+- A story may be valuable even when the generated draft needs cleanup. storyScore reflects the story, postQualityScore reflects the draft.
 - confidence: 0-100 integer
 - Do NOT invent product names, model names, prices, features, dates, quotes, benchmarks, stats, partnerships, funding amounts, or technical specs.`;
   }
@@ -211,7 +215,8 @@ Rules:
     const cleaned = text.replace(/```json/g, '').replace(/```/g, '').trim();
     try {
       const parsed = JSON.parse(cleaned);
-      const score = Math.max(0, Math.min(100, typeof parsed.score === 'number' ? parsed.score : 0));
+      const storyScore = Math.max(0, Math.min(100, typeof parsed.storyScore === 'number' ? parsed.storyScore : (typeof parsed.score === 'number' ? parsed.score : 0)));
+      const postQualityScore = Math.max(0, Math.min(100, typeof parsed.postQualityScore === 'number' ? parsed.postQualityScore : 0));
       const confidence = Math.max(0, Math.min(100, typeof parsed.confidence === 'number' ? parsed.confidence : 0));
       const primaryPost = this.normalizePost(parsed.primaryPost);
       const alternativePosts = Array.isArray(parsed.alternativePosts)
@@ -220,9 +225,10 @@ Rules:
             .filter((p: { type: string; text: string }) => p.type && p.text && !this.isNearDuplicate(primaryPost.text, p.text))
             .slice(0, 2)
         : [];
-      const shouldPost = score >= 65 && primaryPost.text.length >= 100 && primaryPost.text.length <= 280;
+      const shouldPost = storyScore >= 65 && primaryPost.text.length >= 100 && primaryPost.text.length <= 280;
       return {
-        score,
+        storyScore,
+        postQualityScore,
         category: typeof parsed.category === 'string' ? parsed.category : '',
         reason: typeof parsed.reason === 'string' ? parsed.reason : '',
         shouldPost,
@@ -233,7 +239,8 @@ Rules:
       };
     } catch {
       return {
-        score: 0,
+        storyScore: 0,
+        postQualityScore: 0,
         category: '',
         reason: 'Failed to parse Gemini response',
         shouldPost: false,

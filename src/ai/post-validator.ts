@@ -5,14 +5,41 @@ export interface PostValidationResult {
   notes: string[];
 }
 
+const TYPE_MAPPING: Record<string, string> = {
+  model_update: 'breaking_news',
+  product_update: 'breaking_news',
+  business_update: 'industry_observation',
+  workflow: 'practical_tip',
+  opinion: 'founder_take',
+  question: 'thoughtful_question',
+  humor: 'light_humor',
+  meme: 'meme_caption',
+  news: 'breaking_news',
+};
+
+const SUPPORTED_TYPES = new Set([
+  'breaking_news', 'creator_insight', 'tool_spotlight', 'practical_tip',
+  'founder_take', 'research_insight', 'thoughtful_question', 'light_humor',
+  'comparison', 'industry_observation', 'trend_reaction', 'meme_caption'
+]);
+
 export class PostValidator {
+  static normalizePostType(rawType: string): string {
+    const normalized = rawType.toLowerCase().trim();
+    if (SUPPORTED_TYPES.has(normalized)) {
+      return normalized;
+    }
+    return TYPE_MAPPING[normalized] || 'industry_observation';
+  }
+
   static validate(text: string, type: string, existingTexts: string[] = []): PostValidationResult {
     const issues: string[] = [];
     const notes: string[] = [];
-    const normalized = text.trim();
-    const characterCount = normalized.length;
+    const normalizedText = text.trim();
+    const characterCount = normalizedText.length;
+    const normalizedType = PostValidator.normalizePostType(type);
 
-    if (!normalized) {
+    if (!normalizedText) {
       issues.push('Empty post text');
       return { valid: false, characterCount: 0, issues, notes: ['Rejected: empty text'] };
     }
@@ -21,7 +48,7 @@ export class PostValidator {
       issues.push(`Post exceeds 280 characters (${characterCount})`);
     }
 
-    const isHumorType = type === 'light_humor' || type === 'meme_caption';
+    const isHumorType = normalizedType === 'light_humor' || normalizedType === 'meme_caption';
     const minLength = isHumorType ? 60 : 100;
     if (characterCount < minLength && !isHumorType) {
       issues.push(`Post below minimum length (${characterCount} < ${minLength})`);
@@ -29,18 +56,9 @@ export class PostValidator {
       notes.push(`Accepted short humor post (${characterCount} chars) as deliberate brevity`);
     }
 
-    const supportedTypes = [
-      'breaking_news', 'creator_insight', 'tool_spotlight', 'practical_tip',
-      'founder_take', 'research_insight', 'thoughtful_question', 'light_humor',
-      'comparison', 'industry_observation', 'trend_reaction', 'meme_caption'
-    ];
-    if (!supportedTypes.includes(type)) {
-      issues.push(`Unsupported post type: ${type}`);
-    }
-
     const nearDuplicate = existingTexts.some(existing => {
       const normalize = (s: string) => s.toLowerCase().replace(/\s+/g, ' ').trim();
-      const na = normalize(normalized);
+      const na = normalize(normalizedText);
       const nb = normalize(existing);
       if (!na || !nb) return false;
       const wordsA = na.split(' ');
@@ -61,33 +79,25 @@ export class PostValidator {
       /read more/gi, /click here/gi, /subscribe now/gi, /follow us/gi
     ];
     for (const pattern of fillerPatterns) {
-      if (pattern.test(normalized)) {
+      if (pattern.test(normalizedText)) {
         issues.push('Contains corporate filler or banned phrase');
         break;
       }
     }
 
-    const hashtagCount = (normalized.match(/#/g) || []).length;
+    const hashtagCount = (normalizedText.match(/#/g) || []).length;
     if (hashtagCount > 2) {
       issues.push('Excessive hashtags');
     }
 
-    const emojiCount = (normalized.match(/[\u{1F300}-\u{1F6FF}\u{1F900}-\u{1F9FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]/gu) || []).length;
+    const emojiCount = (normalizedText.match(/[\u{1F300}-\u{1F6FF}\u{1F900}-\u{1F9FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]/gu) || []).length;
     if (emojiCount > 1) {
       issues.push('Excessive emojis');
     }
 
-    const quoteCount = (normalized.match(/["""]/g) || []).length;
+    const quoteCount = (normalizedText.match(/["""]/g) || []).length;
     if (quoteCount % 2 !== 0) {
       issues.push('Broken quotation marks');
-    }
-
-    const hasSupportedFactualClaim = /launched|released|raised|partnered|acquired|introduced|updated|announced|published|shipped|built|opened|joined/i.test(normalized) ||
-      /\d+%|\$\d+|\d+ million|\d+ billion|\d+M|\d+B/.test(normalized) ||
-      normalized.includes('OpenAI') || normalized.includes('Google') || normalized.includes('Anthropic') || normalized.includes('Meta') || normalized.includes('Groq');
-
-    if (!hasSupportedFactualClaim && !isHumorType && !existingTexts.includes(normalized)) {
-      notes.push('Post lacks explicit factual anchor; review for precision');
     }
 
     return {
@@ -98,3 +108,4 @@ export class PostValidator {
     };
   }
 }
+
