@@ -42,30 +42,64 @@ function classifyStory(story: Story): string[] {
   return categories;
 }
 
-function pickBalancedPending(stories: Story[], missingTypes: string[], maxPick: number): Story[] {
+function pickBalancedPending(stories: Story[], missingTypes: string[], maxPick: number, queueBefore: QueueItem[]): { story: Story; reason?: string }[] {
   const pending = stories.filter(s => s.evaluationStatus === 'pending' || s.evaluationStatus === 'retry_pending');
+
+  const sourceCounts: Record<string, number> = {};
+  const companyCounts: Record<string, number> = {};
+  for (const q of queueBefore) {
+    sourceCounts[q.sourceName] = (sourceCounts[q.sourceName] || 0) + 1;
+    const company = QueueValidator.extractCompany(q.text);
+    if (company) companyCounts[company] = (companyCounts[company] || 0) + 1;
+  }
+
   const scored = pending.map(s => {
     const cats = classifyStory(s);
     let typeScore = 0;
     for (const mt of missingTypes) {
       if (cats.includes(mt)) typeScore += 3;
     }
+
+    const srcCount = sourceCounts[s.sourceName] || 0;
+    const srcPenalty = srcCount >= 2 ? -10 : (srcCount >= 1 ? -3 : 0);
+    const company = QueueValidator.extractCompany(s.title + ' ' + (s.summary || ''));
+    const compCount = company ? (companyCounts[company] || 0) : 0;
+    const compPenalty = compCount >= 2 ? -10 : (compCount >= 1 ? -3 : 0);
+
     const sourceDiversity = ['OpenAI Blog', 'Google AI Blog', 'Anthropic News', 'Hugging Face Blog', 'TechCrunch AI'];
-    const srcScore = sourceDiversity.includes(s.sourceName) ? 2 : 0;
+    const srcBonus = sourceDiversity.includes(s.sourceName) ? 2 : 0;
     const textLen = (s.articleText || s.rssSummary || s.summary || '').length;
     const detailScore = Math.min(3, Math.floor(textLen / 500));
-    return { story: s, score: typeScore + srcScore + detailScore };
+    const noveltyBonus = s.articleText && s.articleText.length > 1000 ? 2 : 0;
+
+    const score = typeScore + srcBonus + detailScore + noveltyBonus + srcPenalty + compPenalty;
+
+    const reason = srcPenalty < -5 ? 'source cap penalty' : (compPenalty < -5 ? 'company cap penalty' : 'high diversity score');
+    return { story: s, score, reason: score > 0 ? reason : 'lower-ranked candidate' };
   });
 
   scored.sort((a, b) => b.score - a.score);
 
-  const selected: Story[] = [];
+  const selected: { story: Story; reason?: string }[] = [];
   const usedSources = new Set<string>();
+  const usedCompanies = new Set<string>();
+
   for (const item of scored) {
     if (selected.length >= maxPick) break;
-    if (usedSources.has(item.story.sourceName) && usedSources.size >= 3) continue;
-    selected.push(item.story);
+
+    const company = QueueValidator.extractCompany(item.story.title + ' ' + (item.story.summary || ''));
+    const srcCount = sourceCounts[item.story.sourceName] || 0;
+    const compCount = company ? (companyCounts[company] || 0) : 0;
+
+    if (srcCount >= 3) continue;
+    if (company && compCount >= 3) continue;
+
+    if (usedSources.size >= 3 && usedSources.has(item.story.sourceName)) continue;
+    if (company && usedCompanies.size >= 2 && usedCompanies.has(company) && item.score < 5) continue;
+
+    selected.push({ story: item.story, reason: item.reason });
     usedSources.add(item.story.sourceName);
+    if (company) usedCompanies.add(company);
   }
   return selected;
 }
@@ -347,11 +381,12 @@ async function replenish() {
 
   const remainingSlots = Math.max(0, 15 - queueBefore.length - report.rewritesPromotedToDraft);
   if (remainingSlots > 0 && budget.canRequest()) {
-    const pendingStories = pickBalancedPending(stories, missingTypes, remainingSlots);
-    report.pendingStoriesSelected = pendingStories.length;
+    const pendingSelections = pickBalancedPending(stories, missingTypes, remainingSlots, queueBefore);
+    report.pendingStoriesSelected = pendingSelections.length;
     console.log('Pending stories selected: ' + report.pendingStoriesSelected);
 
-    for (const story of pendingStories) {
+    for (const selection of pendingSelections) {
+      const story = selection.story;
       if (!budget.canRequest()) break;
 
       console.log('Evaluating: ' + story.title);

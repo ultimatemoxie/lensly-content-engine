@@ -24,7 +24,12 @@ async function queueStatus() {
   const queue = await readQueue();
   const now = DateTime.now().setZone('Africa/Lagos');
 
-  const queuedGeneratedIds = new Set(queue.map(q => q.generatedPostId));
+  const expired = queue.filter(q => q.status === 'expired' || q.status === 'published' || q.status === 'failed' || q.status === 'cancelled');
+  const activeQueue = queue.filter(q => q.status === 'queued');
+  const future = activeQueue.filter(q => DateTime.fromISO(q.scheduledForUtc, { zone: 'utc' }).toMillis() > now.toMillis()).sort((a, b) => DateTime.fromISO(a.scheduledForUtc, { zone: 'utc' }).toMillis() - DateTime.fromISO(b.scheduledForUtc, { zone: 'utc' }).toMillis());
+  const next = future[0];
+
+  const queuedGeneratedIds = new Set(activeQueue.map(q => q.generatedPostId));
   const queueReadyCount = posts.filter(p => {
     const { eligible } = QueueValidator.isQueueReady(p);
     return eligible && p.status === 'draft' && !queuedGeneratedIds.has(p.id);
@@ -35,7 +40,7 @@ async function queueStatus() {
   const sourceCounts: Record<string, number> = {};
   const companyCounts: Record<string, number> = {};
   const storySlots: Record<string, number> = {};
-  for (const q of queue) {
+  for (const q of activeQueue) {
     typeCounts[q.postType] = (typeCounts[q.postType] || 0) + 1;
     sourceCounts[q.sourceName] = (sourceCounts[q.sourceName] || 0) + 1;
     const company = QueueValidator.extractCompany(q.text);
@@ -43,19 +48,19 @@ async function queueStatus() {
     storySlots[q.storyId] = (storySlots[q.storyId] || 0) + 1;
   }
 
-  const future = queue.filter(q => DateTime.fromISO(q.scheduledForUtc, { zone: 'utc' }).toMillis() > now.toMillis()).sort((a, b) => DateTime.fromISO(a.scheduledForUtc, { zone: 'utc' }).toMillis() - DateTime.fromISO(b.scheduledForUtc, { zone: 'utc' }).toMillis());
-  const next = future[0];
-
   console.log('Queue Status');
   console.log('============');
-  console.log('Total queued: ' + queue.length);
-  console.log('Future posts: ' + future.length);
+  console.log('Total records in post-queue.json: ' + queue.length);
+  console.log('Active queued posts: ' + activeQueue.length);
+  console.log('Expired/published/failed/cancelled posts: ' + expired.length);
+  console.log('Future active posts: ' + future.length);
   console.log('Queue-ready drafts remaining: ' + queueReadyCount);
   console.log('Review posts excluded: ' + reviewCount);
   console.log('Type distribution: ' + JSON.stringify(typeCounts));
   console.log('Source distribution: ' + JSON.stringify(sourceCounts));
   console.log('Company distribution: ' + JSON.stringify(companyCounts));
   console.log('Story variation slots used: ' + JSON.stringify(storySlots));
+
   if (next) {
     console.log('Next scheduled post: ' + next.text.slice(0, 60) + '...');
     console.log('  scheduledForLocal: ' + next.scheduledForLocal);
@@ -63,6 +68,7 @@ async function queueStatus() {
     console.log('  timezone: ' + next.timezone);
     console.log('  timezone consistency: ' + QueueBuilder.validateTimezoneConsistency(next));
   }
+
   const mixGaps = Object.entries(MIX_TARGETS).filter(([type, target]) => (typeCounts[type] || 0) < target);
   if (mixGaps.length > 0) {
     console.log('Mix gaps preventing full 15-post queue: ' + mixGaps.map(([t, g]) => t + ' (need ' + g + ')').join(', '));
@@ -82,6 +88,23 @@ async function queueStatus() {
     }
   }
 
+  const queueReadyDrafts = posts.filter(p => {
+    const { eligible } = QueueValidator.isQueueReady(p);
+    return eligible && p.status === 'draft' && !queuedGeneratedIds.has(p.id);
+  });
+  if (queueReadyDrafts.length > 0) {
+    console.log('Queue-ready drafts not added to queue:');
+    for (const p of queueReadyDrafts) {
+      const reasons: string[] = [];
+      if (QueueValidator.isQueueReady(p).reasons.length > 0) {
+        reasons.push(...QueueValidator.isQueueReady(p).reasons);
+      }
+      if (!reasons.includes('source cap') && (typeCounts[p.postType] || 0) >= 3) reasons.push('post-type cap');
+      if (!reasons.includes('company cap') && QueueValidator.extractCompany(p.text) && (companyCounts[QueueValidator.extractCompany(p.text)] || 0) >= 3) reasons.push('company cap');
+      console.log('  - ' + p.text.slice(0, 50) + '... [' + (reasons.length > 0 ? reasons.join(', ') : 'already queued or lower-ranked') + ']');
+    }
+  }
+
   const sameStorySpacing: Record<string, string> = {};
   const storyTimes: Record<string, number[]> = {};
   for (const q of future) {
@@ -93,7 +116,8 @@ async function queueStatus() {
       times.sort((a, b) => a - b);
       const gaps = [];
       for (let i = 1; i < times.length; i++) {
-        gaps.push(Math.round((times[i] - times[i - 1]) / 60000) + 'min');
+        const gapMinutes = Math.round((times[i] - times[i - 1]) / 60000);
+        gaps.push(gapMinutes + 'min' + (gapMinutes < 240 ? ' (BELOW 4H MIN)' : ''));
       }
       sameStorySpacing[storyId] = gaps.join(', ');
     }

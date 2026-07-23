@@ -15,21 +15,21 @@
     "evaluationStatus": "evaluated",
     "score": 55,
     "category": "breaking_ai_news",
-    "reason": "Approved",
+    "reason": "Major research/industry event",
     "shouldPost": true,
     "verifiedFacts": [
       {
         "claim": "OpenAI announces Project Camellia in Effingham County, Georgia",
-        "sourceEvidence": "OpenAI Blog"
+        "sourceEvidence": "OpenAI announces Project Camellia in Effingham County, Georgia, with commitments to responsible energy, community investment, jobs, and access to Codex."
       },
       {
-        "claim": "Project Camellia includes commitments to responsible energy, community investment, jobs, and access to Codex",
-        "sourceEvidence": "OpenAI Blog"
+        "claim": "Project Camellia aims to build AI infrastructure",
+        "sourceEvidence": "OpenAI announces Project Camellia in Effingham County, Georgia, with commitments to responsible energy, community investment, jobs, and access to Codex."
       }
     ],
     "postType": "breaking_news",
-    "confidence": 95,
-    "lastEvaluatedAt": "2026-07-22T22:35:00.329Z",
+    "confidence": 92,
+    "lastEvaluatedAt": "2026-07-23T07:41:52.774Z",
     "providerAttempts": [
       {
         "provider": "groq",
@@ -38,8 +38,8 @@
         "httpStatus": 200
       }
     ],
-    "storyScore": 90,
-    "postQualityScore": 70
+    "storyScore": 85,
+    "postQualityScore": 75
   },
   {
     "id": "story-1784729951033-wurguhd",
@@ -213,17 +213,21 @@
     "evaluationStatus": "evaluated",
     "score": null,
     "category": "industry_trend",
-    "reason": "Lack of clarity and specificity in the primary post, but the story has potential for an industry trend angle.",
+    "reason": "Approved",
     "shouldPost": true,
     "verifiedFacts": [
       {
-        "claim": "Samsung users can boost productivity and get time back on new foldables, watches, and glasses coming soon.",
-        "sourceEvidence": "Shared how Samsung users can boost productivity and get time back on new foldables, watches, and glasses coming soon."
+        "claim": "Samsung users can boost productivity",
+        "sourceEvidence": "We shared how Samsung users can boost productivity..."
+      },
+      {
+        "claim": "new foldables, watches, and glasses are coming soon",
+        "sourceEvidence": "new foldables, watches, and glasses coming soon"
       }
     ],
     "postType": "breaking_news",
-    "confidence": 50,
-    "lastEvaluatedAt": "2026-07-22T22:34:48.774Z",
+    "confidence": 0,
+    "lastEvaluatedAt": "2026-07-23T07:41:40.974Z",
     "providerAttempts": [
       {
         "provider": "groq",
@@ -232,7 +236,7 @@
         "httpStatus": 200
       }
     ],
-    "storyScore": 65,
+    "storyScore": 80,
     "postQualityScore": 0
   },
   {
@@ -250,18 +254,18 @@
     "collectedAt": "2026-07-22T14:19:14.713Z",
     "evaluationStatus": "evaluated",
     "score": null,
-    "category": "industry_trend",
-    "reason": "Approved",
+    "category": "research_insight",
+    "reason": "Valuable article with a clear focus on practical productivity tips for college students.",
     "shouldPost": true,
     "verifiedFacts": [
       {
-        "claim": "College students can use Google AI tools.",
+        "claim": "college students can use Google AI tools",
         "sourceEvidence": "Discover how college students can use Google AI tools, like Gemini and AI Mode,"
       }
     ],
-    "postType": "industry_observation",
-    "confidence": 85,
-    "lastEvaluatedAt": "2026-07-22T22:34:52.635Z",
+    "postType": "practical_tip",
+    "confidence": 90,
+    "lastEvaluatedAt": "2026-07-23T07:41:44.907Z",
     "providerAttempts": [
       {
         "provider": "groq",
@@ -270,8 +274,8 @@
         "httpStatus": 200
       }
     ],
-    "storyScore": 75,
-    "postQualityScore": 68
+    "storyScore": 65,
+    "postQualityScore": 60
   },
   {
     "id": "story-1784729954713-5bqy2sx",
@@ -372,7 +376,7 @@
     "verifiedFacts": [],
     "postType": "industry_observation",
     "confidence": 0,
-    "lastEvaluatedAt": "2026-07-22T22:35:11.593Z",
+    "lastEvaluatedAt": "2026-07-23T07:42:06.070Z",
     "providerAttempts": [
       {
         "provider": "groq",
@@ -445,13 +449,17 @@
     "shouldPost": true,
     "verifiedFacts": [
       {
-        "claim": "browser wars heat up",
-        "sourceEvidence": "as-the-browser-wars-heat-up"
+        "claim": "Browser wars",
+        "sourceEvidence": "The browser wars aren’t about search anymore "
+      },
+      {
+        "claim": "alternatives to Chrome and Safari",
+        "sourceEvidence": "here are the best alternatives to Chrome and Safari"
       }
     ],
     "postType": "industry_observation",
     "confidence": 80,
-    "lastEvaluatedAt": "2026-07-22T22:34:56.412Z",
+    "lastEvaluatedAt": "2026-07-23T07:41:48.786Z",
     "providerAttempts": [
       {
         "provider": "groq",
@@ -460,8 +468,8 @@
         "httpStatus": 200
       }
     ],
-    "storyScore": 65,
-    "postQualityScore": 60
+    "storyScore": 75,
+    "postQualityScore": 63
   },
   {
     "id": "story-1784729965557-f4osvdp",

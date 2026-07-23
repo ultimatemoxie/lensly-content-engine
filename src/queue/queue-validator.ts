@@ -17,7 +17,7 @@ export interface QueueItem {
   scheduledForUtc: string;
   scheduledForLocal: string;
   timezone: string;
-  status: 'queued' | 'processing' | 'completed' | 'failed';
+  status: 'queued' | 'processing' | 'completed' | 'failed' | 'expired' | 'published' | 'cancelled';
   createdAt: string;
 }
 

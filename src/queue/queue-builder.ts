@@ -102,6 +102,8 @@ export class QueueBuilder {
       cursor = now.plus({ minutes: 30 }).toMillis();
     }
 
+    const plannedItems: { post: GeneratedPost; scheduledUtc: DateTime }[] = [];
+
     for (const post of selected) {
       let next = cursor + this.randomGap() * 60 * 1000;
       let attempts = 0;
@@ -115,14 +117,21 @@ export class QueueBuilder {
         next += 30 * 60 * 1000;
         attempts++;
       }
-      if (newItems.length > 0) {
-        const prev = newItems[newItems.length - 1];
-        const diff = (DateTime.fromISO(prev.scheduledForUtc, { zone: 'utc' }).toMillis() - next) / 60000;
+      if (plannedItems.length > 0) {
+        const prev = plannedItems[plannedItems.length - 1].scheduledUtc;
+        const diff = (prev.toMillis() - next) / 60000;
         if (Math.abs(diff) < MIN_GAP_MINUTES) {
-          next = DateTime.fromISO(prev.scheduledForUtc, { zone: 'utc' }).plus({ minutes: this.randomGap() }).toMillis();
+          next = prev.plus({ minutes: this.randomGap() }).toMillis();
         }
       }
-      const localTime = DateTime.fromMillis(next, { zone: TZ });
+      plannedItems.push({ post, scheduledUtc: DateTime.fromMillis(next, { zone: 'utc' }) });
+      cursor = next;
+    }
+
+    const validPlannedItems = this.enforceSameStorySpacing(plannedItems, future);
+
+    for (const { post, scheduledUtc } of validPlannedItems) {
+      const localTime = scheduledUtc.setZone(TZ);
       newItems.push({
         id: 'queue-' + Date.now() + '-' + Math.random().toString(36).slice(2, 9),
         generatedPostId: post.id,
@@ -137,16 +146,87 @@ export class QueueBuilder {
         storyScore: post.storyScore,
         overallPostQuality: post.qualityRubric?.overallPostQuality ?? 0,
         factualGrounding: post.qualityRubric?.factualGrounding ?? 0,
-        scheduledForUtc: DateTime.fromMillis(next, { zone: 'utc' }).toISO()!,
+        scheduledForUtc: scheduledUtc.toISO()!,
         scheduledForLocal: localTime.toISO()!,
         timezone: TZ,
         status: 'queued',
         createdAt: new Date().toISOString(),
       });
-      cursor = next;
     }
 
     return [...future, ...newItems];
+  }
+
+  private static enforceSameStorySpacing(
+    plannedItems: { post: GeneratedPost; scheduledUtc: DateTime }[],
+    existingFutureItems: QueueItem[]
+  ): { post: GeneratedPost; scheduledUtc: DateTime }[] {
+    const allItems: { storyId: string; scheduledUtc: DateTime; post: GeneratedPost }[] = [];
+
+    for (const q of existingFutureItems) {
+      allItems.push({
+        storyId: q.storyId,
+        scheduledUtc: DateTime.fromISO(q.scheduledForUtc, { zone: 'utc' }),
+        post: null as any,
+      });
+    }
+
+    for (const item of plannedItems) {
+      allItems.push({
+        storyId: item.post.storyId,
+        scheduledUtc: item.scheduledUtc,
+        post: item.post,
+      });
+    }
+
+    allItems.sort((a, b) => a.scheduledUtc.toMillis() - b.scheduledUtc.toMillis());
+
+    const storyGroups: Record<string, typeof allItems> = {};
+    for (const item of allItems) {
+      if (!storyGroups[item.storyId]) storyGroups[item.storyId] = [];
+      storyGroups[item.storyId].push(item);
+    }
+
+    const validItems: typeof allItems = [];
+    for (const [storyId, items] of Object.entries(storyGroups)) {
+      if (items.length <= 1) {
+        validItems.push(...items);
+        continue;
+      }
+      const newItems = items.filter(i => i.post !== null);
+      const existingItems = items.filter(i => i.post === null);
+
+      if (newItems.length === 0) {
+        validItems.push(...items);
+        continue;
+      }
+
+      newItems.sort((a, b) => a.scheduledUtc.toMillis() - b.scheduledUtc.toMillis());
+
+      if (existingItems.length > 0) {
+        const lastExisting = existingItems[existingItems.length - 1].scheduledUtc.toMillis();
+        const firstNew = newItems[0].scheduledUtc.toMillis();
+        const gap = (firstNew - lastExisting) / 60000;
+        if (gap < MIN_SAME_STORY_GAP_MINUTES) {
+          newItems[0].scheduledUtc = DateTime.fromMillis(lastExisting + MIN_SAME_STORY_GAP_MINUTES * 60 * 1000, { zone: 'utc' });
+        }
+      }
+
+      for (let i = 1; i < newItems.length; i++) {
+        const prev = newItems[i - 1].scheduledUtc.toMillis();
+        const curr = newItems[i].scheduledUtc.toMillis();
+        const gap = (curr - prev) / 60000;
+        if (gap < MIN_SAME_STORY_GAP_MINUTES) {
+          newItems[i].scheduledUtc = DateTime.fromMillis(prev + MIN_SAME_STORY_GAP_MINUTES * 60 * 1000, { zone: 'utc' });
+        }
+      }
+
+      validItems.push(...existingItems, ...newItems);
+    }
+
+    return validItems
+      .filter(i => i.post !== null)
+      .map(i => ({ post: i.post, scheduledUtc: i.scheduledUtc }));
   }
 
   static validateTimezoneConsistency(queueItem: QueueItem): boolean {
