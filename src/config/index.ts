@@ -20,6 +20,16 @@ export interface EnvConfig {
   AI_REQUEST_DELAY_MS: number;
   AI_MAX_RETRIES: number;
   MAX_APPROVED_POSTS_PER_RUN: number;
+  X_PUBLISHING_ENABLED: string;
+  X_DRY_RUN: string;
+  X_AUTH_MODE: string;
+  X_CLIENT_ID: string | undefined;
+  X_CLIENT_SECRET: string | undefined;
+  X_ACCESS_TOKEN: string | undefined;
+  X_REFRESH_TOKEN: string | undefined;
+  X_ACCESS_TOKEN_EXPIRES_AT: string | undefined;
+  X_USER_ID: string | undefined;
+  MAX_POSTS_PER_RUN: string;
 }
 
 export function loadConfig(): EnvConfig {
@@ -41,5 +51,15 @@ export function loadConfig(): EnvConfig {
     AI_REQUEST_DELAY_MS: parseInt(process.env.AI_REQUEST_DELAY_MS ?? '3000', 10),
     AI_MAX_RETRIES: parseInt(process.env.AI_MAX_RETRIES ?? '3', 10),
     MAX_APPROVED_POSTS_PER_RUN: parseInt(process.env.MAX_APPROVED_POSTS_PER_RUN ?? '3', 10),
+    X_PUBLISHING_ENABLED: process.env.X_PUBLISHING_ENABLED ?? 'false',
+    X_DRY_RUN: process.env.X_DRY_RUN ?? 'true',
+    X_AUTH_MODE: process.env.X_AUTH_MODE ?? 'oauth2',
+    X_CLIENT_ID: process.env.X_CLIENT_ID,
+    X_CLIENT_SECRET: process.env.X_CLIENT_SECRET,
+    X_ACCESS_TOKEN: process.env.X_ACCESS_TOKEN,
+    X_REFRESH_TOKEN: process.env.X_REFRESH_TOKEN,
+    X_ACCESS_TOKEN_EXPIRES_AT: process.env.X_ACCESS_TOKEN_EXPIRES_AT,
+    X_USER_ID: process.env.X_USER_ID,
+    MAX_POSTS_PER_RUN: process.env.MAX_POSTS_PER_RUN ?? '1',
   };
 }

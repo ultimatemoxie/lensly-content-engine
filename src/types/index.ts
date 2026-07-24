@@ -91,18 +91,37 @@ export interface GeneratedPost {
 export interface PostQueueItem {
   id: string;
   generatedPostId: string;
-  scheduledFor: string;
-  status: 'pending' | 'processing' | 'completed' | 'failed';
+  storyId: string;
+  text: string;
+  postType: string;
+  category: string;
+  sourceName: string;
+  sourceUrl: string;
+  aiProvider: string;
+  aiModel: string;
+  storyScore: number;
+  overallPostQuality: number;
+  factualGrounding: number;
+  scheduledForUtc: string;
+  scheduledForLocal: string;
+  timezone: string;
+  status: 'queued' | 'processing' | 'completed' | 'failed' | 'expired' | 'published' | 'cancelled';
   createdAt: string;
 }
 
 export interface PublishLog {
   id: string;
+  queueItemId: string;
   generatedPostId: string;
-  platform: string;
-  status: 'success' | 'error';
-  message?: string;
-  publishedAt: string;
+  mode: 'dry_run' | 'live';
+  text: string;
+  scheduledForUtc: string;
+  attemptedAt: string;
+  status: 'simulated' | 'published' | 'failed';
+  xPostId: string | null;
+  httpStatus: number | null;
+  errorCode: string | null;
+  sanitizedError: string | null;
 }
 
 export interface SourceHealthReport {

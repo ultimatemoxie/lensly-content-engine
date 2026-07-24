@@ -25,13 +25,19 @@ const MIX_TARGETS: Record<string, number> = {
   research_insight: 1,
 };
 
+export interface ExclusionReason {
+  generatedPostId: string;
+  storyId: string;
+  reason: string;
+}
+
 export class QueueBuilder {
-  static buildQueue(queueReadyPosts: GeneratedPost[], existingQueue: QueueItem[] = []): QueueItem[] {
+  static buildQueue(queueReadyPosts: GeneratedPost[], existingQueue: QueueItem[] = []): { queue: QueueItem[]; exclusions: ExclusionReason[] } {
     const now = DateTime.now().setZone(TZ);
     const eligible = queueReadyPosts.filter(p => QueueValidator.isQueueReady(p).eligible);
 
     if (eligible.length === 0) {
-      return existingQueue;
+      return { queue: existingQueue, exclusions: [] };
     }
 
     const future = existingQueue.filter(q => DateTime.fromISO(q.scheduledForUtc, { zone: 'utc' }).toMillis() > now.toMillis());
@@ -59,6 +65,7 @@ export class QueueBuilder {
     const selectedIds = new Set<string>();
     const selectedStoryIds = new Set<string>();
     const resultTimes: number[] = [...scheduledTimes];
+    const exclusions: ExclusionReason[] = [];
 
     const scorePost = (p: GeneratedPost): number => {
       const mix = MIX_TARGETS[p.postType] || 1;
@@ -73,7 +80,10 @@ export class QueueBuilder {
     available.sort((a, b) => scorePost(b) - scorePost(a));
 
     for (const post of available) {
-      if (selected.length >= MAX_QUEUE_SIZE) break;
+      if (selected.length >= MAX_QUEUE_SIZE) {
+        exclusions.push({ generatedPostId: post.id, storyId: post.storyId, reason: 'lower_ranked' });
+        continue;
+      }
 
       const company = QueueValidator.extractCompany(post.text);
       const typeCount = typeCounts[post.postType] || 0;
@@ -81,11 +91,26 @@ export class QueueBuilder {
       const compCount = companyCounts[company] || 0;
       const storyVar = storyVariationCount[post.storyId] || 0;
 
-      if (typeCount >= 3) continue;
-      if (srcCount >= 3) continue;
-      if (company && compCount >= 3) continue;
-      if (storyVar >= MAX_PER_STORY_PER_DAY) continue;
-      if (selectedStoryIds.has(post.storyId) && storyVar >= MAX_PER_STORY_PER_DAY) continue;
+      if (typeCount >= 3) {
+        exclusions.push({ generatedPostId: post.id, storyId: post.storyId, reason: 'post_type_cap' });
+        continue;
+      }
+      if (srcCount >= 3) {
+        exclusions.push({ generatedPostId: post.id, storyId: post.storyId, reason: 'source_cap' });
+        continue;
+      }
+      if (company && compCount >= 3) {
+        exclusions.push({ generatedPostId: post.id, storyId: post.storyId, reason: 'company_cap' });
+        continue;
+      }
+      if (storyVar >= MAX_PER_STORY_PER_DAY) {
+        exclusions.push({ generatedPostId: post.id, storyId: post.storyId, reason: 'same_story_cap' });
+        continue;
+      }
+      if (selectedStoryIds.has(post.storyId) && storyVar >= MAX_PER_STORY_PER_DAY) {
+        exclusions.push({ generatedPostId: post.id, storyId: post.storyId, reason: 'same_story_cap' });
+        continue;
+      }
 
       selected.push(post);
       selectedIds.add(post.id);
@@ -117,18 +142,27 @@ export class QueueBuilder {
         next += 30 * 60 * 1000;
         attempts++;
       }
+
+      const scheduledUtc = DateTime.fromMillis(next, { zone: 'utc' });
+      if (scheduledUtc.toMillis() <= now.toMillis()) {
+        exclusions.push({ generatedPostId: post.id, storyId: post.storyId, reason: 'outside_schedule_window' });
+        continue;
+      }
+
       if (plannedItems.length > 0) {
         const prev = plannedItems[plannedItems.length - 1].scheduledUtc;
-        const diff = (prev.toMillis() - next) / 60000;
+        const diff = (prev.toMillis() - scheduledUtc.toMillis()) / 60000;
         if (Math.abs(diff) < MIN_GAP_MINUTES) {
-          next = prev.plus({ minutes: this.randomGap() }).toMillis();
+          exclusions.push({ generatedPostId: post.id, storyId: post.storyId, reason: 'outside_schedule_window' });
+          continue;
         }
       }
-      plannedItems.push({ post, scheduledUtc: DateTime.fromMillis(next, { zone: 'utc' }) });
+
+      plannedItems.push({ post, scheduledUtc });
       cursor = next;
     }
 
-    const validPlannedItems = this.enforceSameStorySpacing(plannedItems, future);
+    const validPlannedItems = this.enforceSameStorySpacing(plannedItems, future, exclusions);
 
     for (const { post, scheduledUtc } of validPlannedItems) {
       const localTime = scheduledUtc.setZone(TZ);
@@ -154,20 +188,21 @@ export class QueueBuilder {
       });
     }
 
-    return [...future, ...newItems];
+    return { queue: [...future, ...newItems], exclusions };
   }
 
   private static enforceSameStorySpacing(
     plannedItems: { post: GeneratedPost; scheduledUtc: DateTime }[],
-    existingFutureItems: QueueItem[]
+    existingFutureItems: QueueItem[],
+    exclusions: ExclusionReason[]
   ): { post: GeneratedPost; scheduledUtc: DateTime }[] {
-    const allItems: { storyId: string; scheduledUtc: DateTime; post: GeneratedPost }[] = [];
+    const allItems: { storyId: string; scheduledUtc: DateTime; post: GeneratedPost | null }[] = [];
 
     for (const q of existingFutureItems) {
       allItems.push({
         storyId: q.storyId,
         scheduledUtc: DateTime.fromISO(q.scheduledForUtc, { zone: 'utc' }),
-        post: null as any,
+        post: null,
       });
     }
 
@@ -193,6 +228,7 @@ export class QueueBuilder {
         validItems.push(...items);
         continue;
       }
+
       const newItems = items.filter(i => i.post !== null);
       const existingItems = items.filter(i => i.post === null);
 
@@ -208,7 +244,13 @@ export class QueueBuilder {
         const firstNew = newItems[0].scheduledUtc.toMillis();
         const gap = (firstNew - lastExisting) / 60000;
         if (gap < MIN_SAME_STORY_GAP_MINUTES) {
-          newItems[0].scheduledUtc = DateTime.fromMillis(lastExisting + MIN_SAME_STORY_GAP_MINUTES * 60 * 1000, { zone: 'utc' });
+          const newTime = newItems[0].scheduledUtc.plus({ minutes: MIN_SAME_STORY_GAP_MINUTES });
+          if (newTime.toMillis() > firstNew + 12 * 60 * 60 * 1000) {
+            exclusions.push({ generatedPostId: newItems[0].post!.id, storyId, reason: 'same_story_spacing' });
+            newItems.shift();
+          } else {
+            newItems[0].scheduledUtc = newTime;
+          }
         }
       }
 
@@ -217,7 +259,14 @@ export class QueueBuilder {
         const curr = newItems[i].scheduledUtc.toMillis();
         const gap = (curr - prev) / 60000;
         if (gap < MIN_SAME_STORY_GAP_MINUTES) {
-          newItems[i].scheduledUtc = DateTime.fromMillis(prev + MIN_SAME_STORY_GAP_MINUTES * 60 * 1000, { zone: 'utc' });
+          const newTime = newItems[i].scheduledUtc.plus({ minutes: MIN_SAME_STORY_GAP_MINUTES });
+          if (newTime.toMillis() > curr + 12 * 60 * 60 * 1000) {
+            exclusions.push({ generatedPostId: newItems[i].post!.id, storyId, reason: 'same_story_spacing' });
+            newItems.splice(i, 1);
+            i--;
+          } else {
+            newItems[i].scheduledUtc = newTime;
+          }
         }
       }
 
@@ -225,7 +274,7 @@ export class QueueBuilder {
     }
 
     return validItems
-      .filter(i => i.post !== null)
+      .filter((i): i is { storyId: string; scheduledUtc: DateTime; post: GeneratedPost } => i.post !== null)
       .map(i => ({ post: i.post, scheduledUtc: i.scheduledUtc }));
   }
 

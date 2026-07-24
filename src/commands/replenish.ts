@@ -621,7 +621,7 @@ async function replenish() {
   await storyStorage.writeAll(stories);
 
   const updatedPosts = await generatedPostStorage.readAll();
-  const rebuiltQueue = QueueBuilder.buildQueue(updatedPosts as GeneratedPost[], existingQueue);
+  const { queue: rebuiltQueue } = QueueBuilder.buildQueue(updatedPosts as GeneratedPost[], existingQueue);
   await writeQueue(rebuiltQueue);
 
   const finalQueue = rebuiltQueue.filter(q => DateTime.fromISO(q.scheduledForUtc, { zone: 'utc' }).toMillis() > DateTime.now().setZone('Africa/Lagos').toMillis());

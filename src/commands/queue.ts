@@ -11,10 +11,16 @@ async function buildQueue() {
   const posts: GeneratedPost[] = rawPosts as GeneratedPost[];
   const existing = await readQueue();
 
-  const built = QueueBuilder.buildQueue(posts, existing);
-  await writeQueue(built);
+  const { queue, exclusions } = QueueBuilder.buildQueue(posts, existing);
+  await writeQueue(queue);
 
-  console.log('Queue built. Total queued: ' + built.length);
+  console.log('Queue built. Total queued: ' + queue.length);
+  if (exclusions.length > 0) {
+    console.log('Exclusions:');
+    for (const ex of exclusions) {
+      console.log('  - ' + ex.generatedPostId + ': ' + ex.reason);
+    }
+  }
 }
 
 async function queueStatus() {
@@ -77,7 +83,7 @@ async function queueStatus() {
   }
 
   const eligibleExcluded = posts.filter(p => {
-    const { eligible, reasons } = QueueValidator.isQueueReady(p);
+    const { eligible } = QueueValidator.isQueueReady(p);
     return !eligible && p.status === 'draft';
   });
   if (eligibleExcluded.length > 0) {
@@ -96,12 +102,12 @@ async function queueStatus() {
     console.log('Queue-ready drafts not added to queue:');
     for (const p of queueReadyDrafts) {
       const reasons: string[] = [];
-      if (QueueValidator.isQueueReady(p).reasons.length > 0) {
-        reasons.push(...QueueValidator.isQueueReady(p).reasons);
-      }
-      if (!reasons.includes('source cap') && (typeCounts[p.postType] || 0) >= 3) reasons.push('post-type cap');
-      if (!reasons.includes('company cap') && QueueValidator.extractCompany(p.text) && (companyCounts[QueueValidator.extractCompany(p.text)] || 0) >= 3) reasons.push('company cap');
-      console.log('  - ' + p.text.slice(0, 50) + '... [' + (reasons.length > 0 ? reasons.join(', ') : 'already queued or lower-ranked') + ']');
+      if ((typeCounts[p.postType] || 0) >= 3) reasons.push('post_type_cap');
+      const company = QueueValidator.extractCompany(p.text);
+      if (company && (companyCounts[company] || 0) >= 3) reasons.push('company_cap');
+      if ((sourceCounts[p.sourceName] || 0) >= 3) reasons.push('source_cap');
+      if (reasons.length === 0) reasons.push('lower_ranked');
+      console.log('  - ' + p.text.slice(0, 50) + '... [' + reasons.join(', ') + ']');
     }
   }
 
