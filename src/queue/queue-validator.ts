@@ -22,6 +22,10 @@ export interface QueueItem {
   isTest?: boolean;
   bufferExportedAt?: string;
   bufferExportBatchId?: string;
+  exportCreatedAtUtc?: string;
+  exportCreatedAtLocal?: string;
+  nextRefillAtUtc?: string | null;
+  nextRefillAtLocal?: string | null;
 }
 
 export interface QueueEligibility {

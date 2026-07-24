@@ -51,6 +51,38 @@ function getScheduledParts(scheduledForLocal: string): { date: string; time: str
   };
 }
 
+function calculateNextRefill(exported: QueueItem[], now: DateTime): { utc: string; local: string; stale: boolean } {
+  const futureExported = exported.filter(item => {
+    const scheduledLocal = DateTime.fromISO(item.scheduledForLocal);
+    return scheduledLocal.toMillis() > now.toMillis();
+  });
+
+  if (futureExported.length === 0) {
+    return {
+      utc: now.toUTC().toISO()!,
+      local: now.setZone('Africa/Lagos').toFormat('yyyy-MM-dd HH:mm'),
+      stale: true,
+    };
+  }
+
+  const sortedByScheduled = [...futureExported].sort((a, b) => {
+    const aTime = DateTime.fromISO(a.scheduledForLocal).toMillis();
+    const bTime = DateTime.fromISO(b.scheduledForLocal).toMillis();
+    return aTime - bTime;
+  });
+
+  const earliestFuture = DateTime.fromISO(sortedByScheduled[0].scheduledForLocal);
+  const refillTime = earliestFuture.toMillis() > now.toMillis()
+    ? earliestFuture
+    : now.plus({ minutes: 1 });
+
+  return {
+    utc: refillTime.toUTC().toISO()!,
+    local: refillTime.setZone('Africa/Lagos').toFormat('yyyy-MM-dd HH:mm'),
+    stale: false,
+  };
+}
+
 async function exportBuffer() {
   const force = getForceFlag();
   await ensureExportsDir();
@@ -75,7 +107,6 @@ async function exportBuffer() {
       excluded.push({ item, reason: 'status=' + item.status });
       continue;
     }
-    const scheduledUtc = DateTime.fromISO(item.scheduledForUtc, { zone: 'utc' });
     const scheduledLocal = DateTime.fromISO(item.scheduledForLocal);
     if (scheduledLocal.toMillis() <= now.toMillis()) {
       excluded.push({ item, reason: 'past_due' });
@@ -98,14 +129,21 @@ async function exportBuffer() {
 
   const exported: QueueItem[] = [];
   if (toExport.length > 0) {
-    const exportedAt = new Date().toISOString();
+    const exportedAtUtc = new Date().toISOString();
+    const exportedAtLocal = now.toISO()!;
+    const { utc: nextRefillUtc, local: nextRefillLocal, stale } = calculateNextRefill(toExport, now);
+
     const updatedQueue = queue.map(q => {
       if (toExport.some(te => te.id === q.id)) {
         exported.push(q);
         return {
           ...q,
-          bufferExportedAt: exportedAt,
+          bufferExportedAt: exportedAtUtc,
           bufferExportBatchId: BATCH_ID,
+          exportCreatedAtUtc: exportedAtUtc,
+          exportCreatedAtLocal: exportedAtLocal,
+          nextRefillAtUtc: stale ? null : nextRefillUtc,
+          nextRefillAtLocal: stale ? null : nextRefillLocal,
         };
       }
       return q;
@@ -152,9 +190,10 @@ async function exportBuffer() {
 
   fs.writeFileSync(COPY_LIST_FILE, copyListLines.join('\n') + '\n', 'utf-8');
 
-  const nextRefill = toExport.length > 0
-    ? DateTime.fromISO(toExport[toExport.length - 1].scheduledForLocal).toFormat('yyyy-MM-dd HH:mm')
-    : 'N/A';
+  const { utc: nextRefillUtc, local: nextRefillLocal, stale } = calculateNextRefill(exported, now);
+  const nextRefillDisplay = stale
+    ? 'STALE - all exported posts are in the past. Generate a fresh queue.'
+    : nextRefillLocal;
 
   console.log('Buffer Export Report');
   console.log('====================');
@@ -172,7 +211,10 @@ async function exportBuffer() {
   }
   console.log('Output CSV: ' + CSV_FILE);
   console.log('Output copy list: ' + COPY_LIST_FILE);
-  console.log('Next refill based on earliest scheduled post: ' + nextRefill);
+  console.log('Next refill: ' + nextRefillDisplay);
+  console.log('Next refill UTC: ' + (stale ? 'N/A' : nextRefillUtc));
+  console.log('Next refill Local: ' + (stale ? 'N/A' : nextRefillLocal));
+  console.log('Batch stale: ' + stale);
   console.log('Batch ID: ' + BATCH_ID);
   console.log('X network requests made: 0');
   console.log('Buffer network requests made: 0');
