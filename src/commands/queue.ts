@@ -5,7 +5,32 @@ import { QueueValidator, QueueItem } from '../queue/queue-validator';
 import { DateTime } from 'luxon';
 import type { GeneratedPost } from '../types';
 
+async function applyQueueLifecycle() {
+  const config = loadConfig();
+  const graceMinutes = parseInt(config.X_DUE_GRACE_MINUTES || '30', 10);
+  const queue = await readQueue();
+  const now = DateTime.now().setZone('Africa/Lagos');
+  const graceCutoff = now.minus({ minutes: graceMinutes }).toUTC().toISO()!;
+
+  let expiredCount = 0;
+  const updated = queue.map(q => {
+    if (q.status !== 'queued') return q;
+    const scheduledUtc = DateTime.fromISO(q.scheduledForUtc, { zone: 'utc' });
+    if (scheduledUtc.toISO()! <= graceCutoff) {
+      expiredCount++;
+      return { ...q, status: 'expired' as const };
+    }
+    return q;
+  });
+
+  if (expiredCount > 0) {
+    await writeQueue(updated);
+    console.log('Queue lifecycle: expired ' + expiredCount + ' past queued items (grace: ' + graceMinutes + 'min)');
+  }
+}
+
 async function buildQueue() {
+  await applyQueueLifecycle();
   const config = loadConfig();
   const rawPosts = await generatedPostStorage.readAll();
   const posts: GeneratedPost[] = rawPosts as GeneratedPost[];
@@ -24,16 +49,22 @@ async function buildQueue() {
 }
 
 async function queueStatus() {
+  await applyQueueLifecycle();
   const config = loadConfig();
   const rawPosts = await generatedPostStorage.readAll();
   const posts: GeneratedPost[] = rawPosts as GeneratedPost[];
   const queue = await readQueue();
   const now = DateTime.now().setZone('Africa/Lagos');
+  const graceMinutes = parseInt(config.X_DUE_GRACE_MINUTES || '30', 10);
+  const graceCutoff = now.minus({ minutes: graceMinutes }).toUTC().toISO()!;
 
-  const expired = queue.filter(q => q.status === 'expired' || q.status === 'published' || q.status === 'failed' || q.status === 'cancelled');
+  const futureQueue = queue.filter(q => q.status === 'queued' && DateTime.fromISO(q.scheduledForUtc, { zone: 'utc' }).toMillis()! > now.toMillis());
+  const dueQueue = queue.filter(q => q.status === 'queued' && DateTime.fromISO(q.scheduledForUtc, { zone: 'utc' }).toMillis()! <= now.toMillis() && DateTime.fromISO(q.scheduledForUtc, { zone: 'utc' }).toISO()! >= graceCutoff);
+  const expiredQueue = queue.filter(q => q.status === 'expired');
+  const publishedQueue = queue.filter(q => q.status === 'published');
+  const failedQueue = queue.filter(q => q.status === 'failed');
+  const cancelledQueue = queue.filter(q => q.status === 'cancelled');
   const activeQueue = queue.filter(q => q.status === 'queued');
-  const future = activeQueue.filter(q => DateTime.fromISO(q.scheduledForUtc, { zone: 'utc' }).toMillis() > now.toMillis()).sort((a, b) => DateTime.fromISO(a.scheduledForUtc, { zone: 'utc' }).toMillis() - DateTime.fromISO(b.scheduledForUtc, { zone: 'utc' }).toMillis());
-  const next = future[0];
 
   const queuedGeneratedIds = new Set(activeQueue.map(q => q.generatedPostId));
   const queueReadyCount = posts.filter(p => {
@@ -58,8 +89,12 @@ async function queueStatus() {
   console.log('============');
   console.log('Total records in post-queue.json: ' + queue.length);
   console.log('Active queued posts: ' + activeQueue.length);
-  console.log('Expired/published/failed/cancelled posts: ' + expired.length);
-  console.log('Future active posts: ' + future.length);
+  console.log('Future queued posts: ' + futureQueue.length);
+  console.log('Due within grace period: ' + dueQueue.length);
+  console.log('Expired posts: ' + expiredQueue.length);
+  console.log('Published posts: ' + publishedQueue.length);
+  console.log('Failed posts: ' + failedQueue.length);
+  console.log('Cancelled posts: ' + cancelledQueue.length);
   console.log('Queue-ready drafts remaining: ' + queueReadyCount);
   console.log('Review posts excluded: ' + reviewCount);
   console.log('Type distribution: ' + JSON.stringify(typeCounts));
@@ -67,12 +102,17 @@ async function queueStatus() {
   console.log('Company distribution: ' + JSON.stringify(companyCounts));
   console.log('Story variation slots used: ' + JSON.stringify(storySlots));
 
+  const allFuture = [...futureQueue, ...dueQueue].sort((a, b) => DateTime.fromISO(a.scheduledForUtc, { zone: 'utc' }).toMillis()! - DateTime.fromISO(b.scheduledForUtc, { zone: 'utc' }).toMillis()!);
+  const next = allFuture[0];
+
   if (next) {
     console.log('Next scheduled post: ' + next.text.slice(0, 60) + '...');
     console.log('  scheduledForLocal: ' + next.scheduledForLocal);
     console.log('  scheduledForUtc: ' + next.scheduledForUtc);
     console.log('  timezone: ' + next.timezone);
     console.log('  timezone consistency: ' + QueueBuilder.validateTimezoneConsistency(next));
+    const isDue = DateTime.fromISO(next.scheduledForUtc, { zone: 'utc' }).toMillis()! <= now.toMillis();
+    console.log('  status: ' + (isDue ? 'due' : 'future'));
   }
 
   const mixGaps = Object.entries(MIX_TARGETS).filter(([type, target]) => (typeCounts[type] || 0) < target);
@@ -113,9 +153,9 @@ async function queueStatus() {
 
   const sameStorySpacing: Record<string, string> = {};
   const storyTimes: Record<string, number[]> = {};
-  for (const q of future) {
+  for (const q of allFuture) {
     if (!storyTimes[q.storyId]) storyTimes[q.storyId] = [];
-    storyTimes[q.storyId].push(DateTime.fromISO(q.scheduledForUtc, { zone: 'utc' }).toMillis());
+    storyTimes[q.storyId].push(DateTime.fromISO(q.scheduledForUtc, { zone: 'utc' }).toMillis()!);
   }
   for (const [storyId, times] of Object.entries(storyTimes)) {
     if (times.length > 1) {
@@ -135,7 +175,7 @@ async function queueStatus() {
     }
   }
 
-  const slotsRemaining = Math.max(0, 15 - future.length);
+  const slotsRemaining = Math.max(0, 15 - allFuture.length);
   const typesNeeded = Object.entries(MIX_TARGETS)
     .filter(([type, target]) => (typeCounts[type] || 0) < target)
     .map(([type, target]) => type + ' (need ' + (target - (typeCounts[type] || 0)) + ')');
@@ -150,7 +190,7 @@ async function queueStatus() {
   console.log('Sources at cap: ' + (sourcesAtCap.length > 0 ? sourcesAtCap.join(', ') : 'none'));
   console.log('Pending stories available for future evaluation: ' + pendingStories);
   console.log('Review posts that may become eligible after rewriting: ' + reviewPosts.length);
-  console.log('Estimated additional AI evaluations needed: ' + Math.ceil((15 - future.length) / 3));
+  console.log('Estimated additional AI evaluations needed: ' + Math.ceil((15 - allFuture.length) / 3));
 }
 
 async function getPendingStories(): Promise<number> {
@@ -160,14 +200,6 @@ async function getPendingStories(): Promise<number> {
   } catch {
     return 0;
   }
-}
-
-async function clearTestQueue() {
-  const queue = await readQueue();
-  const testIds = new Set(queue.map(q => q.id));
-  const filtered = queue.filter(q => !testIds.has(q.id));
-  await writeQueue(filtered);
-  console.log('Test queue cleared. Remaining: ' + filtered.length);
 }
 
 async function readQueue(): Promise<QueueItem[]> {
@@ -185,18 +217,6 @@ async function writeQueue(queue: QueueItem[]): Promise<void> {
   fs.writeFileSync('data/post-queue.json', JSON.stringify(queue, null, 2));
 }
 
-const MIX_TARGETS: Record<string, number> = {
-  breaking_news: 3,
-  creator_insight: 2,
-  practical_tip: 2,
-  light_humor: 2,
-  founder_take: 2,
-  industry_observation: 2,
-  thoughtful_question: 1,
-  comparison: 1,
-  research_insight: 1,
-};
-
 const command = process.argv[2];
 if (command === 'queue') {
   buildQueue().catch((err) => {
@@ -205,11 +225,6 @@ if (command === 'queue') {
   });
 } else if (command === 'status') {
   queueStatus().catch((err) => {
-    console.error(err);
-    process.exit(1);
-  });
-} else if (command === 'clear-test') {
-  clearTestQueue().catch((err) => {
     console.error(err);
     process.exit(1);
   });

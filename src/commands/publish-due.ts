@@ -25,26 +25,49 @@ class InMemoryTokenStore implements XTokenStore {
   }
 }
 
+async function applyQueueLifecycle() {
+  const config = loadConfig();
+  const graceMinutes = parseInt(config.X_DUE_GRACE_MINUTES || '30', 10);
+  const queue = await readQueue();
+  const now = DateTime.now().setZone('Africa/Lagos');
+  const graceCutoff = now.minus({ minutes: graceMinutes }).toUTC().toISO();
+
+  let expiredCount = 0;
+  const updated = queue.map(q => {
+    if (q.status !== 'queued') return q;
+    const scheduledUtc = DateTime.fromISO(q.scheduledForUtc, { zone: 'utc' });
+    if (scheduledUtc.toISO() <= graceCutoff) {
+      expiredCount++;
+      return { ...q, status: 'expired' as const };
+    }
+    return q;
+  });
+
+  if (expiredCount > 0) {
+    await writeQueue(updated);
+    console.log('Queue lifecycle: expired ' + expiredCount + ' past queued items (grace: ' + graceMinutes + 'min)');
+  }
+}
+
 async function publishDue() {
+  await applyQueueLifecycle();
   const config = loadConfig();
   const queue = await readQueue();
   const now = DateTime.now().setZone('Africa/Lagos');
+  const graceMinutes = parseInt(config.X_DUE_GRACE_MINUTES || '30', 10);
+  const graceCutoff = now.minus({ minutes: graceMinutes }).toUTC().toISO();
 
   const activeQueue = queue.filter(q => q.status === 'queued');
   const future = activeQueue.filter(q => DateTime.fromISO(q.scheduledForUtc, { zone: 'utc' }).toMillis() > now.toMillis()).sort((a, b) => DateTime.fromISO(a.scheduledForUtc, { zone: 'utc' }).toMillis() - DateTime.fromISO(b.scheduledForUtc, { zone: 'utc' }).toMillis());
+  const due = activeQueue.filter(q => DateTime.fromISO(q.scheduledForUtc, { zone: 'utc' }).toMillis() <= now.toMillis() && DateTime.fromISO(q.scheduledForUtc, { zone: 'utc' }).toISO() >= graceCutoff);
 
-  if (future.length === 0) {
+  if (due.length === 0) {
     console.log('No due posts available for publishing.');
     return;
   }
 
   const maxPosts = parseInt(config.MAX_POSTS_PER_RUN || '1', 10);
-  const dueItems = future.filter(q => DateTime.fromISO(q.scheduledForUtc, { zone: 'utc' }).toMillis() <= now.toMillis()).slice(0, maxPosts);
-
-  if (dueItems.length === 0) {
-    console.log('No due posts available for publishing.');
-    return;
-  }
+  const dueItems = due.slice(0, maxPosts);
 
   const tokenStore = new InMemoryTokenStore();
   const xConfig = {
@@ -65,6 +88,11 @@ async function publishDue() {
   }
 }
 
+publishDue().catch((err) => {
+  console.error(err);
+  process.exit(1);
+});
+
 async function readQueue(): Promise<QueueItem[]> {
   try {
     const fs = await import('fs');
@@ -75,7 +103,7 @@ async function readQueue(): Promise<QueueItem[]> {
   }
 }
 
-publishDue().catch((err) => {
-  console.error(err);
-  process.exit(1);
-});
+async function writeQueue(queue: QueueItem[]): Promise<void> {
+  const fs = await import('fs');
+  fs.writeFileSync('data/post-queue.json', JSON.stringify(queue, null, 2));
+}

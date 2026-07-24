@@ -17,11 +17,12 @@
     "check:gemini": "tsc && node dist/commands/check-gemini.js",
     "queue": "tsc && node dist/commands/queue.js queue",
     "queue:status": "tsc && node dist/commands/queue.js status",
-    "queue:clear-test": "tsc && node dist/commands/queue.js clear-test",
     "replenish": "tsc && node dist/commands/replenish.js",
     "publish:dry": "tsc && node dist/commands/publish-dry.js",
     "publish:due": "tsc && node dist/commands/publish-due.js",
     "publish:status": "tsc && node dist/commands/publish-status.js",
+    "publish:create-test-due": "tsc && node dist/commands/publish-create-test-due.js",
+    "publish:clear-test": "tsc && node dist/commands/publish-clear-test.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

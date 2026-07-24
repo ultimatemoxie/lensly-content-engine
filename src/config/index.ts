@@ -23,6 +23,7 @@ export interface EnvConfig {
   X_PUBLISHING_ENABLED: string;
   X_DRY_RUN: string;
   X_AUTH_MODE: string;
+  X_DUE_GRACE_MINUTES: string;
   X_CLIENT_ID: string | undefined;
   X_CLIENT_SECRET: string | undefined;
   X_ACCESS_TOKEN: string | undefined;
@@ -54,6 +55,7 @@ export function loadConfig(): EnvConfig {
     X_PUBLISHING_ENABLED: process.env.X_PUBLISHING_ENABLED ?? 'false',
     X_DRY_RUN: process.env.X_DRY_RUN ?? 'true',
     X_AUTH_MODE: process.env.X_AUTH_MODE ?? 'oauth2',
+    X_DUE_GRACE_MINUTES: process.env.X_DUE_GRACE_MINUTES ?? '30',
     X_CLIENT_ID: process.env.X_CLIENT_ID,
     X_CLIENT_SECRET: process.env.X_CLIENT_SECRET,
     X_ACCESS_TOKEN: process.env.X_ACCESS_TOKEN,

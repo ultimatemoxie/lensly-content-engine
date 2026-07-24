@@ -19,6 +19,7 @@ export interface QueueItem {
   timezone: string;
   status: 'queued' | 'processing' | 'completed' | 'failed' | 'expired' | 'published' | 'cancelled';
   createdAt: string;
+  isTest?: boolean;
 }
 
 export interface QueueEligibility {
