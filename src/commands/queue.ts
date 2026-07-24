@@ -217,6 +217,18 @@ async function writeQueue(queue: QueueItem[]): Promise<void> {
   fs.writeFileSync('data/post-queue.json', JSON.stringify(queue, null, 2));
 }
 
+const MIX_TARGETS: Record<string, number> = {
+  breaking_news: 3,
+  creator_insight: 2,
+  practical_tip: 2,
+  light_humor: 2,
+  founder_take: 2,
+  industry_observation: 2,
+  thoughtful_question: 1,
+  comparison: 1,
+  research_insight: 1,
+};
+
 const command = process.argv[2];
 if (command === 'queue') {
   buildQueue().catch((err) => {

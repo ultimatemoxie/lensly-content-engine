@@ -8,13 +8,13 @@ async function applyQueueLifecycle() {
   const graceMinutes = parseInt(config.X_DUE_GRACE_MINUTES || '30', 10);
   const queue = await readQueue();
   const now = DateTime.now().setZone('Africa/Lagos');
-  const graceCutoff = now.minus({ minutes: graceMinutes }).toUTC().toISO();
+  const graceCutoff = now.minus({ minutes: graceMinutes }).toUTC().toISO()!;
 
   let expiredCount = 0;
   const updated = queue.map(q => {
     if (q.status !== 'queued') return q;
     const scheduledUtc = DateTime.fromISO(q.scheduledForUtc, { zone: 'utc' });
-    if (scheduledUtc.toISO() <= graceCutoff) {
+    if (scheduledUtc.toISO()! <= graceCutoff) {
       expiredCount++;
       return { ...q, status: 'expired' as const };
     }
@@ -33,10 +33,10 @@ async function publishStatus() {
   const queue = await readQueue();
   const now = DateTime.now().setZone('Africa/Lagos');
   const graceMinutes = parseInt(config.X_DUE_GRACE_MINUTES || '30', 10);
-  const graceCutoff = now.minus({ minutes: graceMinutes }).toUTC().toISO();
+  const graceCutoff = now.minus({ minutes: graceMinutes }).toUTC().toISO()!;
 
-  const futureQueue = queue.filter(q => q.status === 'queued' && DateTime.fromISO(q.scheduledForUtc, { zone: 'utc' }).toMillis() > now.toMillis());
-  const dueQueue = queue.filter(q => q.status === 'queued' && DateTime.fromISO(q.scheduledForUtc, { zone: 'utc' }).toMillis() <= now.toMillis() && DateTime.fromISO(q.scheduledForUtc, { zone: 'utc' }).toISO() >= graceCutoff);
+  const futureQueue = queue.filter(q => q.status === 'queued' && DateTime.fromISO(q.scheduledForUtc, { zone: 'utc' }).toMillis()! > now.toMillis());
+  const dueQueue = queue.filter(q => q.status === 'queued' && DateTime.fromISO(q.scheduledForUtc, { zone: 'utc' }).toMillis()! <= now.toMillis() && DateTime.fromISO(q.scheduledForUtc, { zone: 'utc' }).toISO()! >= graceCutoff);
   const expiredQueue = queue.filter(q => q.status === 'expired');
   const publishedQueue = queue.filter(q => q.status === 'published');
   const failedQueue = queue.filter(q => q.status === 'failed');
