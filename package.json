@@ -23,6 +23,7 @@
     "publish:status": "tsc && node dist/commands/publish-status.js",
     "publish:create-test-due": "tsc && node dist/commands/publish-create-test-due.js",
     "publish:clear-test": "tsc && node dist/commands/publish-clear-test.js",
+    "export:buffer": "tsc && node dist/commands/export-buffer.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

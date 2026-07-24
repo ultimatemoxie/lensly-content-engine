@@ -20,6 +20,8 @@ export interface QueueItem {
   status: 'queued' | 'processing' | 'completed' | 'failed' | 'expired' | 'published' | 'cancelled';
   createdAt: string;
   isTest?: boolean;
+  bufferExportedAt?: string;
+  bufferExportBatchId?: string;
 }
 
 export interface QueueEligibility {
