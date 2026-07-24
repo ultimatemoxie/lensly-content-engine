@@ -31,6 +31,9 @@ export interface EnvConfig {
   X_ACCESS_TOKEN_EXPIRES_AT: string | undefined;
   X_USER_ID: string | undefined;
   MAX_POSTS_PER_RUN: string;
+  STORAGE_PROVIDER: string;
+  DATABASE_URL: string | undefined;
+  DATABASE_SSL: string;
 }
 
 export function loadConfig(): EnvConfig {
@@ -63,5 +66,8 @@ export function loadConfig(): EnvConfig {
     X_ACCESS_TOKEN_EXPIRES_AT: process.env.X_ACCESS_TOKEN_EXPIRES_AT,
     X_USER_ID: process.env.X_USER_ID,
     MAX_POSTS_PER_RUN: process.env.MAX_POSTS_PER_RUN ?? '1',
+    STORAGE_PROVIDER: process.env.STORAGE_PROVIDER ?? 'json',
+    DATABASE_URL: process.env.DATABASE_URL,
+    DATABASE_SSL: process.env.DATABASE_SSL ?? 'true',
   };
 }

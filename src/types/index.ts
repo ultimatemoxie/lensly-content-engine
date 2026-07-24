@@ -107,6 +107,13 @@ export interface PostQueueItem {
   timezone: string;
   status: 'queued' | 'processing' | 'completed' | 'failed' | 'expired' | 'published' | 'cancelled';
   createdAt: string;
+  isTest?: boolean;
+  bufferExportedAt?: string;
+  bufferExportBatchId?: string;
+  exportCreatedAtUtc?: string | null;
+  exportCreatedAtLocal?: string | null;
+  nextRefillAtUtc?: string | null;
+  nextRefillAtLocal?: string | null;
 }
 
 export interface PublishLog {
@@ -122,6 +129,43 @@ export interface PublishLog {
   httpStatus: number | null;
   errorCode: string | null;
   sanitizedError: string | null;
+}
+
+export interface ExportBatch {
+  id: string;
+  batchId: string;
+  queueItemId: string;
+  generatedPostId: string;
+  text: string;
+  scheduledForUtc: string;
+  scheduledForLocal: string;
+  timezone: string;
+  sourceUrl?: string;
+  exportedAt: string;
+  nextRefillAtUtc?: string | null;
+  nextRefillAtLocal?: string | null;
+  stale: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ProviderRequestLog {
+  id: string;
+  storyId?: string;
+  provider: string;
+  model: string;
+  httpStatus?: number;
+  result: 'success' | 'temporary_failure' | 'permanent_failure';
+  error?: string;
+  createdAt: string;
+}
+
+export interface TokenMetadata {
+  id: string;
+  key: string;
+  value: any;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface SourceHealthReport {
