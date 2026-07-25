@@ -1,0 +1,56 @@
+name: Lensly Buffer Export
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 8 * * *'
+
+jobs:
+  buffer-export:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    env:
+      NODE_ENV: production
+      STORAGE_PROVIDER: postgres
+      DATABASE_SSL: true
+      AI_PROVIDER: groq
+      AI_FALLBACK_ORDER: cerebras,gemini
+      GROQ_MODEL: llama-3.1-8b-instant
+      GEMINI_MODEL: gemini-2.0-flash
+      TIMEZONE: Africa/Lagos
+      X_PUBLISHING_ENABLED: false
+      X_DRY_RUN: true
+      MAX_POSTS_PER_RUN: 1
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build TypeScript
+        run: npm run build
+
+      - name: Run Buffer export
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: npm run export:buffer
+
+      - name: Upload Buffer export artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: buffer-export-${{ github.run_number }}-${{ github.run_id }}
+          path: |
+            exports/buffer-upload.csv
+            exports/buffer-copy-list.txt
+          retention-days: 7
+          if-no-files-found: warn

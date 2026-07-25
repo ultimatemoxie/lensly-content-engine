@@ -1,0 +1,88 @@
+name: Lensly Manual
+
+on:
+  workflow_dispatch:
+    inputs:
+      command:
+        description: 'Command to run'
+        required: true
+        type: choice
+        options:
+          - collect
+          - replenish
+          - queue
+          - export-buffer
+          - status
+          - db-migrate
+
+jobs:
+  manual:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    env:
+      NODE_ENV: production
+      STORAGE_PROVIDER: postgres
+      DATABASE_SSL: true
+      AI_PROVIDER: groq
+      AI_FALLBACK_ORDER: cerebras,gemini
+      GROQ_MODEL: llama-3.1-8b-instant
+      GEMINI_MODEL: gemini-2.0-flash
+      TIMEZONE: Africa/Lagos
+      X_PUBLISHING_ENABLED: false
+      X_DRY_RUN: true
+      MAX_POSTS_PER_RUN: 1
+      MAX_AI_CALLS_PER_RUN: 5
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build TypeScript
+        run: npm run build
+
+      - name: Run ${{ inputs.command }}
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          CEREBRAS_API_KEY: ${{ secrets.CEREBRAS_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          case "${{ inputs.command }}" in
+            collect)
+              npm run collect
+              ;;
+            replenish)
+              npm run replenish
+              npm run queue:status
+              ;;
+            queue)
+              npm run queue
+              npm run queue:status
+              ;;
+            export-buffer)
+              npm run export:buffer
+              ;;
+            status)
+              npm run status
+              npm run queue:status
+              npm run export:buffer:status
+              ;;
+            db-migrate)
+              npm run db:migrate
+              ;;
+            *)
+              echo "Unknown command: ${{ inputs.command }}"
+              exit 1
+              ;;
+          esac
