@@ -28,6 +28,7 @@
     "db:migrate": "tsc && node dist/commands/db-migrate.js",
     "db:status": "tsc && node dist/commands/db-status.js",
     "db:import-json": "tsc && node dist/commands/db-import-json.js",
+    "server": "node dist/server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

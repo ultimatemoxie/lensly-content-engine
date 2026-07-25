@@ -76,7 +76,7 @@
     "scheduledForUtc": "2026-07-24T13:55:53.401Z",
     "scheduledForLocal": "2026-07-24T13:55:53.401Z",
     "timezone": "Africa/Lagos",
-    "status": "queued",
+    "status": "expired",
     "createdAt": "2026-07-24T12:55:53.410Z",
     "bufferExportedAt": "2026-07-24T12:56:26.146Z",
     "bufferExportBatchId": "batch-2026-07-24T12-56-26-015Z"
@@ -98,7 +98,7 @@
     "scheduledForUtc": "2026-07-24T14:55:53.401Z",
     "scheduledForLocal": "2026-07-24T14:55:53.401Z",
     "timezone": "Africa/Lagos",
-    "status": "queued",
+    "status": "expired",
     "createdAt": "2026-07-24T12:55:53.410Z",
     "bufferExportedAt": "2026-07-24T12:56:26.146Z",
     "bufferExportBatchId": "batch-2026-07-24T12-56-26-015Z"
@@ -120,7 +120,7 @@
     "scheduledForUtc": "2026-07-24T15:55:53.401Z",
     "scheduledForLocal": "2026-07-24T15:55:53.401Z",
     "timezone": "Africa/Lagos",
-    "status": "queued",
+    "status": "expired",
     "createdAt": "2026-07-24T12:55:53.410Z",
     "bufferExportedAt": "2026-07-24T12:56:26.146Z",
     "bufferExportBatchId": "batch-2026-07-24T12-56-26-015Z"

@@ -34,6 +34,7 @@ export interface EnvConfig {
   STORAGE_PROVIDER: string;
   DATABASE_URL: string | undefined;
   DATABASE_SSL: string;
+  TIMEZONE: string;
 }
 
 export function loadConfig(): EnvConfig {
@@ -69,5 +70,6 @@ export function loadConfig(): EnvConfig {
     STORAGE_PROVIDER: process.env.STORAGE_PROVIDER ?? 'json',
     DATABASE_URL: process.env.DATABASE_URL,
     DATABASE_SSL: process.env.DATABASE_SSL ?? 'true',
+    TIMEZONE: process.env.TIMEZONE ?? 'Africa/Lagos',
   };
 }
